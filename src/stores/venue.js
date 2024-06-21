@@ -8,7 +8,7 @@ export const useVenueStore = defineStore('Venue', {
   }),
   actions: {
     async loadVenues() {
-      await APIService.getVenues()
+      await APIService.fetchVenues()
         .then((response) => {
           this.venues = response.data
         })

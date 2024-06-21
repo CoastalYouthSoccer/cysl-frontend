@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <VenueSelect />
+      <FieldGames />
     </v-main>
 
     <AppFooter />
@@ -9,5 +9,6 @@
 </template>
 
 <script setup>
-  //
+import FieldGames from '@/views/FieldGames'
+
 </script>
