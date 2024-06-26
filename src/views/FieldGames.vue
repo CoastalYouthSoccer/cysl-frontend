@@ -1,4 +1,15 @@
 <template>
+  <div v-if="error">
+    <v-alert
+      :type=error_type
+      variant="outlined"
+      close-label="Close"
+      closable
+    >
+    {{  error_msg }}
+    </v-alert>
+  </div>
+  <h1>Field Coordinator Screen</h1>
   <v-form>
     <v-container>
       <v-row>
@@ -77,6 +88,9 @@ const dataExists = ref(false)
 const loading = ref(false)
 const games = ref(null)
 const gameDate = ref(null)
+const error = ref(null)
+const error_msg = ref(null)
+const error_type = ref(null)
 
 function handleVenueChange(value) {
   venue.value = value.name;
@@ -84,13 +98,19 @@ function handleVenueChange(value) {
 
 async function returnGames(startDt, endDt, venue) {
   loading.value = true;
+  error.value = false;
+  error_type.value = "success";
+
   await APIService.fetchGames(startDt, endDt, venue)
     .then((response) => {
       games.value = response.data;
       dataExists.value = true;
     })
-    .catch((error) => {
-      console.error('Error fetching games:', error);
+    .catch((err) => {
+      console.error('Error fetching games:', err);
+      error.value = true;
+      error_msg.value = err.response.statusText;
+      error_type.value = "error";
     })
     .finally(() => {
       loading.value = false;

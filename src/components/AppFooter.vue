@@ -1,25 +1,27 @@
 <template>
-  <v-footer height="40" app>
-    <div
-      class="text-caption text-disabled"
-      style="position: absolute; right: 16px;"
-    >
-      &copy; {{ (new Date()).getFullYear() }} <span class="d-none d-sm-inline-block">Peter White</span>
-    </div>
-  </v-footer>
+    <v-footer class="d-flex flex-column bg-blue-darken-1">
+      <v-row>
+        <v-btn
+          v-for="link in links"
+          :key="link.title"
+          color="white"
+          variant="text"
+          class="mx-2"
+          rounded="xl"
+          :href="link.link"
+        >
+          {{ link.title }}
+        </v-btn>
+      </v-row>
+      <v-row>
+        {{ new Date().getFullYear() }} — <strong>Hanover Soccer Referee</strong>
+      </v-row>
+    </v-footer>
 </template>
 
 <script setup>
-  const items = [
+  const links = [
+    { title: "Home", link: "/" },
+//     { title: "About", link: "/about" },
   ]
 </script>
-
-<style scoped lang="sass">
-  .social-link :deep(.v-icon)
-    color: rgba(var(--v-theme-on-background), var(--v-disabled-opacity))
-    text-decoration: none
-    transition: .2s ease-in-out
-
-    &:hover
-      color: rgba(25, 118, 210, 1)
-</style>
