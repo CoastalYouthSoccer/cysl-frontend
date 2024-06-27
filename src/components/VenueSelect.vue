@@ -7,7 +7,9 @@
 
 <script setup>
 import { ref, onBeforeMount, watch } from 'vue'
-import APIService from '@/services/APIService.js'
+import { useAuth0 } from "@auth0/auth0-vue";
+
+import { fetchVenues } from '@/services/api.venue.js'
 
 const emit = defineEmits(['venueChange']);
 const venues = ref(null);
@@ -25,13 +27,15 @@ function itemProps(item) {
 }
 
 async function getVenues() {
-  await APIService.fetchVenues()
-    .then((response) => {
-      venues.value = response.data
-    })
-    .catch((error) => {
-      console.error('Error fetching venues:', error);
-    });
+  const { data, error } = await fetchVenues();
+
+  if (data) {
+    venues.value = data;
+  }
+
+  if (error) {
+    console.error('Error fetching venues:', error);
+  }
 }
 
 onBeforeMount(() => {

@@ -24,7 +24,6 @@ const { user, logout } = useAuth0();
 const store = useUserStore();
 
 watch(user, function() {
-  console.log(user);
   store.setUser(user);
 });
 

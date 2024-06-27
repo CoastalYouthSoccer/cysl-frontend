@@ -1,12 +1,12 @@
 <template>
-  <div v-if="error">
+  <div v-if="errorExist">
     <v-alert
-      :type=error_type
+      :type=errorType
       variant="outlined"
       close-label="Close"
       closable
     >
-    {{  error_msg }}
+    {{  errorMsg }}
     </v-alert>
   </div>
   <h1>Field Coordinator Screen</h1>
@@ -81,16 +81,20 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import APIService from '@/services/APIService.js'
+import { useAuth0 } from "@auth0/auth0-vue";
+
+import { fetchGames } from '@/services/api.game.js'
+
+const { getAccessTokenSilently } = useAuth0();
 
 let venue = ref()
 const dataExists = ref(false)
 const loading = ref(false)
 const games = ref(null)
 const gameDate = ref(null)
-const error = ref(null)
-const error_msg = ref(null)
-const error_type = ref(null)
+const errorExist = ref(false)
+const errorMsg = ref(null)
+const errorType = ref(null)
 
 function handleVenueChange(value) {
   venue.value = value.name;
@@ -98,23 +102,36 @@ function handleVenueChange(value) {
 
 async function returnGames(startDt, endDt, venue) {
   loading.value = true;
-  error.value = false;
-  error_type.value = "success";
+  errorExist.value = false;
+  errorType.value = "success";
+  dataExists.value = false;
+  const params = {
+    start_dt: startDt,
+    end_dt: endDt,
+    venue: venue
+  }
+  const accessToken = await getAccessTokenSilently({
+    authorizationParams: {
+      audience: import.meta.env.VITE_AUTH0_AUDIENCE,
+      scope: import.meta.env.VITE_AUTH0_SCOPE,
+    },
+  });
+  const { data, error } = await fetchGames(accessToken, params);
 
-  await APIService.fetchGames(startDt, endDt, venue)
-    .then((response) => {
-      games.value = response.data;
-      dataExists.value = true;
-    })
-    .catch((err) => {
-      console.error('Error fetching games:', err);
-      error.value = true;
-      error_msg.value = err.response.statusText;
-      error_type.value = "error";
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+  if (data) {
+    console.log(data);
+    games.value = data;
+    dataExists.value = true;
+  }
+
+  if (error) {
+    console.error('Error fetching games:', error);
+    errorExist.value = true;
+    errorMsg.value = error;
+    errorType.value = "error";
+  }
+
+  loading.value = false;
 }
 
 const formattedDate = computed(() => {

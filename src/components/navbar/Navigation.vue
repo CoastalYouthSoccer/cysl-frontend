@@ -27,19 +27,22 @@ import Assignor from './Assignor.vue';
 //import FAQButton from '@/components/FAQButton.vue';
 //import ContactButton from "@/components/ContactButton.vue";
 
-const { isAuthenticated, user } = useAuth0();
+const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
 
 const store = useUserStore();
-const { setAuthenticated } = store
+const { setAuthenticated, setAccessToken } = store
 
 watch(user, function() {
   store.setUser(user);
 });
 
-watch(isAuthenticated, function() {
+watch(isAuthenticated, async function() {
   if (isAuthenticated) {
+    const accessToken = isAuthenticated ? await getAccessTokenSilently() : null;
+    setAccessToken(accessToken);
     setAuthenticated(isAuthenticated.value);
   } else {
+    setAccessToken(null);
     setAuthenticated(false);
   }
 });

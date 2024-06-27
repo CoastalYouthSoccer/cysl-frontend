@@ -16,9 +16,13 @@ const useUserStore = defineStore('user', {
       isReferee: false,
       courierId: null,
       userId: null
-    }
+    },
+    accessToken: null
   }),
   actions: {
+    setAccessToken(token) {
+      this.accessToken = token;
+    },
     setFirstName(name) {
       this.user.firstName = name;
     },
@@ -87,6 +91,9 @@ const useUserStore = defineStore('user', {
     }
   },
   getters: {
+    getAccessToken(state) {
+      return state.accessToken;
+    },
     firstName(state) {
       return state.user.firstName;
     },
