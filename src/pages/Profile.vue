@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-  import { defineComponent, ref } from "vue";
+  import { ref } from "vue";
   import { useAuth0 } from "@auth0/auth0-vue";
   import { storeToRefs } from 'pinia';
   const { getAccessTokenSilently } = useAuth0();

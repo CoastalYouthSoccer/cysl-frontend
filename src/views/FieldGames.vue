@@ -119,7 +119,6 @@ async function returnGames(startDt, endDt, venue) {
   const { data, error } = await fetchGames(accessToken, params);
 
   if (data) {
-    console.log(data);
     games.value = data;
     dataExists.value = true;
   }
