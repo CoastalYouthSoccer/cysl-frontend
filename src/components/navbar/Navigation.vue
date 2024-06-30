@@ -18,7 +18,7 @@
 
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue';
-import useUserStore from '@/stores/user';
+import { useUserStore } from '@/stores/user';
 //import Referee from './Referee.vue';
 import { computed, watch } from 'vue';
 import LoginButton from "../buttons/LoginButton.vue";

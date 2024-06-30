@@ -18,7 +18,7 @@
 <script setup>
 import { watch, computed } from 'vue';
 import { useAuth0 } from '@auth0/auth0-vue';
-import useUserStore from '@/stores/user';
+import { useUserStore } from '@/stores/user';
 
 const { user, logout } = useAuth0();
 const store = useUserStore();
