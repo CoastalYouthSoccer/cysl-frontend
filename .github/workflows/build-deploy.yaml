@@ -1,0 +1,44 @@
+name: Build and Deploy Frontend Code
+
+on:
+    push:
+      paths:
+        - '**'
+        - '!README.md'
+        - '!VERSION'
+      branches:
+        - '**'
+        - '!releases/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: 20.x
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+#        npm run test
+    - run: |
+        npm install
+        npm run build
+    - name: Deploy to Server
+      uses: easingthemes/ssh-deploy@main
+      with:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        ARGS: "-rlgoDzvc -i"
+        SOURCE: "dist/"
+        REMOTE_HOST: ${{ vars.DEPLOY_HOST }}
+        REMOTE_USER: ${{ vars.DEPLOY_USER }}
+        TARGET: ${{ vars.DEPLOY_TARGET }}
+        SCRIPT_AFTER: |
+          whoami
+          ls -al ${{ secrets.SCRIPT_DIR }}
+          echo $RSYNC_STDOUT
