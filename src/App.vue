@@ -1,8 +1,11 @@
 <template>
   <v-app>
     <Navigation/>
+    <v-container>
+      <v-row></v-row>
+    </v-container>
     <RouterView/>
-<!--    <AppFooter/> -->
+    <AppFooter/>
   </v-app>
 </template>
 

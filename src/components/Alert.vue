@@ -3,6 +3,7 @@
     <v-snackbar
       :timeout="5000"
       :color=color
+      location="top"
       variant="tonal"
       v-model="snackbar"
       data-test="alert-snackbar"

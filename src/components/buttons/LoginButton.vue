@@ -1,7 +1,7 @@
 <template>
   <v-tooltip text="Login to access additional content.">
     <template v-slot:activator="{ props }">
-      <v-btn icon @click="handleLogin" data-cy="login-btn">
+      <v-btn icon @click="handleLogin" data-test="login-btn">
         <v-icon>mdi-login</v-icon>Login
       </v-btn>
     </template>

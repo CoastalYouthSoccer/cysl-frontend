@@ -5,8 +5,7 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: () => import("@/views/HomeView.vue"),
-    props: true
+    component: () => import("@/views/HomeView.vue")
   },
   {
     path: "/assignr-assignor",
