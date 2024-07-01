@@ -5,7 +5,6 @@
       <v-row></v-row>
     </v-container>
     <RouterView/>
-    <AppFooter/>
   </v-app>
 </template>
 

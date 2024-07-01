@@ -22,7 +22,7 @@ import { useUserStore } from '@/stores/user';
 //import Referee from './Referee.vue';
 import { computed, watch } from 'vue';
 import LoginButton from "../buttons/LoginButton.vue";
-import Profile from './Profile.vue';
+import Profile from '@/pages/Profile.vue';
 import Assignor from './Assignor.vue';
 //import FAQButton from '@/components/FAQButton.vue';
 //import ContactButton from "@/components/ContactButton.vue";
