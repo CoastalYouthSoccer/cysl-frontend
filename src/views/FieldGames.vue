@@ -1,13 +1,9 @@
 <template>
   <div v-if="errorExist">
-    <v-alert
-      :type=errorType
-      variant="outlined"
-      close-label="Close"
-      closable
-    >
-    {{  errorMsg }}
-    </v-alert>
+    <Alert
+      :msg="errorMsg"
+      :color="red"
+    />
   </div>
   <h1>Field Coordinator Screen</h1>
   <v-form>
@@ -82,6 +78,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useAuth0 } from "@auth0/auth0-vue";
+import Alert from "@/components/Alert.vue";
 
 import { fetchGames } from '@/services/api.game.js'
 

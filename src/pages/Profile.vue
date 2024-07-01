@@ -3,28 +3,28 @@
     <v-container :fluid=true>
       <v-row justify="center">
         <v-col sm="4" lg="4">
-          <v-text-field label="First Name" type="text" v-model="firstName" data-cy="firstName"/>
+          <v-text-field label="First Name" type="text" v-model="firstName" data-test="firstName" :disabled="true"/>
         </v-col>
         </v-row>
         <v-row justify="center">
         <v-col sm="4" lg="4">
-          <v-text-field label="Last Name" type="text" v-model="lastName" data-cy="lastName"/>
+          <v-text-field label="Last Name" type="text" v-model="lastName" data-test="lastName" :disabled="true"/>
         </v-col>
       </v-row>
       <v-row justify="center">
         <v-col sm="2" lg="2">
-          <v-checkbox v-model="isReferee" label="Referee?" data-cy="isReferee"/>
+          <v-checkbox v-model="isReferee" label="Referee?" data-test="isReferee" :disabled="true"/>
         </v-col>
         <v-col sm="2" lg="2">
-          <v-checkbox v-model="isAssignor" label="Assignor?" data-cy="isAssignor"/>
+          <v-checkbox v-model="isAssignor" label="Assignor?" data-test="isAssignor" :disabled="true"/>
         </v-col>
       </v-row>
       <v-row justify="center">
         <v-col sm="2" lg="2">
-          <v-btn color="success" rounded type="submit" data-cy="update">Update</v-btn>
+          <v-btn color="success" rounded type="submit" data-test="update">Update</v-btn>
         </v-col>
         <v-col sm="2" lg="2">
-          <v-btn color="info" rounded type="button" @click="cancel" data-cy="cancel">Cancel</v-btn>
+          <v-btn color="info" rounded type="button" @click="cancel" data-test="cancel">Cancel</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -34,16 +34,12 @@
 </template>
 
 <script setup>
-  import { ref } from "vue";
+  import { watch, ref } from "vue";
   import { useAuth0 } from "@auth0/auth0-vue";
-  import { storeToRefs } from 'pinia';
-  const { getAccessTokenSilently } = useAuth0();
-  import { useUserStore } from '@/stores/user.js'
+  const { getAccessTokenSilently, user, isAuthenticated } = useAuth0();
   import Alert from "@/components/Alert.vue";
 
   const baseURL = window.location.origin;
-  const userStore = useUserStore();
-  const { user } = storeToRefs(userStore);
 
   const msg = ref(null);
   const firstName = ref(null);
@@ -53,6 +49,18 @@
 
   const apiError = ref(false);
   const valid = ref(false);
+
+  watch(user, function() {
+    firstName.value = user.value?.given_name
+    lastName.value = user.value?.family_name;
+    isReferee.value = user.value?.user_roles.includes("referee");
+    isAssignor.value = user.value?.user_roles.includes("assignor");
+    valid.value = isAuthenticated;
+  });
+
+  function cancel() {
+    console.log('cancel')
+  }
 
 //  export default defineComponent({
 //    name: "Profile",
