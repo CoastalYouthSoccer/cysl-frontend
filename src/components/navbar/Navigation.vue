@@ -10,16 +10,16 @@
 <!--    <RefereeNav v-if="isReferee" />
     <ContactButton/>
       <FAQButton/> -->
-    <AssignorNav v-if="isAssignor" />
-    <ProfileNav v-if="isAuthenticated"/>
-    <LoginButton v-if="!isAuthenticated"/>
+    <AssignorNav v-if="isAssignor" data-test="AssignorNav"/>
+    <ProfileNav v-if="isAuthenticated" data-test="ProfileNav"/>
+    <LoginButton data-test="LoginButton"/>
   </v-app-bar>
 </template>
 
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue';
 //import RefereeNav from './RefereeNav.vue';
-import { watch, ref } from 'vue';
+import { watch, ref, onBeforeMount } from 'vue';
 import LoginButton from "../buttons/LoginButton.vue";
 import ProfileNav from './ProfileNav.vue';
 import AssignorNav from './AssignorNav.vue';
@@ -31,9 +31,18 @@ const { isAuthenticated, user } = useAuth0();
 const isReferee = ref(false);
 const isAssignor = ref(false);
 
-watch(user, function() {
+async function setValues() {
   isReferee.value = user.value?.user_roles.includes("referee");
   isAssignor.value = user.value?.user_roles.includes("assignor");
+}
+
+watch(user, function() {
+  setValues()
+});
+
+
+onBeforeMount(() => {
+  setValues();
 });
 
 </script>

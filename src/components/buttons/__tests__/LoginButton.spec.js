@@ -34,7 +34,7 @@ describe('LoginButtonComponent', () => {
       }
     });
     wrapper.vm.$nextTick();
-    button = wrapper.find('button[data-test="login-btn"]');
+    button = wrapper.findComponent('button[data-test="login-btn"]');
   });
 
   test('renders v-btn and v-tooltip correctly', () => {
@@ -45,7 +45,7 @@ describe('LoginButtonComponent', () => {
   });
 
   test('calls loginWithRedirect on button click', async () => {
-    const button = wrapper.find('button[data-test="login-btn"]');
+    const button = wrapper.findComponent('button[data-test="login-btn"]');
     await button.trigger('click');
 
     expect(loginWithRedirectMock).toHaveBeenCalled();

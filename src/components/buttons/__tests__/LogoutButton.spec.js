@@ -35,7 +35,7 @@ describe('LogoutButton', () => {
       }
     });
     wrapper.vm.$nextTick();
-    button = wrapper.find('button[data-test="logout-btn"]')
+    button = wrapper.findComponent('button[data-test="logout-btn"]')
   });
 
   test('renders v-btn correctly', () => {
