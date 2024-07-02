@@ -10,9 +10,9 @@
 <!--    <RefereeNav v-if="isReferee" />
     <ContactButton/>
       <FAQButton/> -->
-    <AssignorNav v-if="isAssignor" data-test="AssignorNav"/>
-    <ProfileNav v-if="isAuthenticated" data-test="ProfileNav"/>
-    <LoginButton data-test="LoginButton"/>
+    <AssignorNav v-if="isAssignor && !isLoading" data-test="AssignorNav"/>
+    <ProfileNav v-if="isAuthenticated && !isLoading" data-test="ProfileNav"/>
+    <LoginButton v-if="!isAuthenticated && !isLoading" data-test="LoginButton"/>
   </v-app-bar>
 </template>
 
@@ -26,14 +26,15 @@ import AssignorNav from './AssignorNav.vue';
 //import FAQButton from '@/components/FAQButton.vue';
 //import ContactButton from "@/components/ContactButton.vue";
 
-const { isAuthenticated, user } = useAuth0();
+const { isAuthenticated, isLoading, user } = useAuth0();
 
 const isReferee = ref(false);
 const isAssignor = ref(false);
 
 async function setValues() {
-  isReferee.value = user.value?.user_roles.includes("referee");
-  isAssignor.value = user.value?.user_roles.includes("assignor");
+  const user_roles = user.value?.user_roles || [];
+  isReferee.value = user_roles.includes("referee");
+  isAssignor.value = user_roles.includes("assignor");
 }
 
 watch(user, function() {
