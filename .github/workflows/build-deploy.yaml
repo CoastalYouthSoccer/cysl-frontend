@@ -11,20 +11,21 @@ on:
         - '!releases/**'
 
 jobs:
-  build:
-
+  build_deploy:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 20
-#        npm run test
     - run: |
         npm install
+        npm run test
         npm run build
+
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@main
       with:
@@ -33,8 +34,9 @@ jobs:
         SOURCE: "dist/"
         REMOTE_HOST: ${{ vars.DEPLOY_HOST }}
         REMOTE_USER: ${{ vars.DEPLOY_USER }}
-        TARGET: ${{ vars.DEPLOY_TARGET }}
+        TARGET: ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }}
+        SCRIPT_BEFORE: |
+          mkdir -p ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }}
         SCRIPT_AFTER: |
-          whoami
-          ls -al ${{ secrets.SCRIPT_DIR }}
-          echo $RSYNC_STDOUT
+          rm ${{ vars.DEPLOY_TARGET }}/frontend/frontend || echo frontend link does NOT exist
+          ln -s ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }} ${{ vars.DEPLOY_TARGET }}/frontend/frontend
