@@ -34,11 +34,12 @@ jobs:
         SOURCE: "dist/"
         REMOTE_HOST: ${{ vars.DEPLOY_HOST }}
         REMOTE_USER: ${{ vars.DEPLOY_USER }}
-        TARGET: ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }}
+        TARGET: ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
         SCRIPT_BEFORE: |
-          sudo mkdir -p ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }}
-          sudo chmod 777 -R ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }}
+          sudo mkdir -p ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
+          sudo chmod 777 -R ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
         SCRIPT_AFTER: |
-          sudo rm ${{ vars.DEPLOY_TARGET }}/frontend/frontend || echo frontend link does NOT exist
-          sudo ln -s ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }} ${{ vars.DEPLOY_TARGET }}/frontend/frontend
-          sudo chmod 744 -R ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }}
+          sudo rm ${{ vars.DEPLOY_TARGET }}/frontend || echo frontend link does NOT exist
+          sudo ln -s ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }} ${{ vars.DEPLOY_TARGET }}/frontend
+          sudo chmod 744 -R ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
+          sudo chown root:root -R ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
