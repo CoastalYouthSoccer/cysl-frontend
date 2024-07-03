@@ -36,7 +36,7 @@ jobs:
         REMOTE_USER: ${{ vars.DEPLOY_USER }}
         TARGET: ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }}
         SCRIPT_BEFORE: |
-          mkdir -p ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }}
+          sudo mkdir -p ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }}
         SCRIPT_AFTER: |
           rm ${{ vars.DEPLOY_TARGET }}/frontend/frontend || echo frontend link does NOT exist
           ln -s ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }} ${{ vars.DEPLOY_TARGET }}/frontend/frontend
