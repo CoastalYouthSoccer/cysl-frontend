@@ -29,18 +29,20 @@ jobs:
     - name: Deploy to Server
 #      if: github.ref == 'refs/heads/main'
       uses: easingthemes/ssh-deploy@main
+      env:
+        TARGET_DIR: ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
       with:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         ARGS: "-rlgoDzvc -i"
         SOURCE: "dist/"
         REMOTE_HOST: ${{ vars.DEPLOY_HOST }}
         REMOTE_USER: ${{ vars.DEPLOY_USER }}
-        TARGET: ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
+        TARGET: ${{ env.TARGET_DIR }}
         SCRIPT_BEFORE: |
-          sudo mkdir -p ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
-          sudo chmod 777 -R ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
+          sudo mkdir -p ${{ env.TARGET_DIR }}
+          sudo chmod 777 -R $${{ env.TARGET_DIR }}
         SCRIPT_AFTER: |
           sudo rm ${{ vars.DEPLOY_TARGET }}/frontend || echo frontend link does NOT exist
-          sudo ln -s ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }} ${{ vars.DEPLOY_TARGET }}/frontend
-          sudo chmod 755 -R ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
-          sudo chown root:root -R ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
+          sudo ln -s ${{ env.TARGET_DIR }} ${{ vars.DEPLOY_TARGET }}/frontend
+          sudo chmod 755 -R ${{ env.TARGET_DIR }}
+          sudo chown root:root -R ${{ env.TARGET_DIR }}
