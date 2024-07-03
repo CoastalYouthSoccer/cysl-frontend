@@ -37,7 +37,6 @@ jobs:
         TARGET: ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }}
         SCRIPT_BEFORE: |
           sudo mkdir -p ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }}
-          sudo chown -r ${{ vars.DEPLOY_USER }} ${{ vars.DEPLOY_TARGET }}/frontend
         SCRIPT_AFTER: |
-          rm ${{ vars.DEPLOY_TARGET }}/frontend/frontend || echo frontend link does NOT exist
-          ln -s ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }} ${{ vars.DEPLOY_TARGET }}/frontend/frontend
+          sudo rm ${{ vars.DEPLOY_TARGET }}/frontend/frontend || echo frontend link does NOT exist
+          sudo ln -s ${{ vars.DEPLOY_TARGET }}/frontend/${{ github.sha }} ${{ vars.DEPLOY_TARGET }}/frontend/frontend
