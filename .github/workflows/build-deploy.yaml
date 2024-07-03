@@ -27,7 +27,7 @@ jobs:
         npm run build
 
     - name: Deploy to Server
-      if: github.ref == 'refs/heads/main'
+#      if: github.ref == 'refs/heads/main'
       uses: easingthemes/ssh-deploy@main
       with:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -42,5 +42,5 @@ jobs:
         SCRIPT_AFTER: |
           sudo rm ${{ vars.DEPLOY_TARGET }}/frontend || echo frontend link does NOT exist
           sudo ln -s ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }} ${{ vars.DEPLOY_TARGET }}/frontend
-          sudo chmod 744 -R ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
+          sudo chmod 755 -R ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
           sudo chown root:root -R ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
