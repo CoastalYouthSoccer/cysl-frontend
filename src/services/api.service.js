@@ -43,7 +43,7 @@ export const callApi = async (options) => {
 
       let message = "http request failed";
 
-      if (response && response.statusText) {
+      if (response?.statusText) {
         message = response.statusText;
       }
 
@@ -51,7 +51,7 @@ export const callApi = async (options) => {
         message = axiosError.message;
       }
 
-      if (response && response.data && response.data.message) {
+      if (response?.data && response?.data.message) {
         message = response.data.message;
       }
 

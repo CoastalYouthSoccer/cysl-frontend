@@ -7,9 +7,6 @@
   >
     <v-btn href="/" size="350">CYSL Referee Resources</v-btn>
     <v-spacer></v-spacer>
-<!--    <RefereeNav v-if="isReferee" />
-    <ContactButton/>
-      <FAQButton/> -->
     <AssignorNav v-if="isAssignor && !isLoading" data-test="AssignorNav"/>
     <ProfileNav v-if="isAuthenticated && !isLoading" data-test="ProfileNav"/>
     <LoginButton v-if="!isAuthenticated && !isLoading" data-test="LoginButton"/>
@@ -18,13 +15,10 @@
 
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue';
-//import RefereeNav from './RefereeNav.vue';
 import { watch, ref, onBeforeMount } from 'vue';
 import LoginButton from "../buttons/LoginButton.vue";
 import ProfileNav from './ProfileNav.vue';
 import AssignorNav from './AssignorNav.vue';
-//import FAQButton from '@/components/FAQButton.vue';
-//import ContactButton from "@/components/ContactButton.vue";
 
 const { isAuthenticated, isLoading, user } = useAuth0();
 
