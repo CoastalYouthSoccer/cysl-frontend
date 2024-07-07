@@ -1,19 +1,15 @@
 import { describe, it, expect, vi } from 'vitest';
-import { fetchVenues } from '../api.venue'; // Adjust the import to your actual file
-import { callApi } from '../api.service';
-
-vi.mock('./api.service', () => ({
-  callApi: vi.fn(),
-}));
+import { fetchVenues } from '../api.venue';
+import * as apiService from '../api.service';
 
 describe('fetchVenues', () => {
   it('should call callApi with correct config and return data on success', async () => {
     const mockResponse = { data: [{ id: 1, name: 'Venue 1' }] };
-    callApi.mockResolvedValueOnce(mockResponse);
+    const callApiSpy = vi.spyOn(apiService, 'callApi').mockResolvedValueOnce(mockResponse);
 
     const result = await fetchVenues();
 
-    expect(callApi).toHaveBeenCalledWith({
+    expect(callApiSpy).toHaveBeenCalledWith({
       url: 'venues',
       method: 'GET',
       headers: {
@@ -21,16 +17,18 @@ describe('fetchVenues', () => {
       },
     });
 
-    expect(result).toEqual({ data: mockResponse.data, error: null });
+    expect(result).toEqual({ data: mockResponse.data, error: undefined });
+
+    callApiSpy.mockRestore(); // Clean up the spy after the test
   });
 
   it('should return an error message on failure', async () => {
     const mockError = { error: { message: 'Request failed' } };
-    callApi.mockResolvedValueOnce(mockError);
+    const callApiSpy = vi.spyOn(apiService, 'callApi').mockResolvedValueOnce(mockError);
 
     const result = await fetchVenues();
 
-    expect(callApi).toHaveBeenCalledWith({
+    expect(callApiSpy).toHaveBeenCalledWith({
       url: 'venues',
       method: 'GET',
       headers: {
@@ -39,5 +37,7 @@ describe('fetchVenues', () => {
     });
 
     expect(result).toEqual({ data: null, error: mockError.error });
+
+    callApiSpy.mockRestore(); // Clean up the spy after the test
   });
 });
