@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { expect, test, describe } from 'vitest'
+import { expect, it, describe } from 'vitest'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
@@ -19,11 +19,11 @@ describe("AppFooter", () =>{
       plugins: [vuetify],
     }
   });
-  test('displays message', () => {
+  it('displays message', () => {
     expect(wrapper.get('[data-test="copyright"]').text()).toContain('2024 — Hanover Soccer Referee')
   });
 
-  test('display links', () => {
+  it('display links', () => {
     expect(wrapper.findComponent('.v-btn').text()).toContain('Home')
   })
 })

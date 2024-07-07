@@ -12,7 +12,6 @@ export const fetchGames = async (accessToken, params) => {
   };
 
   const { data, error } = await callApi(config);
-
   return {
     data: data || null,
     error,

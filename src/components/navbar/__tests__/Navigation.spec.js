@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import { describe, test, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
@@ -34,7 +34,7 @@ describe('Navigation', () => {
 //    wrapper.vm.$nextTick();
   });
 
-  test('renders the button and app bar', async () => {
+  it('renders the button and app bar', async () => {
  //   const { isAuthenticated } = useAuth0();
  //   isAuthenticated.value = false;
     auth0.useAuth0 = vi.fn().mockReturnValue({
@@ -51,7 +51,7 @@ describe('Navigation', () => {
 //    expect(appBar.exists()).toBe(true)
   })
 
-//  test('renders properly when not authenticated', () => {
+//  it('renders properly when not authenticated', () => {
 //    const { isAuthenticated } = useAuth0();
 //    isAuthenticated.value = false;
 
@@ -62,7 +62,7 @@ describe('Navigation', () => {
 //    expect(profileNav.exists()).toBe(false)
 //  })
 
-//  test('renders ProfileNav when authenticated', async () => {
+//  it('renders ProfileNav when authenticated', async () => {
 //    const { isAuthenticated } = useAuth0();
 //    isAuthenticated.value = true;
 
@@ -70,7 +70,7 @@ describe('Navigation', () => {
 //    expect(profileNav.exists()).toBe(true)
 //  })
 
-//  test('renders AssignorNav when user is an assignor', async () => {
+//  it('renders AssignorNav when user is an assignor', async () => {
 //    const { user } = useAuth0()
 //    user.value = { user_roles: ['assignor'] }
 //
@@ -86,7 +86,7 @@ describe('Navigation', () => {
 //    expect(assignorNav.exists()).toBe(true)
 //  })
 //
-//  test('does not render AssignorNav when user is not an assignor', async () => {
+//  it('does not render AssignorNav when user is not an assignor', async () => {
 //    const { user } = useAuth0()
 //    user.value = { user_roles: [] }
 //

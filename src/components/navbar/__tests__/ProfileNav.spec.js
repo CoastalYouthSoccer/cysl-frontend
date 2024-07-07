@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue'
 import { mount } from '@vue/test-utils'
-import { describe, test, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
@@ -34,7 +34,7 @@ describe('ProfileNav', () => {
     await wrapper.vm.$nextTick(); // Wait for Vue to render
   });
 
-  test('renders the button and menu', () => {
+  it('renders the button and menu', () => {
     const button = wrapper.findComponent('[data-test="profile-btn"]')
     expect(button.exists()).toBe(true)
     expect(button.text()).toBe('John Doe')
@@ -43,13 +43,13 @@ describe('ProfileNav', () => {
     expect(menu.exists()).toBe(true)
   })
 
-//  test('renders the menu items correctly', () => {
+//  it('renders the menu items correctly', () => {
 //    const listItems = wrapper.findAllComponents('[data-test="list-item"]')
 //    expect(listItems.length).toBe(1)
 //    expect(listItems[0].text()).toBe('Profile')
 //  })
 
-//  test('calls logout function on clicking logout', async () => {
+//  it('calls logout function on clicking logout', async () => {
 //    const { logout } = useAuth0()
 //    const logoutItem = wrapper.findAllComponents('[ata-test="list-item"]').at(1)
 //    await logoutItem.trigger('click')
@@ -57,7 +57,7 @@ describe('ProfileNav', () => {
 //    expect(logout).toHaveBeenCalled()
 //  })
 
-//  test('opens the menu on hover', async () => {
+//  it('opens the menu on hover', async () => {
 //    const button = wrapper.findComponent({ name: '#profile-activator' })
 //    await button.trigger('mouseenter')
 

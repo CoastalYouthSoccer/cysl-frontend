@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
@@ -37,14 +37,14 @@ describe('LoginButtonComponent', () => {
     button = wrapper.findComponent('button[data-test="login-btn"]');
   });
 
-  test('renders v-btn and v-tooltip correctly', () => {
+  it('renders v-btn and v-tooltip correctly', () => {
     expect(button.exists()).toBe(true);
 
     const tooltip = wrapper.findComponent({ name: 'v-tooltip' });
     expect(tooltip.exists()).toBe(true);
   });
 
-  test('calls loginWithRedirect on button click', async () => {
+  it('calls loginWithRedirect on button click', async () => {
     const button = wrapper.findComponent('button[data-test="login-btn"]');
     await button.trigger('click');
 

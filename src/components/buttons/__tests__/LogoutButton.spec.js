@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
@@ -38,12 +38,12 @@ describe('LogoutButton', () => {
     button = wrapper.findComponent('button[data-test="logout-btn"]')
   });
 
-  test('renders v-btn correctly', () => {
+  it('renders v-btn correctly', () => {
     expect(button.exists()).toBe(true);
     expect(button.text()).toBe('Log Out');
   });
 
-  test('calls logout on button click', async () => {
+  it('calls logout on button click', async () => {
     await button.trigger('click');
 
     // Check if logout was called with the correct parameters

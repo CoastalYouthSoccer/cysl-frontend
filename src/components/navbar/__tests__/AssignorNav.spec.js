@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { describe, test, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
@@ -25,7 +25,7 @@ describe('AssignorNav', () => {
     await wrapper.vm.$nextTick(); // Wait for Vue to render
   });
 
-  test('renders the button and menu', () => {
+  it('renders the button and menu', () => {
     const button = wrapper.findComponent('[data-test="assignor-btn"]')
     expect(button.exists()).toBe(true)
     expect(button.text()).toBe('Assignor')
@@ -44,7 +44,7 @@ describe('AssignorNav', () => {
 //    ])
   })
 
-//  test('opens the menu on hover', async () => {
+//  it('opens the menu on hover', async () => {
     // Trigger hover on the button
 //    const button = wrapper.findComponent('[data-test="assignor-activator"]')
 //    await button.trigger('mouseenter')

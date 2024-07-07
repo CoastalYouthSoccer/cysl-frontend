@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils';
-import { expect, test, describe, vi, beforeEach } from 'vitest'
+import { expect, it, describe, vi, beforeEach } from 'vitest'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
@@ -39,7 +39,7 @@ describe('VenueSelect', () => {
     await wrapper.vm.$nextTick(); // Wait for Vue to render
   });
 
-  test('renders v-select when venues are fetched', async () => {
+  it('renders v-select when venues are fetched', async () => {
     // Check if the v-select component is rendered
     expect(wrapper.findComponent({ name: 'v-select' }).exists()).toBe(true);
 
@@ -48,7 +48,7 @@ describe('VenueSelect', () => {
     expect(items).toHaveLength(2);
   });
 
-  test('emits venueChange event when venue is selected', async () => {
+  it('emits venueChange event when venue is selected', async () => {
     const vSelect = wrapper.findComponent({ name: 'v-select' });
 
     // Simulate selecting a venue

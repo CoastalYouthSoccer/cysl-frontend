@@ -1,4 +1,4 @@
-import { describe, test, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
@@ -29,7 +29,7 @@ describe('Alert', () => {
   });
 
 
-  test('closes the alert when close button is clicked', async () => {
+  it('closes the alert when close button is clicked', async () => {
     expect(wrapper.vm.snackbar).toBe(true);
 
     const button = wrapper.findComponent('[data-test="alert-btn"]');
