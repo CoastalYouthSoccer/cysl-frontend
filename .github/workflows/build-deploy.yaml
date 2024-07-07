@@ -17,9 +17,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: set .env
+    - name: set .env.production
       run: |
-        echo ${{ vars.VITE_ENV }} >.env
+        echo ${{ vars.VITE_ENV }} >.env.production
 
     - name: Use Node.js
       uses: actions/setup-node@v4
@@ -37,7 +37,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     - name: Deploy to Server
-      if: github.ref == 'refs/heads/main'
+#      if: github.ref == 'refs/heads/main'
       uses: easingthemes/ssh-deploy@main
       env:
         TARGET_DIR: ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
