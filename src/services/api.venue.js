@@ -1,10 +1,8 @@
 import { callApi } from "./api.service";
 
-const apiServerUrl = import.meta.env.VITE_API_SERVER_URL;
-
 export const fetchVenues = async () => {
   const config = {
-    url: `${apiServerUrl}/venues`,
+    url: 'venues',
     method: "GET",
     headers: {
       "content-type": "application/json",

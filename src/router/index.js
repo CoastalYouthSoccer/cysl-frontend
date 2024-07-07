@@ -5,8 +5,7 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: () => import("@/views/HomeView.vue"),
-    props: true
+    component: () => import("@/views/HomeView.vue")
   },
   {
     path: "/assignr-assignor",
@@ -35,7 +34,6 @@ const routes = [
     path: "/profile",
     name: "Profile",
     component: () => import("@/pages/Profile.vue"),
-    beforeEnter: authGuard
   },
   {
     path: "/call",

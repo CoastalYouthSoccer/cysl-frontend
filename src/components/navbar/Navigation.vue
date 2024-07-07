@@ -7,51 +7,37 @@
   >
     <v-btn href="/" size="350">CYSL Referee Resources</v-btn>
     <v-spacer></v-spacer>
-<!--    <Referee v-if="isReferee" />
-    <ContactButton/>
-      <FAQButton/> -->
-    <Assignor v-if="isAssignor" />
-    <Profile v-if="isAuthenticated"/>
-    <LoginButton v-if="!isAuthenticated"/>
+    <AssignorNav v-if="isAssignor && !isLoading" data-test="AssignorNav"/>
+    <ProfileNav v-if="isAuthenticated && !isLoading" data-test="ProfileNav"/>
+    <LoginButton v-if="!isAuthenticated && !isLoading" data-test="LoginButton"/>
   </v-app-bar>
 </template>
 
 <script setup>
 import { useAuth0 } from '@auth0/auth0-vue';
-import useUserStore from '@/stores/user';
-//import Referee from './Referee.vue';
-import { computed, watch } from 'vue';
+import { watch, ref, onBeforeMount } from 'vue';
 import LoginButton from "../buttons/LoginButton.vue";
-import Profile from './Profile.vue';
-import Assignor from './Assignor.vue';
-//import FAQButton from '@/components/FAQButton.vue';
-//import ContactButton from "@/components/ContactButton.vue";
+import ProfileNav from './ProfileNav.vue';
+import AssignorNav from './AssignorNav.vue';
 
-const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
+const { isAuthenticated, isLoading, user } = useAuth0();
 
-const store = useUserStore();
-const { setAuthenticated, setAccessToken } = store
+const isReferee = ref(false);
+const isAssignor = ref(false);
+
+async function setValues() {
+  const user_roles = user.value?.user_roles || [];
+  isReferee.value = user_roles.includes("referee");
+  isAssignor.value = user_roles.includes("assignor");
+}
 
 watch(user, function() {
-  store.setUser(user);
+  setValues()
 });
 
-watch(isAuthenticated, async function() {
-  if (isAuthenticated) {
-    const accessToken = isAuthenticated ? await getAccessTokenSilently() : null;
-    setAccessToken(accessToken);
-    setAuthenticated(isAuthenticated.value);
-  } else {
-    setAccessToken(null);
-    setAuthenticated(false);
-  }
+
+onBeforeMount(() => {
+  setValues();
 });
 
-const isReferee = computed(() => {
-  return store.isReferee;
-});
-
-const isAssignor = computed(() => {
-  return store.isAssignor;
-});
 </script>

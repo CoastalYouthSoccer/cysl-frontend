@@ -1,5 +1,5 @@
 <template>
-  <v-btn color="primary" @click="handleLogout" data-cy="logout-btn">Log Out</v-btn>
+  <v-btn color="primary" @click="handleLogout" data-test="logout-btn">Log Out</v-btn>
 </template>
 
 <script setup>

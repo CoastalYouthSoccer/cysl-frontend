@@ -14,7 +14,14 @@ export default mergeConfig(
         deps: {
           inline: ["vuetify"],
         }
-      }
+      },
+      coverage: {
+        provider: 'istanbul',
+        reporter: ['text', 'html'],
+        exclude: [
+          '__tests__/**',
+        ],
+      },
     }
   })
 )

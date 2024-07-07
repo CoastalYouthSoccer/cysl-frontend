@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-const useUserStore = defineStore('user', {
+export const useUserStore = defineStore('user', {
   state: () => ({
     user: {
       userIsAuthenticated: false,
@@ -79,7 +79,7 @@ const useUserStore = defineStore('user', {
         this.user.lastName = "";
         this.user.email = "";
         this.user.phone = "";
-        this.user.userId = null,
+        this.user.userId = null;
         this.user.emailEnabled = false;
         this.user.smsEnabled = false;
         this.user.isAssignor = false;
@@ -144,5 +144,3 @@ const useUserStore = defineStore('user', {
     }
   }
 });
-
-export default useUserStore;

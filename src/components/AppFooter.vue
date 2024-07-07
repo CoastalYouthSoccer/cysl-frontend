@@ -1,4 +1,6 @@
 <template>
+  <v-container>
+    <v-layout>
     <v-footer class="d-flex flex-column bg-blue-darken-1">
       <v-row>
         <v-btn
@@ -14,9 +16,11 @@
         </v-btn>
       </v-row>
       <v-row>
-        {{ new Date().getFullYear() }} — <strong>Hanover Soccer Referee</strong>
+        <p data-test="copyright">{{ new Date().getFullYear() }} — <strong>Hanover Soccer Referee</strong></p>
       </v-row>
     </v-footer>
+  </v-layout>
+  </v-container>
 </template>
 
 <script setup>

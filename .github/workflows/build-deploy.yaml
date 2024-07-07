@@ -1,0 +1,58 @@
+name: Build and Deploy Frontend Code
+
+on:
+    push:
+      paths:
+        - '**'
+        - '!README.md'
+        - '!VERSION'
+      branches:
+        - '**'
+        - '!releases/**'
+
+jobs:
+  build_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: set .env
+      run: |
+        echo ${{ vars.VITE_ENV }} >.env
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    - run: |
+        npm install
+        npm run test
+        npm run build
+
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    - name: Deploy to Server
+      if: github.ref == 'refs/heads/main'
+      uses: easingthemes/ssh-deploy@main
+      env:
+        TARGET_DIR: ${{ vars.DEPLOY_TARGET }}/frontend-files/${{ github.sha }}
+      with:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        ARGS: "-rlgoDzvc -i"
+        SOURCE: "dist/"
+        REMOTE_HOST: ${{ vars.DEPLOY_HOST }}
+        REMOTE_USER: ${{ vars.DEPLOY_USER }}
+        TARGET: ${{ env.TARGET_DIR }}
+        SCRIPT_BEFORE: |
+          sudo mkdir -p ${{ env.TARGET_DIR }}
+          sudo chmod 777 -R $${{ env.TARGET_DIR }}
+        SCRIPT_AFTER: |
+          sudo rm ${{ vars.DEPLOY_TARGET }}/frontend || echo frontend link does NOT exist
+          sudo ln -s ${{ env.TARGET_DIR }} ${{ vars.DEPLOY_TARGET }}/frontend
+          sudo chmod 755 -R ${{ env.TARGET_DIR }}
+          sudo chown root:root -R ${{ env.TARGET_DIR }}

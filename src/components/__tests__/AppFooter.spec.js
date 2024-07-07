@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import { expect, test } from 'vitest'
+import { expect, it, describe } from 'vitest'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
@@ -12,14 +12,18 @@ const vuetify = createVuetify({
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
-test('displays message', () => {
+describe("AppFooter", () =>{
   const wrapper = mount(AppFooter, {
     props: {},
     global: {
       plugins: [vuetify],
     }
-  })
+  });
+  it('displays message', () => {
+    expect(wrapper.get('[data-test="copyright"]').text()).toContain('2024 — Hanover Soccer Referee')
+  });
 
-  // Assert the rendered text of the component
-  expect(wrapper.text()).toContain('Home2024 — Hanover Soccer Refereeq')
+  it('display links', () => {
+    expect(wrapper.findComponent('.v-btn').text()).toContain('Home')
+  })
 })
