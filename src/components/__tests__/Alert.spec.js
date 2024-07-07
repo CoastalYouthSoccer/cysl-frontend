@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
-import Alert from './components/Alert.vue'
+import Alert from '../Alert.vue'
 
 const vuetify = createVuetify({
   components,

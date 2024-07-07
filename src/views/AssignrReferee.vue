@@ -7,5 +7,5 @@
 
 <script setup>
   import VuePdfEmbed from 'vue-pdf-embed'
-  import AssignrRefereePDF from "@/assets/assignr/referee.pdf"
+  import AssignrRefereePDF from "../assets/assignr/referee.pdf"
 </script>

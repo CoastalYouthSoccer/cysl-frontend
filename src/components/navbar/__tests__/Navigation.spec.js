@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
-import Navigation from './components/navbar/Navigation.vue'
+import Navigation from '../Navigation.vue'
 import * as auth0 from '@auth0/auth0-vue';
 
 const vuetify = createVuetify({

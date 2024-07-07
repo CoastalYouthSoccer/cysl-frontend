@@ -8,7 +8,7 @@
 <script setup>
 import { ref, onBeforeMount, watch } from 'vue'
 
-import { fetchVenues } from '@/services/api.venue.js'
+import { fetchVenues } from '../services/api.venue.js'
 
 const emit = defineEmits(['venueChange']);
 const venues = ref(null);

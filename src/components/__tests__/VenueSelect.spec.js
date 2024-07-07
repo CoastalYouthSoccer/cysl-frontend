@@ -3,8 +3,8 @@ import { expect, it, describe, vi, beforeEach } from 'vitest'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
-import VenueSelect from './components/VenueSelect.vue'; // Adjust the import path as needed
-import { fetchVenues } from '@/services/api.venue.js';
+import VenueSelect from '../VenueSelect.vue'; // Adjust the import path as needed
+import { fetchVenues } from '../../services/api.venue.js';
 
 const vuetify = createVuetify({
   components,
@@ -14,7 +14,7 @@ const vuetify = createVuetify({
 global.ResizeObserver = require('resize-observer-polyfill')
 
 // Mock the fetchVenues API call
-vi.mock('@/services/api.venue.js', () => ({
+vi.mock('../../services/api.venue.js', () => ({
   fetchVenues: vi.fn(),
 }));
 
