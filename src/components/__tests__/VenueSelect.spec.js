@@ -3,7 +3,7 @@ import { expect, it, describe, vi, beforeEach } from 'vitest'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
-import VenueSelect from '@/components/VenueSelect.vue'; // Adjust the import path as needed
+import VenueSelect from './components/VenueSelect.vue'; // Adjust the import path as needed
 import { fetchVenues } from '@/services/api.venue.js';
 
 const vuetify = createVuetify({

@@ -5,7 +5,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
-import ProfileNav from '@/components/navbar/ProfileNav.vue'
+import ProfileNav from './components/navbar/ProfileNav.vue'
 
 const vuetify = createVuetify({
   components,

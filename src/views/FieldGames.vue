@@ -78,9 +78,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useAuth0 } from "@auth0/auth0-vue";
-import Alert from "@/components/Alert.vue";
+import Alert from "../components/Alert.vue";
 
-import { fetchGames } from '@/services/api.game.js'
+import { fetchGames } from '../services/api.game.js'
 
 const { getAccessTokenSilently } = useAuth0();
 

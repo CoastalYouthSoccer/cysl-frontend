@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
-import RefereeNav from '@/components/navbar/RefereeNav.vue'
+import RefereeNav from './components/navbar/RefereeNav.vue'
 
 const vuetify = createVuetify({
   components,

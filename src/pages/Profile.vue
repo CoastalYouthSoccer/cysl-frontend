@@ -37,7 +37,7 @@
   import { watch, ref } from "vue";
   import { useAuth0 } from "@auth0/auth0-vue";
   const { getAccessTokenSilently, user, isAuthenticated } = useAuth0();
-  import Alert from "@/components/Alert.vue";
+  import Alert from "../components/Alert.vue";
 
   const baseURL = window.location.origin;
 

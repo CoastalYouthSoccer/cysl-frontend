@@ -20,6 +20,7 @@ jobs:
     - name: set .env.production
       run: |
         echo ${{ vars.VITE_ENV }} >.env.production
+        cat .env.production
 
     - name: Use Node.js
       uses: actions/setup-node@v4
