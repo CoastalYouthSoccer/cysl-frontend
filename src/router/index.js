@@ -5,49 +5,49 @@ const routes = [
   {
     path: "/",
     name: "Home",
-    component: () => import("../views/HomeView.vue")
+    component: () => import("@/views/HomeView.vue")
   },
   {
     path: "/assignr-assignor",
     name: "AssignrAssignor",
-    component: () => import("../views/AssignrAssignor.vue"),
+    component: () => import("@/views/AssignrAssignor.vue"),
     beforeEnter: authGuard
   },
   {
     path: "/assignr-referee",
     name: "AssignrReferee",
-    component: () => import("../views/AssignrReferee.vue"),
+    component: () => import("@/views/AssignrReferee.vue"),
     beforeEnter: authGuard
   },
   {
     path: "/spring2024rules",
     name: "CYSLSpring2024Rules",
-    component: () => import("../views/GameRules2024.vue"),
+    component: () => import("@/views/GameRules2024.vue"),
   },
   {
     path: "/field-coordinator",
     name: "FieldCoordinator",
-    component: () => import("../views/FieldGames.vue"),
+    component: () => import("@/views/FieldGames.vue"),
 //    beforeEnter: authGuard
   },
   {
     path: "/profile",
     name: "Profile",
-    component: () => import("../pages/Profile.vue"),
+    component: () => import("@/pages/Profile.vue"),
   },
   {
     path: "/call",
     name: "TheCall",
-    component: () => import("../views/TheCall.vue"),
+    component: () => import("@/views/TheCall.vue"),
   },
   {
     path: "/callback",
     name: "CallBack",
-    component: () => import("../pages/CallPage.vue"),
+    component: () => import("@/pages/CallPage.vue"),
   },
   {
     path: "/:catchAll(.*)",
-    component: () => import("../views/NotFound.vue"),
+    component: () => import("@/views/NotFound.vue"),
   }
 ];
 
