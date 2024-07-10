@@ -51,7 +51,7 @@ jobs:
         TARGET: ${{ env.TARGET_DIR }}
         SCRIPT_BEFORE: |
           sudo mkdir -p ${{ env.TARGET_DIR }}
-          sudo chmod 777 -R $${{ env.TARGET_DIR }}
+          sudo chmod 777 -R ${{ env.TARGET_DIR }}
         SCRIPT_AFTER: |
           sudo rm ${{ vars.DEPLOY_TARGET }}/frontend || echo frontend link does NOT exist
           sudo ln -s ${{ env.TARGET_DIR }} ${{ vars.DEPLOY_TARGET }}/frontend
