@@ -18,7 +18,7 @@ export default defineConfig({
     }),
     Components(),
   ],
-  define: { 'process.env': {} },
+  define: { 'process.env': process.env },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
