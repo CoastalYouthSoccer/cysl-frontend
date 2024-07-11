@@ -2,7 +2,7 @@ import { callApi } from "./api.service";
 
 export const fetchVenues = async () => {
   const config = {
-    url: 'venues',
+    url: 'cysl/venues',
     method: "GET",
     headers: {
       "content-type": "application/json",
