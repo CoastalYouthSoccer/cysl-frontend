@@ -10,7 +10,7 @@ describe('fetchVenues', () => {
     const result = await fetchVenues();
 
     expect(callApiSpy).toHaveBeenCalledWith({
-      url: 'venues',
+      url: 'cysl/venues',
       method: 'GET',
       headers: {
         'content-type': 'application/json',
@@ -29,7 +29,7 @@ describe('fetchVenues', () => {
     const result = await fetchVenues();
 
     expect(callApiSpy).toHaveBeenCalledWith({
-      url: 'venues',
+      url: 'cysl/venues',
       method: 'GET',
       headers: {
         'content-type': 'application/json',
