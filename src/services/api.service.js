@@ -3,11 +3,13 @@ import axios from "axios";
 function getDomainName() {
   let port = 0
   let domain = `${location.host}/api`;
+  console.log(`let domain: ${domain}`)
 
   if (location.host.includes(':')) {
     const domainArray = location.host.split(':');
     domain = domainArray[0];
     port = domainArray[1];
+    console.log('includes :');
   }
 
   if (location.host.includes('localhost')) {
@@ -26,6 +28,7 @@ export const callApi = async (options) => {
   try {
 // replace the provided endpoint name with the domain name/end point.
     const domainName = getDomainName();
+    console.log(`domain name: ${domainName}`);
     options.url = `${domainName}/${options.url}`
 
     const response = await axios(options);
