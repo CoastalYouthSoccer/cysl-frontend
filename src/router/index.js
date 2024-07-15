@@ -28,7 +28,7 @@ const routes = [
     path: "/field-coordinator",
     name: "FieldCoordinator",
     component: () => import("@/views/FieldGames.vue"),
-//    beforeEnter: authGuard
+    beforeEnter: authGuard
   },
   {
     path: "/profile",

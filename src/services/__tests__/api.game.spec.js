@@ -16,7 +16,7 @@ describe('fetchGames', () => {
     const result = await fetchGames(accessToken, params);
 
     expect(callApi).toHaveBeenCalledWith({
-      url: 'cysl/games',
+      url: 'api/games',
       method: 'GET',
       headers: {
         'content-type': 'application/json',
@@ -37,7 +37,7 @@ describe('fetchGames', () => {
     const result = await fetchGames(accessToken, params);
 
     expect(callApi).toHaveBeenCalledWith({
-      url: 'cysl/games',
+      url: 'api/games',
       method: 'GET',
       headers: {
         'content-type': 'application/json',
