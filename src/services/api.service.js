@@ -8,7 +8,6 @@ function getDomainName() {
     const domainArray = location.host.split(':');
     domain = domainArray[0];
     port = domainArray[1];
-    console.log('includes :');
   }
 
   if (location.host.includes('localhost')) {
@@ -17,7 +16,7 @@ function getDomainName() {
   }
 
   if (port === 0) {
-    return domain;
+    return `${domain}/api`;
   } else {
     return domain.concat(':', port);
   }
