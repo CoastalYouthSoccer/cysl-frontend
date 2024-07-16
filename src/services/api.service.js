@@ -3,6 +3,7 @@ import axios from "axios";
 function getDomainName() {
   let port = 0
   let domain = `${location.host}`;
+  console.log(`domain: ${domain}`);
 
   if (location.host.includes(':')) {
     const domainArray = location.host.split(':');
@@ -16,7 +17,7 @@ function getDomainName() {
   }
 
   if (port === 0) {
-    return `${domain}/api`;
+    return `https://${domain}/api`;
   } else {
     return domain.concat(':', port);
   }
