@@ -16,7 +16,7 @@ describe('fetchGames', () => {
     const result = await fetchGames(accessToken, params);
 
     expect(callApi).toHaveBeenCalledWith({
-      url: 'api/games',
+      url: 'games',
       method: 'GET',
       headers: {
         'content-type': 'application/json',
@@ -37,7 +37,7 @@ describe('fetchGames', () => {
     const result = await fetchGames(accessToken, params);
 
     expect(callApi).toHaveBeenCalledWith({
-      url: 'api/games',
+      url: 'games',
       method: 'GET',
       headers: {
         'content-type': 'application/json',

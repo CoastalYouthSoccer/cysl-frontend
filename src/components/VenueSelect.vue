@@ -32,7 +32,7 @@ async function getVenues() {
     venues.value = data;
   }
 
-  if (error.message) {
+  if (error && error.message) {
     console.error('Error fetching venues:', error.message);
   }
 }

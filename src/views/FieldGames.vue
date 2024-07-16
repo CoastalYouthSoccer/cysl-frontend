@@ -10,7 +10,7 @@
     <v-container>
       <v-row>
         <v-col cols="4">
-          <v-date-input v-model="gameDate" label="Date input"></v-date-input>
+          <v-date-input v-model="gameDate" label="Date"></v-date-input>
         </v-col>
         <v-col cols="8">
           <VenueSelect @venueChange="handleVenueChange"/>
