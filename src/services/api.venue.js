@@ -2,7 +2,7 @@ import { callApi } from "./api.service";
 
 export const fetchVenues = async () => {
   const config = {
-    url: 'api/venues',
+    url: 'venues',
     method: "GET",
     headers: {
       "content-type": "application/json",

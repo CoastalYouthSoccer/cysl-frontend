@@ -32,8 +32,8 @@ async function getVenues() {
     venues.value = data;
   }
 
-  if (error) {
-    console.error('Error fetching venues:', error);
+  if (error.message) {
+    console.error('Error fetching venues:', error.message);
   }
 }
 
