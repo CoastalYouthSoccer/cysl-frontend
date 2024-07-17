@@ -12,7 +12,7 @@ describe('callApi', () => {
     const options = { url: 'test-endpoint', method: 'GET' };
     const result = await callApi(options);
 
-//    expect(axios).toHaveBeenCalledWith({ url: 'http://localhost:8000/test-endpoint', method: 'GET' });
+    expect(axios).toHaveBeenCalledWith({ url: 'http://localhost:8000/test-endpoint', method: 'GET' });
     expect(result).toEqual({ data: { message: 'success' }, error: { message: null }});
   });
 
@@ -27,7 +27,7 @@ describe('callApi', () => {
     const options = { url: 'test-endpoint', method: 'GET' };
     const result = await callApi(options);
 
-//    expect(axios).toHaveBeenCalledWith({ url: 'http://localhost:8000/test-endpoint', method: 'GET' });
+    expect(axios).toHaveBeenCalledWith({ url: 'http://localhost:8000/test-endpoint', method: 'GET' });
     expect(result).toEqual({ data: null, error: { message: 'Request failed' } });
   });
 
@@ -38,7 +38,7 @@ describe('callApi', () => {
     const options = { url: 'test-endpoint', method: 'GET' };
     const result = await callApi(options);
 
-//    expect(axios).toHaveBeenCalledWith({ url: 'http://localhost:8000/test-endpoint', method: 'GET' });
+    expect(axios).toHaveBeenCalledWith({ url: 'http://localhost:8000/test-endpoint', method: 'GET' });
     expect(result).toEqual({ data: null, error: { message: 'Network Error' } });
   });
 });
