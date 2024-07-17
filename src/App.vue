@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-  import Navigation from "./components/navbar/Navigation.vue"
+  import Navigation from "@/components/navbar/Navigation.vue"
 </script>
 
 <style>
