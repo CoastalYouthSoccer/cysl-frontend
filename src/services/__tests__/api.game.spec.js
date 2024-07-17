@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { fetchGames } from '../api.game'; // Adjust the import to your actual file
+import { fetchGames } from '../api.game';
 import { callApi } from '../api.service';
 
 vi.mock('../api.service', () => ({

@@ -6,5 +6,5 @@
 
 <script setup>
   import VuePdfEmbed from 'vue-pdf-embed'
-  import rulePDF from "../assets/Spring2024GameRules.pdf"
+  import rulePDF from "@/assets/Spring2024GameRules.pdf"
 </script>

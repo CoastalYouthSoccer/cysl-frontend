@@ -2,7 +2,7 @@ import axios from "axios";
 
 function getDomainName() {
   let port = 0
-  let domain = `${location.host}`;
+  let domain = location.host;
 
   if (location.host.includes(':')) {
     const domainArray = location.host.split(':');
@@ -57,7 +57,6 @@ export const callApi = async (options) => {
         message = response.data.message;
       }
 
-      console.log(message);
       return {
         data: null,
         error: {

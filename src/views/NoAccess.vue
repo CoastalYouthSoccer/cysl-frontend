@@ -1,5 +1,5 @@
 <template>
-  <v-img src="../assets/pagenotfound.jpg"
+  <v-img src="@/assets/pagenotfound.jpg"
     class="img-fluid rounded"
     width="800"
     height="auto"
