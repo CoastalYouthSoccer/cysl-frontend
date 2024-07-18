@@ -18,6 +18,9 @@ export default mergeConfig(
       reporters: [
         ['vitest-sonar-reporter',{ outputFile: 'sonar-report.xml' }]
       ],
+      coverage: {
+        reporters: 'lcov',
+      },
     }
   })
 )
