@@ -27,12 +27,12 @@ jobs:
         node-version: 20
 
     - name: Test and Build
-#      env:
-#        VITE_AUTH0_DOMAIN: ${{ vars.VITE_AUTH0_DOMAIN}}
-#        VITE_AUTH0_CLIENT_ID: ${{ vars.VITE_AUTH0_CLIENT_ID }}
-#        VITE_AUTH0_CALLBACK_URL: ${{ vars.VITE_AUTH0_CALLBACK_URL }}
-#        VITE_AUTH0_SCOPE: ${{ vars.VITE_AUTH0_SCOPE }}
-#        VITE_AUTH0_AUDIENCE: ${{ vars.VITE_AUTH0_AUDIENCE }}
+      env:
+        VITE_AUTH0_DOMAIN: ${{ vars.VITE_AUTH0_DOMAIN}}
+        VITE_AUTH0_CLIENT_ID: ${{ vars.VITE_AUTH0_CLIENT_ID }}
+        VITE_AUTH0_CALLBACK_URL: ${{ vars.VITE_AUTH0_CALLBACK_URL }}
+        VITE_AUTH0_SCOPE: ${{ vars.VITE_AUTH0_SCOPE }}
+        VITE_AUTH0_AUDIENCE: ${{ vars.VITE_AUTH0_AUDIENCE }}
       run: |
         npm install
         npm run test
