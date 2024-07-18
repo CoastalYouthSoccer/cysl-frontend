@@ -37,6 +37,7 @@ jobs:
         npm install
         npm run test
         npm run build
+        ls -l
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master
