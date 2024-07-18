@@ -1,14 +1,18 @@
 name: Build and Deploy Frontend Code
 
 on:
-    push:
-      paths:
-        - '**'
-        - '!README.md'
-        - '!VERSION'
-      branches:
-        - '**'
-        - '!releases/**'
+  push:
+    paths:
+      - '**'
+      - '!README.md'
+      - '!VERSION'
+    branches:
+      - '**'
+      - '!releases/**'
+  pull_request:
+    branches:
+      - '**'
+      - '!releases/**'    
 
 jobs:
   build_deploy:
