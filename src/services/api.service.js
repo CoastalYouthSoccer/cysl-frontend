@@ -16,7 +16,7 @@ function getDomainName() {
   }
 
   if (port === 0) {
-    return domain;
+    return `https://${domain}/api`;
   } else {
     return domain.concat(':', port);
   }

@@ -25,7 +25,15 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 20
-    - run: |
+
+    - name: Test and Build
+      env:
+        VITE_AUTH0_DOMAIN: ${{ vars.VITE_AUTH0_DOMAIN}}
+        VITE_AUTH0_CLIENT_ID: ${{ vars.VITE_AUTH0_CLIENT_ID }}
+        VITE_AUTH0_CALLBACK_URL: ${{ vars.VITE_AUTH0_CALLBACK_URL }}
+        VITE_AUTH0_SCOPE: ${{ vars.VITE_AUTH0_SCOPE }}
+        VITE_AUTH0_AUDIENCE: ${{ vars.VITE_AUTH0_AUDIENCE }}
+      run: |
         npm install
         npm run test
         npm run build
@@ -35,6 +43,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 
     - name: Deploy to Server
       if: github.ref == 'refs/heads/main'
@@ -50,7 +59,7 @@ jobs:
         TARGET: ${{ env.TARGET_DIR }}
         SCRIPT_BEFORE: |
           sudo mkdir -p ${{ env.TARGET_DIR }}
-          sudo chmod 777 -R $${{ env.TARGET_DIR }}
+          sudo chmod 777 -R ${{ env.TARGET_DIR }}
         SCRIPT_AFTER: |
           sudo rm ${{ vars.DEPLOY_TARGET }}/frontend || echo frontend link does NOT exist
           sudo ln -s ${{ env.TARGET_DIR }} ${{ vars.DEPLOY_TARGET }}/frontend

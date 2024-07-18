@@ -16,11 +16,13 @@ export default mergeConfig(
         }
       },
       coverage: {
-        provider: 'istanbul',
-        reporter: ['text', 'html'],
         exclude: [
           '__tests__/**',
         ],
+      },
+      reporters: ['default', 'vitest-sonar-reporter'],
+      outputFile: {
+          'vitest-sonar-reporter': './sonar-report.xml',
       },
     }
   })

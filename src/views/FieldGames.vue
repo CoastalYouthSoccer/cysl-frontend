@@ -10,7 +10,7 @@
     <v-container>
       <v-row>
         <v-col cols="4">
-          <v-date-input v-model="gameDate" label="Date input"></v-date-input>
+          <v-date-input v-model="gameDate" label="Date"></v-date-input>
         </v-col>
         <v-col cols="8">
           <VenueSelect @venueChange="handleVenueChange"/>
@@ -120,10 +120,10 @@ async function returnGames(startDt, endDt, venue) {
     dataExists.value = true;
   }
 
-  if (error) {
-    console.error('Error fetching games:', error);
+  if (error.message) {
+    console.error('Error fetching games:', error.message);
     errorExist.value = true;
-    errorMsg.value = error;
+    errorMsg.value = error.message;
     errorType.value = "error";
   }
 

@@ -1,10 +1,9 @@
 <template>
   <v-app>
     <Navigation/>
-    <v-container>
-      <v-row></v-row>
+    <v-container class="spacing-playground pa-15">
+      <RouterView/>
     </v-container>
-    <RouterView/>
   </v-app>
 </template>
 
