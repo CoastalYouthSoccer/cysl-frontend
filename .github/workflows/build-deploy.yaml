@@ -9,11 +9,7 @@ on:
     branches:
       - '**'
       - '!releases/**'
-  pull_request:
-    branches:
-      - '**'
-      - '!releases/**'    
-
+  
 jobs:
   build_deploy:
     runs-on: ubuntu-latest
