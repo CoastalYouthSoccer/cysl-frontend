@@ -15,15 +15,9 @@ export default mergeConfig(
           inline: ["vuetify"],
         }
       },
-      coverage: {
-        exclude: [
-          '__tests__/**',
-        ],
-      },
-      reporters: ['default', 'vitest-sonar-reporter'],
-      outputFile: {
-          'vitest-sonar-reporter': './sonar-report.xml',
-      },
+      reporters: [
+        ['vitest-sonar-reporter',{ outputFile: 'sonar-report.xml' }]
+      ],
     }
   })
 )
