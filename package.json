@@ -23,6 +23,7 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
     "@vue/test-utils": "^2.4.6",
+    "c8": "^10.1.2",
     "jsdom": "^24.1.0",
     "resize-observer-polyfill": "^1.5.1",
     "vite": "^5.1.5",

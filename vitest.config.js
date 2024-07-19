@@ -15,11 +15,10 @@ export default mergeConfig(
           inline: ["vuetify"],
         }
       },
-      reporters: [
-        ['vitest-sonar-reporter',{ outputFile: 'sonar-report.xml' }]
-      ],
       coverage: {
-        reporters: 'lcov',
+        provider: 'c8',
+        reporter: ['text', 'lcov'],
+        reportsDirectory: './coverage',
       },
     }
   })
