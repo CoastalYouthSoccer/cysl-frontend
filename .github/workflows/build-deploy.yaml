@@ -35,7 +35,7 @@ jobs:
         VITE_AUTH0_AUDIENCE: ${{ vars.VITE_AUTH0_AUDIENCE }}
       run: |
         npm install
-        npm run test
+        npm run coverage
         npm run build
         ls -l
 
