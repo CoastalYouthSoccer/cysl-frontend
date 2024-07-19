@@ -16,13 +16,9 @@ export default mergeConfig(
         }
       },
       coverage: {
-        exclude: [
-          '__tests__/**',
-        ],
-      },
-      reporters: ['default', 'vitest-sonar-reporter'],
-      outputFile: {
-          'vitest-sonar-reporter': './sonar-report.xml',
+        provider: 'v8',
+        reporter: ['text', 'lcov'],
+        reportsDirectory: './coverage',
       },
     }
   })

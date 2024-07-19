@@ -1,15 +1,15 @@
 name: Build and Deploy Frontend Code
 
 on:
-    push:
-      paths:
-        - '**'
-        - '!README.md'
-        - '!VERSION'
-      branches:
-        - '**'
-        - '!releases/**'
-
+  push:
+    paths:
+      - '**'
+      - '!README.md'
+      - '!VERSION'
+    branches:
+      - '**'
+      - '!releases/**'
+  
 jobs:
   build_deploy:
     runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
         VITE_AUTH0_AUDIENCE: ${{ vars.VITE_AUTH0_AUDIENCE }}
       run: |
         npm install
-        npm run test
+        npm run coverage
         npm run build
 
     - name: SonarCloud Scan
