@@ -37,13 +37,13 @@ jobs:
         npm install
         npm run coverage
         npm run build
+        ls -l
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
 
     - name: Deploy to Server
       if: github.ref == 'refs/heads/main'
