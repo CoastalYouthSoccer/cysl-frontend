@@ -1,11 +1,12 @@
 <template>
   <v-app-bar
     color="primary"
+    dense
     dark
     prominent
-    height="50"
+    height="48"
   >
-    <v-btn href="/" size="350">CYSL Referee Resources</v-btn>
+    <v-btn href="/" size="280">CYSL Game Management Site</v-btn>
     <v-spacer></v-spacer>
     <AssignorNav v-if="isAssignor && !isLoading" data-test="AssignorNav"/>
     <ProfileNav v-if="isAuthenticated && !isLoading" data-test="ProfileNav"/>
