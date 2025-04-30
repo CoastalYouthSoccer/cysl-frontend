@@ -15,11 +15,7 @@ function getDomainName() {
     port = 8000;
   }
 
-  if (port === 0) {
-    return `https://${domain}/api`;
-  } else {
-    return domain.concat(':', port);
-  }
+  return port === 0 ? `https://${domain}/api` : `${domain}:${port}`;
 }
 
 export const callApi = async (options) => {

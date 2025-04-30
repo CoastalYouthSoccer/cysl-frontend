@@ -20,7 +20,7 @@ describe("AppFooter", () =>{
     }
   });
   it('displays message', () => {
-    expect(wrapper.get('[data-test="copyright"]').text()).toContain('2024 — Hanover Soccer Referee')
+    expect(wrapper.get('[data-test="copyright"]').text()).toContain('2025 — CYSL System')
   });
 
   it('display links', () => {

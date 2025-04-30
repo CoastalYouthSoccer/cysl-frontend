@@ -1,14 +1,18 @@
 <template>
   <v-app>
-    <Navigation/>
-    <v-container class="spacing-playground pa-15">
-      <RouterView/>
-    </v-container>
+    <Navigation app/>
+    <v-main>
+      <v-container fluid>
+        <RouterView/>
+      </v-container>
+    </v-main>
+    <AppFooter/>
   </v-app>
 </template>
 
 <script setup>
   import Navigation from "@/components/navbar/Navigation.vue"
+  import AppFooter from "@/components/AppFooter.vue";
 </script>
 
 <style>

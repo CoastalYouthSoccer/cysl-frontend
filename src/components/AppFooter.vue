@@ -16,7 +16,7 @@
         </v-btn>
       </v-row>
       <v-row>
-        <p data-test="copyright">{{ new Date().getFullYear() }} — <strong>Hanover Soccer Referee</strong></p>
+        <p data-test="copyright">{{ new Date().getFullYear() }} — <strong>CYSL System</strong></p>
       </v-row>
     </v-footer>
   </v-layout>
