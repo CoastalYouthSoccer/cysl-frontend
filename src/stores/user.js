@@ -11,18 +11,14 @@ export const useUserStore = defineStore('user', {
       socialLogin: false,
       smsEnabled: false,
       emailEnabled: false,
-      isAssignor: false,
-      isAdmin: false,
-      isReferee: false,
       courierId: null,
-      userId: null
-    },
-    accessToken: null
+      userId: null,
+      roles: [],
+      permissions: [],
+      associations: []
+    }
   }),
   actions: {
-    setAccessToken(token) {
-      this.accessToken = token;
-    },
     setFirstName(name) {
       this.user.firstName = name;
     },
@@ -47,33 +43,35 @@ export const useUserStore = defineStore('user', {
     setSMSEnabled(enable) {
       this.user.smsEnabled = enable;
     },
-    setIsReferee(active) {
-      this.user.isReferee = active;
-    },
-    setIsAssignor(active) {
-      this.user.isAssignor = active;
-    },
-    setIsAdmin(active) {
-      this.user.isAdmin = active;
-    },
     setSocialLogin(active) {
       this.user.socialLogin = active;
     },
     setUserId(id) {
       this.user.userId = id;
     },
+    setRoles(roles) {
+      this.user.roles = roles;
+    },
+    setPermissions(permissions) {
+      this.user.permissions = permissions;
+    },
+    setAssociations(associations) {
+      this.user.associations = associations;
+    },
+    clearUser() {
+      this.user = null
+      this.user.permissions = []
+      this.user.roles = []
+    },
     setUser(user) {
       if (user) {
-        this.user.firstName = user.value?.given_name ? user.value?.given_name : "";
-        this.user.lastName = user.value?.family_name ? user.value?.family_name : "";
-        this.user.email = user.value?.email ? user.value?.email : "";
-        this.user.phone = user.value?.phone ? user.value?.phone : "";
-        this.user.socialLogin = user.value?.sub.includes("oauth") ? true : false;
-        this.user.userIsAuthenticated = user.value?.authenticated ? user.value?.authenticated : false;
-        this.user.userId = user.value?.sub
-        this.user.isAdmin = user.value?.user_roles.includes("admin") ? true : false;
-        this.user.isReferee = user.value?.user_roles.includes("referee") ? true : false;
-        this.user.isAssignor = user.value?.user_roles.includes("assignor") ? true : false;
+        this.user.firstName = user?.given_name ? user?.given_name : "";
+        this.user.lastName = user?.family_name ? user?.family_name : "";
+        this.user.email = user?.email ? user?.email : "";
+        this.user.phone = user?.phone ? user?.phone : "";
+        this.user.socialLogin = user?.sub.includes("oauth") ? true : false;
+        this.user.userIsAuthenticated = user?.authenticated ? user.value?.authenticated : false;
+        this.user.userId = user?.sub
       } else {
         this.user.firstName = "";
         this.user.lastName = "";
@@ -82,18 +80,11 @@ export const useUserStore = defineStore('user', {
         this.user.userId = null;
         this.user.emailEnabled = false;
         this.user.smsEnabled = false;
-        this.user.isAssignor = false;
-        this.user.isReferee = false;
-        this.user.isAdmin = false;
-        this.user.isSocialLogin = false;
         this.user.userIsAuthenticated = false;
       }
     }
   },
   getters: {
-    getAccessToken(state) {
-      return state.accessToken;
-    },
     firstName(state) {
       return state.user.firstName;
     },
@@ -130,14 +121,20 @@ export const useUserStore = defineStore('user', {
     smsEnabled(state) {
       return state.user.smsEnabled;
     },
+    associations(state) {
+      return state.user.associations;
+    },
     isReferee(state) {
-      return state.user.isReferee;
+      return state.user?.permissions?.includes('referee') || false;
     },
     isAssignor(state) {
-      return state.user.isAssignor;
+      return state.user?.permissions?.includes('assignor') || false;
     },
     isAdmin(state) {
-      return state.user.isAdmin;
+      return state.user?.permissions?.includes('admin') || false;
+    },
+    isCoach(state) {
+      return state.user?.permissions?.includes('coach') || false;
     },
     isSocialLogin(state) {
       return state.user.socialLogin;

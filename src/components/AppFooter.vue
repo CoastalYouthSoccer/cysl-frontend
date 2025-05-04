@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout>
-    <v-footer class="d-flex flex-column bg-blue-darken-1">
+    <v-footer class="d-flex flex-column bg-blue-darken-1" app>
       <v-row>
         <v-btn
           v-for="link in links"

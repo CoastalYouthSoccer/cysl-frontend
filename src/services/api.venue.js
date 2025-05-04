@@ -1,8 +1,11 @@
 import { callApi } from "./api.service";
 
-export const fetchVenues = async () => {
+export const fetchVenues = async (params = {}) => {
+  const query = new URLSearchParams(params).toString();
+  const url = query ? `venues?${query}` : 'venues';
+
   const config = {
-    url: 'venues',
+    url,
     method: "GET",
     headers: {
       "content-type": "application/json",

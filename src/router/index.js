@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { authGuard } from '@auth0/auth0-vue';
+import { authGuard } from "@auth0/auth0-vue";
+import { roleGuard } from "@/auth/authGuard";
 
 const routes = [
   {
@@ -23,27 +24,26 @@ const routes = [
     path: "/spring2024rules",
     name: "CYSLSpring2024Rules",
     component: () => import("@/views/GameRules2024.vue"),
+    beforeEnter: authGuard
+    ,
   },
   {
     path: "/field-coordinator",
     name: "FieldCoordinator",
     component: () => import("@/views/FieldGames.vue"),
-    beforeEnter: authGuard
+    beforeEnter: [authGuard,roleGuard(['admin', 'assignor'])]
   },
   {
     path: "/profile",
     name: "Profile",
     component: () => import("@/pages/Profile.vue"),
+    beforeEnter: authGuard
   },
   {
     path: "/call",
     name: "TheCall",
     component: () => import("@/views/TheCall.vue"),
-  },
-  {
-    path: "/callback",
-    name: "CallBack",
-    component: () => import("@/pages/CallPage.vue"),
+    beforeEnter: [authGuard,roleGuard(['admin', 'assignor', 'referee'])]
   },
   {
     path: "/:catchAll(.*)",

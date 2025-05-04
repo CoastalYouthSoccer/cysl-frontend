@@ -46,6 +46,7 @@
   const lastName = ref(null);
   const isReferee = ref(false);
   const isAssignor = ref(false);
+  const isAdmin = ref(false);
 
   const apiError = ref(false);
   const valid = ref(false);
@@ -55,6 +56,7 @@
     lastName.value = user.value?.family_name;
     isReferee.value = user.value?.user_roles.includes("referee");
     isAssignor.value = user.value?.user_roles.includes("assignor");
+    isAdmin.value = user.value?.user_roles.includes("admin");
     valid.value = isAuthenticated;
   });
 

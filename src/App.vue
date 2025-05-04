@@ -11,8 +11,63 @@
 </template>
 
 <script setup>
+  import { watch } from 'vue'
+  import { useAuth0 } from '@auth0/auth0-vue'
+  import { useUserStore } from '@/stores/user'
+
   import Navigation from "@/components/navbar/Navigation.vue"
   import AppFooter from "@/components/AppFooter.vue";
+
+  const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0()
+  const userStore = useUserStore()
+
+  watch(
+  () => ({ loading: isLoading.value, authed: isAuthenticated.value }),
+  async ({ loading, authed }) => {
+    if (!loading && authed) {
+        try {
+          const token = await getAccessTokenSilently()
+          const res = await fetch('/venues', {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+          const data = await res.json()
+          userStore.setProtectedData(data)
+        } catch (err) {
+          console.error('Failed to load user data:', err)
+        }
+      }
+    if (!loading && authed && user.value) {
+      userStore.setUser(user.value)
+      try {
+        const token = await getAccessTokenSilently()
+        if (!token) throw new Error('No token returned')
+        const base64Url = token.split('.')[1]
+        if (!base64Url) throw new Error('Malformed JWT: no payload')
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+        const jsonPayload = decodeURIComponent(
+          atob(base64)
+            .split('')
+            .map(c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0'))
+            .join('')
+        )
+
+        const payload = JSON.parse(jsonPayload)
+        const roles = payload['user_roles'] || []
+        const permissions = payload['permissions'] || []
+        const associations = payload['associations'] || []
+
+        userStore.setRoles(roles)
+        userStore.setPermissions(permissions)
+        userStore.setAssociations(associations)
+      } catch (err) {
+        console.error('Error loading access token claims:', err)
+      }
+    } else if (!loading && !authed) {
+      userStore.clearUser()
+    }
+  },
+  { immediate: true }
+)
 </script>
 
 <style>
