@@ -55,10 +55,12 @@
           <h2 class="text-h4 font-weight-black" style="padding: 20px;">{{ fieldName }}</h2>
           <v-table>
               <thead>
-                <th>Time</th>
-                <th>Center</th>
-                <th>AR1</th>
-                <th>AR2</th>
+                <tr>
+                  <th id="time">Time</th>
+                  <th id="referee">Center</th>
+                  <th id="ar1">AR1</th>
+                  <th id="ar2">AR2</th>
+                </tr>
               </thead>
               <tbody>
                 <tr v-for="(game, time) in timeSlots" :key="time">
@@ -80,7 +82,7 @@ import { ref, computed } from 'vue'
 import { useAuth0 } from "@auth0/auth0-vue";
 import Alert from "@/components/Alert.vue";
 
-import { fetchGames } from '@/services/api.game.js'
+import { fetchAssignrGames } from '@/services/api.game.js'
 
 const { getAccessTokenSilently } = useAuth0();
 
@@ -107,13 +109,8 @@ async function returnGames(startDt, endDt, venue) {
     end_dt: endDt,
     venue: venue
   }
-  const accessToken = await getAccessTokenSilently({
-    authorizationParams: {
-      audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-      scope: import.meta.env.VITE_AUTH0_SCOPE,
-    },
-  });
-  const { data, error } = await fetchGames(accessToken, params);
+  const accessToken = await getAccessTokenSilently();
+  const { data, error } = await fetchAssignrGames(accessToken, params);
 
   if (data) {
     games.value = data;

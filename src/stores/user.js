@@ -3,7 +3,6 @@ import { defineStore } from 'pinia'
 export const useUserStore = defineStore('user', {
   state: () => ({
     user: {
-      userIsAuthenticated: false,
       firstName: "",
       lastName: "",
       email: "",
@@ -70,7 +69,6 @@ export const useUserStore = defineStore('user', {
         this.user.email = user?.email ? user?.email : "";
         this.user.phone = user?.phone ? user?.phone : "";
         this.user.socialLogin = user?.sub.includes("oauth") ? true : false;
-        this.user.userIsAuthenticated = user?.authenticated ? user.value?.authenticated : false;
         this.user.userId = user?.sub
       } else {
         this.user.firstName = "";
@@ -80,23 +78,15 @@ export const useUserStore = defineStore('user', {
         this.user.userId = null;
         this.user.emailEnabled = false;
         this.user.smsEnabled = false;
-        this.user.userIsAuthenticated = false;
       }
     }
   },
   getters: {
-    firstName(state) {
-      return state.user.firstName;
-    },
-    lastName(state) {
-      return state.user.lastName;
-    },
-    userIsAuthenticated(state) {
-      return state.user.userIsAuthenticated;
-    },
-    userId(state) {
-      return state.user.userId
-    },
+    firstName: (state) => state.user.firstName,
+    lastName:(state) => state.user.lastName,
+    isAuthenticated: (state) => !!state.user,
+    userId: (state) => state.user.userId,
+
     fullName(state) {
       if (state.user.lastName) {
         if (state.user.firstName) {
@@ -106,38 +96,16 @@ export const useUserStore = defineStore('user', {
       }
       return (state.user.firstName ? state.user.firstName : null);
     },
-    email(state) {
-      return state.user.email;
-    },
-    phone(state) {
-      return state.user.phone;
-    },
-    courierId(state) {
-      return state.user.courierId;
-    },
-    emailEnabled(state) {
-      return state.user.emailEnabled;
-    },
-    smsEnabled(state) {
-      return state.user.smsEnabled;
-    },
-    associations(state) {
-      return state.user.associations;
-    },
-    isReferee(state) {
-      return state.user?.permissions?.includes('referee') || false;
-    },
-    isAssignor(state) {
-      return state.user?.permissions?.includes('assignor') || false;
-    },
-    isAdmin(state) {
-      return state.user?.permissions?.includes('admin') || false;
-    },
-    isCoach(state) {
-      return state.user?.permissions?.includes('coach') || false;
-    },
-    isSocialLogin(state) {
-      return state.user.socialLogin;
-    }
+    email: (state) => state.user.email,
+    phone: (state) => state.user.phone,
+    courierId: (state) => state.user.courierId,
+    emailEnabled: (state) => state.user.emailEnabled,
+    smsEnabled: (state) => state.user.smsEnabled,
+    associations: (state) => state.user.associations,
+    isReferee: (state) => state.user?.roles?.includes('referee') || false,
+    isAssignor: (state) => state.user?.roles?.includes('assignor') || false,
+    isAdmin: (state) => state.user?.roles?.includes('admin') || false,
+    isCoach: (state) => state.user?.roles?.includes('coach') || false,
+    isSocialLogin: (state) => state.user.socialLogin
   }
 });

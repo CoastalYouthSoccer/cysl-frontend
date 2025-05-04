@@ -24,18 +24,6 @@
   watch(
   () => ({ loading: isLoading.value, authed: isAuthenticated.value }),
   async ({ loading, authed }) => {
-    if (!loading && authed) {
-        try {
-          const token = await getAccessTokenSilently()
-          const res = await fetch('/venues', {
-            headers: { Authorization: `Bearer ${token}` }
-          })
-          const data = await res.json()
-          userStore.setProtectedData(data)
-        } catch (err) {
-          console.error('Failed to load user data:', err)
-        }
-      }
     if (!loading && authed && user.value) {
       userStore.setUser(user.value)
       try {

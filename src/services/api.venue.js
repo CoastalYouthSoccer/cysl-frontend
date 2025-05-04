@@ -18,3 +18,19 @@ export const fetchVenues = async (params = {}) => {
     error,
   };
 };
+
+export const fetchAssignrVenues = async () => {
+  const config = {
+    url: "assignr-venues",
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+    },
+  };
+
+  const { data, error } = await callApi(config);
+  return {
+    data: data || null,
+    error,
+  };
+};

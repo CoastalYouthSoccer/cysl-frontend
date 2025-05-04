@@ -8,7 +8,7 @@
 <script setup>
 import { ref, onBeforeMount, watch } from 'vue'
 
-import { fetchVenues } from '@/services/api.venue.js'
+import { fetchAssignrVenues } from '@/services/api.venue.js'
 
 const emit = defineEmits(['venueChange']);
 const venues = ref(null);
@@ -26,7 +26,7 @@ function itemProps(item) {
 }
 
 async function getVenues() {
-  const { data, error } = await fetchVenues();
+  const { data, error } = await fetchAssignrVenues();
 
   if (data) {
     venues.value = data;

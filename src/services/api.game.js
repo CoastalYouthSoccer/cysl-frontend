@@ -17,3 +17,21 @@ export const fetchGames = async (accessToken, params) => {
     error,
   };
 };
+
+export const fetchAssignrGames = async (accessToken, params) => {
+  const config = {
+    url: 'assignr-games',
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    params: params
+  };
+
+  const { data, error } = await callApi(config);
+  return {
+    data: data || null,
+    error,
+  };
+};
