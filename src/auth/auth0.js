@@ -9,7 +9,7 @@ const auth0 = createAuth0({
     audience: import.meta.env.VITE_AUTH0_AUDIENCE,
   },
   cacheLocation: 'localstorage',
-  useRefreshTokens: true,
+  useRefreshTokens: false,
   onRedirectCallback: () => {
       // Push to /callback so we can run logic there
       router.push('/callback')

@@ -109,8 +109,7 @@ async function returnGames(startDt, endDt, venue) {
     end_dt: endDt,
     venue: venue
   }
-  const accessToken = await getAccessTokenSilently();
-  const { data, error } = await fetchAssignrGames(accessToken, params);
+  const { data, error } = await fetchAssignrGames(params);
 
   if (data) {
     games.value = data;

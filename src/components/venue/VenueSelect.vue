@@ -7,6 +7,7 @@
 
 <script setup>
 import { ref, onBeforeMount, watch } from 'vue'
+import { useAuth0 } from '@auth0/auth0-vue';
 
 import { fetchAssignrVenues } from '@/services/api.venue.js'
 
@@ -26,7 +27,9 @@ function itemProps(item) {
 }
 
 async function getVenues() {
-  const { data, error } = await fetchAssignrVenues();
+  const { getAccessTokenSilently } = useAuth0();
+  const token = await getAccessTokenSilently();
+  const { data, error } = await fetchAssignrVenues(token);
 
   if (data) {
     venues.value = data;
