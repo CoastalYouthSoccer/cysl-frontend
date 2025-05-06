@@ -63,7 +63,7 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-date-picker v-model="record.start_dt" label="Start Date" data-testid="start-date"></v-date-picker>
+            <v-date-input v-model="record.start_dt" label="Start Date" data-testid="start-date"></v-date-input>
           </v-col>
 
           <v-col cols="12" md="6">
@@ -71,7 +71,7 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-date-picker v-model="record.holiday_dates" label="Holiday Dates" multiple data-testid="holiday-dates"></v-date-picker>
+            <v-date-input v-model="record.holiday_dates" label="Holiday Dates" multiple data-testid="holiday-dates"></v-date-input>
           </v-col>
         </v-row>
       </template>
