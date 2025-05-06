@@ -38,5 +38,10 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ["vuetify"],
-  }
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./vitest.setup.js'],
+  },
 });

@@ -10,7 +10,6 @@
           <v-toolbar-title>
             Seasons
           </v-toolbar-title>
-
           <v-btn v-if="allowEdit"
             color="green"
             class="me-2"
@@ -19,6 +18,7 @@
             text="Add Season"
             border
             variant="flat"
+            data-testid="add-season-btn"
             @click="add"
           ></v-btn>
         </v-toolbar>
@@ -34,8 +34,8 @@
 
       <template v-slot:item.actions="{ item }">
         <div class="d-flex ga-2 justify-end">
-          <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-pencil" size="small" @click="edit(item)"></v-icon>
-          <v-icon v-if="allowDelete" color="medium-emphasis" icon="mdi-delete" size="small" @click="openDeleteDialog(item)"></v-icon>
+          <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-pencil" size="small" @click="edit(item)" data-testid="edit-season-btn"></v-icon>
+          <v-icon v-if="allowDelete" color="medium-emphasis" icon="mdi-delete" size="small" @click="openDeleteDialog(item)" data-testid="delete-season-btn"></v-icon>
         </div>
       </template>
 
@@ -59,19 +59,19 @@
       <template v-slot:text>
         <v-row>
           <v-col cols="12">
-            <v-text-field v-model="record.name" label="Name"></v-text-field>
+            <v-text-field v-model="record.name" label="Name" data-testid="input-name"></v-text-field>
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-date-input v-model="record.start_dt" label="Start Date"></v-date-input>
+            <v-date-picker v-model="record.start_dt" label="Start Date" data-testid="start-date"></v-date-picker>
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-number-input v-model="record.season_length" label="Length"></v-number-input>
+            <v-number-input v-model="record.season_length" label="Length" data-testid="season-length"></v-number-input>
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-date-input v-model="record.holiday_dates" label="Holiday Dates" multiple></v-date-input>
+            <v-date-picker v-model="record.holiday_dates" label="Holiday Dates" multiple data-testid="holiday-dates"></v-date-picker>
           </v-col>
         </v-row>
       </template>
@@ -79,11 +79,11 @@
       <v-divider></v-divider>
 
       <v-card-actions class="bg-surface-light">
-        <v-btn text="Cancel" variant="plain" @click="modifyDialog = false"></v-btn>
+        <v-btn text="Cancel" variant="plain" @click="modifyDialog = false" data-testid="modify-cancel-btn"></v-btn>
 
         <v-spacer></v-spacer>
 
-        <v-btn text="Save" prepend-icon="mdi-content-save" @click="save(record)"></v-btn>
+        <v-btn text="Save" prepend-icon="mdi-content-save" @click="save(record)" data-testid="modify-save-btn"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -96,9 +96,9 @@
       :text="`Are you sure you want to delete ${seasonToDelete?.name || ''}?`"
     >
       <v-card-actions class="bg-surface-light">
-        <v-btn text="Cancel" variant="plain" @click="deleteDialog = false"></v-btn>
+        <v-btn text="Cancel" variant="plain" @click="deleteDialog = false" data-testid="delete-cancel-btn"></v-btn>
         <v-spacer></v-spacer>
-        <v-btn text="Delete" prepend-icon="mdi-delete" @click="deleteItem(seasonToDelete)"></v-btn>
+        <v-btn text="Delete" prepend-icon="mdi-delete" @click="deleteItem(seasonToDelete)" data-testid="delete-delete-btn"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
