@@ -63,7 +63,7 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-text-field v-model="record.start_dt" label="Start Date"></v-text-field>
+            <v-date-input v-model="record.start_dt" label="Start Date"></v-date-input>
           </v-col>
 
           <v-col cols="12" md="6">
@@ -71,7 +71,7 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-text-field v-model="record.holiday_dates" label="Holiday Dates"></v-text-field>
+            <v-date-input v-model="record.holiday_dates" label="Holiday Dates" multiple></v-date-input>
           </v-col>
         </v-row>
       </template>
@@ -112,11 +112,12 @@
   import { useUserStore } from '@/stores/user'
   import { fetchSeasons, deleteSeason, updateSeason, createSeason }
     from '@/services/api.season.js'
+  import { formatDateToYYYYMMDD } from '@/utils/date';
 
   const adapter = useDate()
   const { getAccessTokenSilently } = useAuth0();
 
-  const DEFAULT_RECORD = { name: '', start_dt: '', season_length: 0, holiday_dates: ''}
+  const DEFAULT_RECORD = { name: '', start_dt: null, season_length: 0, holiday_dates: null}
 
   const seasons = ref([])
   const seasonToDelete = ref(null)
@@ -187,12 +188,14 @@
   }
 
   async function createItem(item) {
+    item.start_dt = formatDateToYYYYMMDD(item.start_dt);
     const token = await getAccessTokenSilently();
     const { data, error } = await createSeason(item, token);
 
     if (data) {
-      seasons.value = data;
+      seasons.value.push(data);
     }
+
 
     if (error && error.message) {
       console.error('Error Creating season:', error.message);
