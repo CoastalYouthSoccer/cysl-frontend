@@ -1,8 +1,11 @@
 import { callApi } from './api.service';
 
-export const fetchSeasons = async (token) => {
+export const fetchSeasons = async (token, params = {}) => {
+  const query = new URLSearchParams(params).toString();
+  const url = query ? `seasons?${query}` : 'seasons';
+
   const config = {
-    url: 'seasons',
+    url: url,
     method: "GET",
   };
 
