@@ -72,7 +72,7 @@ describe('callApi', () => {
 
     expect(result).toEqual({
       data: null,
-      error: { message: 'Not Found' },
+      error: { message: 'Request failed' },
     })
   })
 })

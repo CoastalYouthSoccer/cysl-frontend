@@ -1,17 +1,16 @@
 <template>
   <v-select
     v-if="venues" :item-props="itemProps" :items="venues" label="Venue"
-    v-model="venue" >
+    v-model="venue">
   </v-select>
 </template>
 
 <script setup>
 import { ref, onBeforeMount, watch } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue';
-const { getAccessTokenSilently } = useAuth0();
-
 import { fetchAssignrVenues } from '@/services/api.venue.js'
 
+const { getAccessTokenSilently } = useAuth0();
 const emit = defineEmits(['venueChange']);
 const venues = ref(null);
 const venue = ref(null);
@@ -36,7 +35,7 @@ async function getVenues() {
   }
 
   if (error && error.message) {
-    console.error('Error fetching venues:', error.message);
+    console.error(`Error fetching venues: ${error.message}`);
   }
 }
 
