@@ -1,7 +1,7 @@
 <template>
   <v-select
     v-if="associations" :item-props="itemProps" :items="associations" label="Association"
-    v-model="association">
+    v-model="association" data-testid="association-select">
   </v-select>
 </template>
 

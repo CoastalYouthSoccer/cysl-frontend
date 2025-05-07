@@ -1,7 +1,7 @@
 <template>
   <v-select
     v-if="venues" :item-props="itemProps" :items="venues" label="Venue"
-    v-model="venue">
+    v-model="venue" data-testid="venue-select">
   </v-select>
 </template>
 
