@@ -1,5 +1,5 @@
 <template>
-  <Alert v-if="errorMessage" data-testid="association-alert"/>
+  <Alert v-if="errorMessage" :msg=errorMessage color="red" data-testid="association-alert"/>
   <div v-if="isLoading" class="d-flex justify-center my-4" data-testid="association-loading">
     <v-progress-circular indeterminate color="primary" />
   </div>
