@@ -7,6 +7,8 @@ import 'vuetify/styles'
 import { vuetify } from '@/vuetify-setup'
 import { VDateInput } from 'vuetify/components'
 
+global.ResizeObserver = require('resize-observer-polyfill')
+
 vi.mock('@/services/api.season.js', () => ({
   fetchSeasons: vi.fn(),
   createSeason: vi.fn(),

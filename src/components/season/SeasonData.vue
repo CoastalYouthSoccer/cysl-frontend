@@ -1,5 +1,9 @@
 <template>
-  <v-sheet border rounded>
+  <Alert v-if="errorMessage" data-testid="season-alert"/>
+  <div v-if="isLoading" class="d-flex justify-center my-4" data-testid="season-loading">
+    <v-progress-circular indeterminate color="primary" />
+  </div>
+  <v-sheet border rounded v-if="!isLoading && seasons.length">
     <v-data-table
       :headers="headers"
       :hide-default-footer="seasons.length < 11"
@@ -113,7 +117,8 @@
   import { fetchSeasons, deleteSeason, updateSeason, createSeason }
     from '@/services/api.season.js'
   import { formatDateToYYYYMMDD } from '@/utils/date';
-
+  import formatErrorMessage from '@/utils/formatMessage.js'
+  import Alert from '../Alert.vue';
   const adapter = useDate()
   const { getAccessTokenSilently } = useAuth0();
 
@@ -128,7 +133,8 @@
   const userStore = useUserStore()
   const allowEdit = computed(() => userStore.user.permissions.includes('write:seasons'))
   const allowDelete = computed(() => userStore.user.permissions.includes('delete:seasons'))
-
+  const errorMessage = ref(null)
+  const isLoading = ref(true)
   const headers = [
     { title: 'Name', key: 'name', align: 'start' },
     { title: 'Start Date', key: 'start_dt' },
@@ -177,14 +183,13 @@
   async function getSeasons() {
     const token = await getAccessTokenSilently();
     const { data, error } = await fetchSeasons(token);
-
-    if (data) {
-      seasons.value = data;
+    if (error?.message) {
+      errorMessage.value = `Error fetching seasons: ${formatErrorMessage(error.message)}`
+      console.error(errorMessage.value)
+    } else {
+      seasons.value = data
     }
-
-    if (error && error.message) {
-      console.error('Error fetching seasons:', error.message);
-    }
+    isLoading.value = false
   }
 
   async function createItem(item) {

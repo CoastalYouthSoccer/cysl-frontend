@@ -14,6 +14,7 @@
 import { ref, onBeforeMount, watch } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue';
 import { fetchAssociations } from '@/services/api.association.js'
+import formatErrorMessage from '@/utils/formatMessage.js'
 import Alert from '../Alert.vue';
 
 const { getAccessTokenSilently } = useAuth0();
@@ -38,7 +39,7 @@ onBeforeMount(async() => {
   const token = await getAccessTokenSilently();
   const { data, error } = await fetchAssociations(token);
   if (error?.message) {
-    errorMessage.value = `Error fetching associations: ${error.message.join(', ')}`
+    errorMessage.value = `Error fetching associations: ${formatErrorMessage(error.message)}`
     console.error(errorMessage.value)
   } else {
     associations.value = data
