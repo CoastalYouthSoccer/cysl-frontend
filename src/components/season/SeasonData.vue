@@ -117,7 +117,7 @@
   import { fetchSeasons, deleteSeason, updateSeason, createSeason }
     from '@/services/api.season.js'
   import { formatDateToYYYYMMDD } from '@/utils/date';
-  import formatErrorMessage from '@/utils/formatMessage.js'
+  import { formatErrorMessage } from '@/utils/formatMessage.js'
   import Alert from '../Alert.vue';
   const adapter = useDate()
   const { getAccessTokenSilently } = useAuth0();

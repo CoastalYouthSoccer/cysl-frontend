@@ -13,7 +13,7 @@
 import { ref, onBeforeMount, watch } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue';
 import { fetchSeasons } from '@/services/api.season.js'
-import formatErrorMessage from '@/utils/formatMessage.js'
+import { formatErrorMessage } from '@/utils/formatMessage.js'
 import Alert from '../Alert.vue';
 
 const { getAccessTokenSilently } = useAuth0();

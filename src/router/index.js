@@ -13,8 +13,8 @@ const routes = [
     children: [
       { path: 'association', name: 'Association',
         component: () => import("@/components/association/AssociationData.vue") },
-      { path: 'game', name: 'Game',
-        component: () => import("@/components/game/GameData.vue") },
+//      { path: 'game', name: 'Game',
+//        component: () => import("@/components/game/GameData.vue") },
       { path: 'season', name: 'Season',
         component: () => import("@/components/season/SeasonData.vue") },
       { path: 'venue', name: 'Venue',
@@ -26,7 +26,7 @@ const routes = [
     path: '/assignor',
     children: [
       { path: 'assignr-documentation', name: 'AssignrDocumentation',
-        component: () => import("@/views/AssignrAssignor.vue" },
+        component: () => import("@/views/AssignrAssignor.vue") },
       { path: 'field-coordinator', name: 'FieldCoordinator',
         component: () => import("@/views/FieldGames.vue") },
     ],

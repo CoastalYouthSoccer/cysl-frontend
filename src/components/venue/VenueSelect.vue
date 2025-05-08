@@ -14,7 +14,7 @@
 import { ref, onBeforeMount, watch } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue';
 import { fetchAssignrVenues } from '@/services/api.venue.js'
-import formatErrorMessage from '@/utils/formatMessage.js'
+import { formatErrorMessage } from '@/utils/formatMessage.js'
 
 const { getAccessTokenSilently } = useAuth0();
 const emit = defineEmits(['venueChange']);
