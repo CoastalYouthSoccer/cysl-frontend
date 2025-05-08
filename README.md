@@ -65,8 +65,3 @@ To build your project for production, use:
 ```bash
 npm run build
 ```
-
-## TO DO
-
-1. Replace hard code API base url
-1. Create an authenticated API service

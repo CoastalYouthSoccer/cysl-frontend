@@ -18,14 +18,10 @@ export const fetchGames = async (accessToken, params) => {
   };
 };
 
-export const fetchAssignrGames = async (accessToken, params) => {
+export const fetchAssignrGames = async (accessparams) => {
   const config = {
     url: 'assignr-games',
     method: "GET",
-    headers: {
-      "content-type": "application/json",
-      Authorization: `Bearer ${accessToken}`,
-    },
     params: params
   };
 

@@ -13,7 +13,7 @@
     "@auth0/auth0-vue": "^2.3.3",
     "@mdi/font": "7.0.96",
     "axios": "^1.7.2",
-    "pinia": "^2.1.7",
+    "pinia": "^3.0.2",
     "roboto-fontface": "*",
     "unplugin-vue-components": "^0.27.2",
     "vue": "^3.4.0",
@@ -22,6 +22,7 @@
     "vuetify": "^3.5.0"
   },
   "devDependencies": {
+    "@pinia/testing": "^1.0.1",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vitest/coverage-v8": "^2.0.3",
     "@vue/test-utils": "^2.4.6",

@@ -1,43 +1,88 @@
-import { describe, it, expect, vi } from 'vitest';
-import { fetchVenues } from '../api.venue';
-import * as apiService from '../api.service';
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import * as venueApi from '../api.venue' // Adjust path
+import { callApi } from '../api.service' // Adjust path
 
-describe('fetchVenues', () => {
-  it('should call callApi with correct config and return data on success', async () => {
-    const mockResponse = { data: [{ id: 1, name: 'Venue 1' }] };
-    const callApiSpy = vi.spyOn(apiService, 'callApi').mockResolvedValueOnce(mockResponse);
+vi.mock('../api.service', () => ({
+  callApi: vi.fn()
+}))
 
-    const result = await fetchVenues();
+const mockToken = 'mock-token'
 
-    expect(callApiSpy).toHaveBeenCalledWith({
-      url: 'venues',
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-      },
-    });
+describe('Venue API methods', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
 
-    expect(result).toEqual({ data: mockResponse.data, error: undefined });
+  it('fetchVenues calls callApi with query params', async () => {
+    const mockData = [{ id: 1, name: 'Field A' }]
+    callApi.mockResolvedValueOnce({ data: mockData, error: { message: null } })
 
-    callApiSpy.mockRestore(); // Clean up the spy after the test
-  });
+    const result = await venueApi.fetchVenues(mockToken, { city: 'Springfield' })
 
-  it('should return an error message on failure', async () => {
-    const mockError = { error: { message: 'Request failed' } };
-    const callApiSpy = vi.spyOn(apiService, 'callApi').mockResolvedValueOnce(mockError);
+    expect(callApi).toHaveBeenCalledWith(
+      { url: 'venues?city=Springfield', method: 'GET' },
+      mockToken
+    )
+    expect(result.data).toEqual(mockData)
+  })
 
-    const result = await fetchVenues();
+  it('fetchAssignrVenues calls callApi correctly', async () => {
+    const mockData = [{ id: 'ext-venue-1', name: 'Assignr Venue' }]
+    callApi.mockResolvedValueOnce({ data: mockData, error: { message: null } })
 
-    expect(callApiSpy).toHaveBeenCalledWith({
-      url: 'venues',
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-      },
-    });
+    const result = await venueApi.fetchAssignrVenues(mockToken)
 
-    expect(result).toEqual({ data: null, error: mockError.error });
+    expect(callApi).toHaveBeenCalledWith(
+      { url: 'assignr-venues', method: 'GET' },
+      mockToken
+    )
+    expect(result.data).toEqual(mockData)
+  })
 
-    callApiSpy.mockRestore(); // Clean up the spy after the test
-  });
-});
+  it('createVenue posts venue data', async () => {
+    const newVenue = { name: 'New Park' }
+    callApi.mockResolvedValueOnce({ data: newVenue, error: { message: null } })
+
+    const result = await venueApi.createVenue(newVenue, mockToken)
+
+    expect(callApi).toHaveBeenCalledWith(
+      { url: 'venue', method: 'POST', data: newVenue },
+      mockToken
+    )
+    expect(result.data).toEqual(newVenue)
+  })
+
+  it('updateVenue patches venue data', async () => {
+    const updatedVenue = { id: 1, name: 'Updated Park' }
+    callApi.mockResolvedValueOnce({ data: updatedVenue, error: { message: null } })
+
+    const result = await venueApi.updateVenue(updatedVenue, mockToken)
+
+    expect(callApi).toHaveBeenCalledWith(
+      { url: 'venue', method: 'PATCH', data: updatedVenue },
+      mockToken
+    )
+    expect(result.data).toEqual(updatedVenue)
+  })
+
+  it('deleteVenue sends DELETE request with ID', async () => {
+    callApi.mockResolvedValueOnce({ data: { success: true }, error: { message: null } })
+
+    const result = await venueApi.deleteVenue(5, mockToken)
+
+    expect(callApi).toHaveBeenCalledWith(
+      { url: 'venue/5', method: 'DELETE' },
+      mockToken
+    )
+    expect(result.data).toEqual({ success: true })
+  })
+
+  it('handles errors gracefully', async () => {
+    callApi.mockResolvedValueOnce({ data: null, error: { message: 'Something went wrong' } })
+
+    const result = await venueApi.fetchVenues(mockToken)
+
+    expect(result.data).toBeNull()
+    expect(result.error.message).toBe('Something went wrong')
+  })
+})

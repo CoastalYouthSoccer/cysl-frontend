@@ -1,5 +1,5 @@
 <template>
-  <v-btn id="menu-activator" data-test="referee-btn">Referee</v-btn>
+  <v-btn id="menu-activator" data-test="admin-btn">Admin</v-btn>
   <v-menu activator="#menu-activator" open-on-hover>
     <v-list bg-color="primary" :nav=true>
       <v-list-item to="/assignr-referee">

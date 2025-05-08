@@ -1,57 +1,81 @@
-import { mount } from '@vue/test-utils';
-import { expect, it, describe, vi, beforeEach } from 'vitest'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-import VenueSelect from '@/components/VenueSelect.vue';
-import { fetchVenues } from '@/services/api.venue.js';
-
-const vuetify = createVuetify({
-  components,
-  directives,
-})
+import { mount, flushPromises } from '@vue/test-utils'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import VenueSelect from '@/components/venue/VenueSelect.vue'
+import * as venueApi from '@/services/api.venue.js'
+import { vuetify } from '@/vuetify-setup'
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
-vi.mock('@/services/api.venue.js', () => ({
-  fetchVenues: vi.fn(),
-}));
+vi.mock('@auth0/auth0-vue', () => ({
+  useAuth0: () => ({
+    getAccessTokenSilently: vi.fn().mockResolvedValue('fake-token')
+  })
+}))
 
-describe('VenueSelect', () => {
-  let wrapper;
+const mockVenues = [
+  { id: 1, name: 'Stadium A', city: 'Townville' },
+  { id: 2, name: 'Arena B', city: 'Cityplace' }
+]
 
-  beforeEach(async () => {
-    fetchVenues.mockResolvedValue({
-      data: [
-        { name: 'Venue 1', city: 'City 1' },
-        { name: 'Venue 2', city: 'City 2' }
-      ],
-      error: null
-    });
+describe('VenueSelect.vue', () => {
+  it('renders v-select with venue options from API', async () => {
+    vi.spyOn(venueApi, 'fetchAssignrVenues').mockResolvedValue({
+      data: mockVenues,
+      error: { message: null }
+    })
 
-    wrapper = mount(VenueSelect, {
-      props: {},
+    const wrapper = mount(VenueSelect, {
       global: {
         plugins: [vuetify],
-      }
-    });
-    await wrapper.vm.$nextTick();
-  });
+      },
+    })
 
-  it('renders v-select when venues are fetched', async () => {
-    expect(wrapper.findComponent({ name: 'v-select' }).exists()).toBe(true);
+    await flushPromises()
 
-    const items = wrapper.findComponent({ name: 'v-select' }).props('items');
-    expect(items).toHaveLength(2);
-  });
+    const select = wrapper.findComponent('[data-testid="venue-select"]')
+    expect(select.exists()).toBe(true)
+    expect(select.props('items')).toEqual(mockVenues)
+  })
 
-  it('emits venueChange event when venue is selected', async () => {
-    const vSelect = wrapper.findComponent({ name: 'v-select' });
+  it('emits venueChange on selection', async () => {
+    vi.spyOn(venueApi, 'fetchAssignrVenues').mockResolvedValue({
+      data: mockVenues,
+      error: { message: null }
+    })
 
-    vSelect.vm.$emit('update:modelValue', { name: 'Venue 1', city: 'City 1' });
-    await wrapper.vm.$nextTick();
+    const wrapper = mount(VenueSelect, {
+      global: {
+        plugins: [vuetify],
+      },
+    })
 
-    expect(wrapper.emitted().venueChange).toBeTruthy();
-    expect(wrapper.emitted().venueChange[0]).toEqual([{ name: 'Venue 1', city: 'City 1' }]);
-  });
-});
+    await flushPromises()
+
+    wrapper.vm.venue = mockVenues[1]
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.emitted().venueChange).toBeTruthy()
+    expect(wrapper.emitted().venueChange[0]).toEqual([mockVenues[1]])
+  })
+
+//  it('handles error in fetchVenues gracefully', async () => {
+//    vi.spyOn(venueApi, 'fetchAssignrVenues').mockResolvedValue({
+//      data: null,
+//      error: { message: 'Failed to fetch venues' }
+//    })
+//
+//    const wrapper = mount(VenueSelect, {
+//      global: {
+//        plugins: [vuetify],
+//      },
+//    })
+//
+//    await flushPromises()
+//
+//    const alert = wrapper.findComponent('[data-testid="venue-alert"]')
+//    expect(alert.exists()).toBe(true)
+//    expect(alert.text()).toContain('Error fetching venues: Failed to fetch venues')
+//
+//    await Promise.resolve()
+//  })
+})

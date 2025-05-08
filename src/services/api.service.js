@@ -1,16 +1,16 @@
 import axios from "axios";
 
 function getDomainName() {
-  let port = 0
+  let port = 0;
   let domain = location.host;
 
-  if (location.host.includes(':')) {
-    const domainArray = location.host.split(':');
-    domain = domainArray[0];
-    port = domainArray[1];
+  if (location.host.includes(":")) {
+    const [host, hostPort] = location.host.split(":");
+    domain = host;
+    port = hostPort;
   }
 
-  if (location.host.includes('localhost')) {
+  if (location.host.includes("localhost")) {
     domain = "http://localhost";
     port = 8000;
   }
@@ -18,54 +18,36 @@ function getDomainName() {
   return port === 0 ? `https://${domain}/api` : `${domain}:${port}`;
 }
 
-export const callApi = async (options) => {
-  try {
-// replace the provided endpoint name with the domain name/end point.
-    const domainName = getDomainName();
-    options.url = `${domainName}/${options.url}`
+export const callApi = async (options, token = null) => {
+  const domainName = getDomainName();
 
-    const response = await axios(options);
-    const { data } = response;
+  const headers = {
+    "content-type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(options.headers || {}),
+  };
+
+  try {
+    const response = await axios({
+      ...options,
+      url: `${domainName}/${options.url}`,
+      headers,
+    });
 
     return {
-      data,
-      error: {
-        message: null
-      },
+      data: response.data,
+      error: { message: null },
     };
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error;
-
-      const { response } = axiosError;
-
-      let message = "http request failed";
-
-      if (response?.statusText) {
-        message = response.statusText;
-      }
-
-      if (axiosError.message) {
-        message = axiosError.message;
-      }
-
-      if (response?.data && response?.data.message) {
-        message = response.data.message;
-      }
-
-      return {
-        data: null,
-        error: {
-          message,
-        },
-      };
-    }
+    const message = axios.isAxiosError(error)
+      ? error.response?.data?.message ||
+        error.response?.statusText ||
+        error.message
+      : error.message;
 
     return {
       data: null,
-      error: {
-        message: error.message,
-      },
+      error: { message },
     };
   }
 };
