@@ -77,16 +77,16 @@ describe('SeasonData.vue', () => {
     api.createSeason.mockResolvedValue({ data: newSeason, error: null })
 
     // Open Add dialog
-    const addBtn = wrapper.findComponent('[data-testid="add-season-btn"]')
+    const addBtn = wrapper.findComponent('[data-test="add-season-btn"]')
     await addBtn.trigger('click')
 
-    const nameInput = wrapper.findComponent('[data-testid="input-name"]')
+    const nameInput = wrapper.findComponent('[data-test="input-name"]')
     expect(nameInput.exists()).toBe(true)
     await nameInput.setValue('Summer')
     expect(wrapper.vm.record.name).toBe('Summer')
 
     // Save
-    const saveBtn = wrapper.findComponent('[data-testid="modify-save-btn"]')
+    const saveBtn = wrapper.findComponent('[data-test="modify-save-btn"]')
     await saveBtn.trigger('click')
 
     await flushPromises()
@@ -117,11 +117,11 @@ describe('SeasonData.vue', () => {
     wrapper.vm.modifyDialog = true
     await wrapper.vm.$nextTick()
 
-    const nameInput = wrapper.findComponent('[data-testid="input-name"]')
+    const nameInput = wrapper.findComponent('[data-test="input-name"]')
     expect(nameInput.exists()).toBe(true)
     await nameInput.setValue('Spring Updated')
 
-    const saveBtn = wrapper.findComponent('[data-testid="modify-save-btn"]')
+    const saveBtn = wrapper.findComponent('[data-test="modify-save-btn"]')
     await saveBtn.trigger('click')
 
     wrapper.vm.seasons[0] = { ...wrapper.vm.record }
@@ -134,11 +134,11 @@ describe('SeasonData.vue', () => {
     api.deleteSeason.mockResolvedValue({ data: null, error: { message: null } })
 
     // Trigger delete icon (first delete button)
-    const deleteIcon = wrapper.findComponent('[data-testid="delete-season-btn"]')
+    const deleteIcon = wrapper.findComponent('[data-test="delete-season-btn"]')
     await deleteIcon.trigger('click')
 
     // Confirm delete in dialog
-    const confirmBtn = wrapper.findComponent('[data-testid="delete-delete-btn"]')
+    const confirmBtn = wrapper.findComponent('[data-test="delete-delete-btn"]')
     expect(confirmBtn.exists()).toBe(true)
     await confirmBtn.trigger('click')
 

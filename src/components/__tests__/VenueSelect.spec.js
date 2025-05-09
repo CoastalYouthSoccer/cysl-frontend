@@ -32,7 +32,7 @@ describe('VenueSelect.vue', () => {
 
     await flushPromises()
 
-    const select = wrapper.findComponent('[data-testid="venue-select"]')
+    const select = wrapper.findComponent('[data-test="venue-select"]')
     expect(select.exists()).toBe(true)
     expect(select.props('items')).toEqual(mockVenues)
   })
@@ -72,7 +72,7 @@ describe('VenueSelect.vue', () => {
 //
 //    await flushPromises()
 //
-//    const alert = wrapper.findComponent('[data-testid="venue-alert"]')
+//    const alert = wrapper.findComponent('[data-test="venue-alert"]')
 //    expect(alert.exists()).toBe(true)
 //    expect(alert.text()).toContain('Error fetching venues: Failed to fetch venues')
 //

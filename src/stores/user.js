@@ -61,6 +61,7 @@ export const useUserStore = defineStore('user', {
       this.user = null
       this.user.permissions = []
       this.user.roles = []
+      this.user.associations = []
     },
     setUser(user) {
       if (user) {
