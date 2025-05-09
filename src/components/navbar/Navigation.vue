@@ -8,10 +8,10 @@
   >
     <v-btn href="/" size="280">CYSL Game Management Site</v-btn>
     <v-spacer></v-spacer>
-    <AssignorNav v-if="isAssignor || isAdmin" data-test="AssignorNav"/>
-    <RefereeNav v-if="isReferee || isAdmin" data-test="RefereeNav"/>
-    <ProfileNav v-if="isAuthenticated" data-test="ProfileNav"/>
-    <LoginButton v-if="!isAuthenticated" data-test="LoginButton"/>
+    <AssignorNav v-if="isAssignor || isAdmin"/>
+    <RefereeNav v-if="isReferee || isAdmin"/>
+    <ProfileNav v-if="isAuthenticated"/>
+    <LoginButton v-if="!isAuthenticated"/>
   </v-app-bar>
 </template>
 

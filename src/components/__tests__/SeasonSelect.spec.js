@@ -35,7 +35,7 @@ describe('SeasonSelect.vue', () => {
   })
 
   it('renders v-select with season options from API', async () => {
-    const select = wrapper.findComponent('[data-testid="season-select"]')
+    const select = wrapper.findComponent('[data-test="season-select"]')
     expect(select.exists()).toBe(true)
     expect(select.props('items')).toEqual(mockSeasons)
   })
@@ -56,7 +56,7 @@ describe('SeasonSelect.vue', () => {
 //      })
 //    }))
 //
-//    const alert = wrapper.findComponent('[data-testid="season-alert"]')
+//    const alert = wrapper.findComponent('[data-test="season-alert"]')
 //    expect(alert.exists()).toBe(true)
 //    expect(alert.text()).toContain('Error fetching seasons: Failed to fetch seasons')
 //

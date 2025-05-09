@@ -1,8 +1,9 @@
 <template>
-  <Alert v-if="errorMessage" :msg=errorMessage color="red" data-testid="subVenues-alert"/>
-  <div v-if="isLoading" class="d-flex justify-center my-4" data-testid="subVenues-loading">
+  {{ isLoading }}
+  <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="subVenues-alert"/>
+<!--  <div v-if="isLoading" class="d-flex justify-center my-4" data-test="subVenues-loading">
     <v-progress-circular indeterminate color="primary" />
-  </div>
+  </div> -->
   <v-sheet border rounded v-if="!isLoading">
     <v-data-table
       :headers="headers"
@@ -22,7 +23,7 @@
             text="Add"
             border
             variant="flat"
-            data-testid="add-subVenues-btn"
+            data-test="add-subVenues-btn"
             @click="add"
           ></v-btn>
         </v-toolbar>
@@ -38,8 +39,8 @@
 
       <template v-slot:item.actions="{ item }">
         <div class="d-flex ga-2 justify-end">
-          <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-pencil" size="small" @click="edit(item)" data-testid="edit-subVenues-btn"></v-icon>
-          <v-icon v-if="allowDelete" color="medium-emphasis" icon="mdi-delete" size="small" @click="openDeleteDialog(item)" data-testid="delete-subVenues-btn"></v-icon>
+          <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-pencil" size="small" @click="edit(item)" data-test="edit-subVenues-btn"></v-icon>
+          <v-icon v-if="allowDelete" color="medium-emphasis" icon="mdi-delete" size="small" @click="openDeleteDialog(item)" data-test="delete-subVenues-btn"></v-icon>
         </div>
       </template>
 
@@ -63,7 +64,7 @@
       <template v-slot:text>
         <v-row>
           <v-col cols="12">
-            <v-text-field v-model="record.name" label="Name" data-testid="input-name"></v-text-field>
+            <v-text-field v-model="record.name" label="Name" data-test="input-name"></v-text-field>
           </v-col>
         </v-row>
       </template>
@@ -71,11 +72,11 @@
       <v-divider></v-divider>
 
       <v-card-actions class="bg-surface-light">
-        <v-btn text="Cancel" variant="plain" @click="modifyDialog = false" data-testid="modify-cancel-btn"></v-btn>
+        <v-btn text="Cancel" variant="plain" @click="modifyDialog = false" data-test="modify-cancel-btn"></v-btn>
 
         <v-spacer></v-spacer>
 
-        <v-btn text="Save" prepend-icon="mdi-content-save" @click="save(record)" data-testid="modify-save-btn"></v-btn>
+        <v-btn text="Save" prepend-icon="mdi-content-save" @click="save(record)" data-test="modify-save-btn"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -88,9 +89,9 @@
       :text="`Are you sure you want to delete ${subVenuesToDelete?.name || ''}?`"
     >
       <v-card-actions class="bg-surface-light">
-        <v-btn text="Cancel" variant="plain" @click="deleteDialog = false" data-testid="delete-cancel-btn"></v-btn>
+        <v-btn text="Cancel" variant="plain" @click="deleteDialog = false" data-test="delete-cancel-btn"></v-btn>
         <v-spacer></v-spacer>
-        <v-btn text="Delete" prepend-icon="mdi-delete" @click="deleteItem(subVenuesToDelete)" data-testid="delete-delete-btn"></v-btn>
+        <v-btn text="Delete" prepend-icon="mdi-delete" @click="deleteItem(subVenuesToDelete)" data-test="delete-delete-btn"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -133,15 +134,22 @@
     { title: 'Actions', key: 'actions', align: 'end', sortable: false },
   ]
 
-  onMounted(() => {
+  onMounted(async() => {
+    console.log(props.venueId, props.venueName)
     modifyDialog.value = false
     record.value = DEFAULT_RECORD
-    getSubVenues()
-  })
+    const token = await getAccessTokenSilently();
+    const { data, error } = await fetchSubVenues(token, {"venue_id": props.venueId});
 
-  function loadSubSubVenues() {
-    console.log('log')
-  }
+    if (error?.message) {
+      errorMessage.value = `Error fetching subVenues: ${formatErrorMessage(error.message)}`
+      console.error(errorMessage.value)
+    } else {
+      subVenues.value = data
+    }
+
+    isLoading.value = false
+  })
 
   function openDeleteDialog(item) {
     subVenuesToDelete.value = item
@@ -174,21 +182,9 @@
     modifyDialog.value = false
   }
 
-  async function getSubVenues() {
-    const token = await getAccessTokenSilently();
-    const { data, error } = await fetchSubVenues(token, {"venue_id": props.venueId});
-
-    if (error?.message) {
-      errorMessage.value = `Error fetching subVenues: ${formatErrorMessage(error.message)}`
-      console.error(errorMessage.value)
-    } else {
-      subVenues.value = data
-    }
-    isLoading.value = false
-    }
-
   async function createItem(item) {
     const token = await getAccessTokenSilently();
+    item.venue_id = props.venueId
     const { data, error } = await createSubVenue(item, token);
 
     if (data) {

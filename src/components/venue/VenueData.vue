@@ -1,6 +1,6 @@
 <template>
-  <Alert v-if="errorMessage" :msg=errorMessage color="red" data-testid="venue-alert"/>
-  <div v-if="isLoading" class="d-flex justify-center my-4" data-testid="venue-loading">
+  <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="venue-alert"/>
+  <div v-if="isLoading" class="d-flex justify-center my-4" data-test="venue-loading">
     <v-progress-circular indeterminate color="primary" />
   </div>
   <v-sheet border rounded v-if="!isLoading">
@@ -22,7 +22,7 @@
             text="Add"
             border
             variant="flat"
-            data-testid="add-venue-btn"
+            data-test="add-venue-btn"
             @click="add"
           ></v-btn>
         </v-toolbar>
@@ -38,9 +38,9 @@
 
       <template v-slot:item.actions="{ item }">
         <div class="d-flex ga-2 justify-end">
-          <v-icon color="medium-emphasis" icon="mdi-crosshairs" size="small" @click="loadSubVenues(item)" data-testid="edit-venue-btn"></v-icon>
-          <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-pencil" size="small" @click="edit(item)" data-testid="edit-venue-btn"></v-icon>
-          <v-icon v-if="allowDelete" color="medium-emphasis" icon="mdi-delete" size="small" @click="openDeleteDialog(item)" data-testid="delete-venue-btn"></v-icon>
+          <v-icon color="medium-emphasis" icon="mdi-crosshairs" size="small" @click="editSubVenue(item)" data-test="edit-venue-btn"></v-icon>
+          <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-pencil" size="small" @click="edit(item)" data-test="edit-venue-btn"></v-icon>
+          <v-icon v-if="allowDelete" color="medium-emphasis" icon="mdi-delete" size="small" @click="openDeleteDialog(item)" data-test="delete-venue-btn"></v-icon>
         </div>
       </template>
 
@@ -64,39 +64,39 @@
       <template v-slot:text>
         <v-row>
           <v-col cols="12">
-            <v-text-field v-model="record.name" label="Name" data-testid="input-name"></v-text-field>
+            <v-text-field v-model="record.name" label="Name" data-test="input-name"></v-text-field>
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-text-field v-model="record.address1" label="Address 1" data-testid="address1"></v-text-field>
+            <v-text-field v-model="record.address1" label="Address 1" data-test="input-address1"></v-text-field>
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-text-field v-model="record.address2" label="Address 2" data-testid="address2"></v-text-field>
+            <v-text-field v-model="record.address2" label="Address 2" data-test="input-address2"></v-text-field>
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-text-field v-model="record.city" label="City" data-testid="city"></v-text-field>
+            <v-text-field v-model="record.city" label="City" data-test="input-city"></v-text-field>
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-text-field v-model="record.state" label="State" data-testid="state"></v-text-field>
+            <v-text-field v-model="record.state" label="State" data-test="input-state"></v-text-field>
           </v-col>
 
-          <v-col cols="12" md="6">
-            <v-text-field v-model="record.association" label="Association" data-testid="association"></v-text-field>
-          </v-col>
+<!--          <v-col cols="12" md="6">
+            <v-text-field v-model="record.association" label="Association" data-test="association"></v-text-field>
+          </v-col> -->
         </v-row>
       </template>
 
       <v-divider></v-divider>
 
       <v-card-actions class="bg-surface-light">
-        <v-btn text="Cancel" variant="plain" @click="modifyDialog = false" data-testid="modify-cancel-btn"></v-btn>
+        <v-btn text="Cancel" variant="plain" @click="modifyDialog = false" data-test="modify-cancel-btn"></v-btn>
 
         <v-spacer></v-spacer>
 
-        <v-btn text="Save" prepend-icon="mdi-content-save" @click="save(record)" data-testid="modify-save-btn"></v-btn>
+        <v-btn text="Save" prepend-icon="mdi-content-save" @click="save(record)" data-test="modify-save-btn"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -109,16 +109,17 @@
       :text="`Are you sure you want to delete ${venueToDelete?.name || ''}?`"
     >
       <v-card-actions class="bg-surface-light">
-        <v-btn text="Cancel" variant="plain" @click="deleteDialog = false" data-testid="delete-cancel-btn"></v-btn>
+        <v-btn text="Cancel" variant="plain" @click="deleteDialog = false" data-test="delete-cancel-btn"></v-btn>
         <v-spacer></v-spacer>
-        <v-btn text="Delete" prepend-icon="mdi-delete" @click="deleteItem(venueToDelete)" data-testid="delete-delete-btn"></v-btn>
+        <v-btn text="Delete" prepend-icon="mdi-delete" @click="deleteItem(venueToDelete)" data-test="delete-delete-btn"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
-
 </template>
+
 <script setup>
   import { onMounted, ref, shallowRef, computed } from 'vue'
+  import { useRouter } from 'vue-router'
   import { useDate } from 'vuetify'
   import { useAuth0 } from '@auth0/auth0-vue';
 
@@ -146,6 +147,7 @@
   const allowDelete = computed(() => userStore.user.permissions.includes('delete:venues'))
   const errorMessage = ref(null)
   const isLoading = ref(true)
+  const router = useRouter()
 
   const headers = [
     { title: 'Name', key: 'name', align: 'start' },
@@ -188,16 +190,33 @@
         id: item.association_id,
         name: item.association
       }
+    }
   }
-}
+
   onMounted(() => {
     modifyDialog.value = false
     record.value = DEFAULT_RECORD
     getVenues()
+    isLoading.value = false
   })
 
-  function loadSubVenues() {
-    console.log('log')
+  async function getVenues() {
+    const token = await getAccessTokenSilently();
+    const { data, error } = await fetchVenues(token);
+
+    if (error?.message) {
+      errorMessage.value = `Error fetching venues: ${formatErrorMessage(error.message)}`
+      console.error(errorMessage.value)
+    } else {
+      venues.value = data
+    }
+  }
+
+  function editSubVenue(item) {
+    console.log(item)
+    router.push({ name: 'SubVenue',
+      query: {venueId: item.id, venueName: item.name}
+    })
   }
 
   function openDeleteDialog(item) {
@@ -230,19 +249,6 @@
 
     modifyDialog.value = false
   }
-
-  async function getVenues() {
-    const token = await getAccessTokenSilently();
-    const { data, error } = await fetchVenues(token);
-
-    if (error?.message) {
-      errorMessage.value = `Error fetching venues: ${formatErrorMessage(error.message)}`
-      console.error(errorMessage.value)
-    } else {
-      venues.value = data
-    }
-    isLoading.value = false
-    }
 
   async function createItem(item) {
     const token = await getAccessTokenSilently();

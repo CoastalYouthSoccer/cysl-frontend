@@ -18,7 +18,7 @@
             text="Add"
             border
             variant="flat"
-            data-testid="add-association-btn"
+            data-test="add-association-btn"
             @click="add"
           ></v-btn>
         </v-toolbar>
@@ -34,8 +34,8 @@
 
       <template v-slot:item.actions="{ item }">
         <div class="d-flex ga-2 justify-end">
-          <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-pencil" size="small" @click="edit(item)" data-testid="edit-association-btn"></v-icon>
-          <v-icon v-if="allowDelete" color="medium-emphasis" icon="mdi-delete" size="small" @click="openDeleteDialog(item)" data-testid="delete-association-btn"></v-icon>
+          <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-pencil" size="small" @click="edit(item)" data-test="edit-association-btn"></v-icon>
+          <v-icon v-if="allowDelete" color="medium-emphasis" icon="mdi-delete" size="small" @click="openDeleteDialog(item)" data-test="delete-association-btn"></v-icon>
         </div>
       </template>
 
@@ -59,7 +59,7 @@
       <template v-slot:text>
         <v-row>
           <v-col cols="12">
-            <v-text-field v-model="record.name" label="Name" data-testid="input-name"></v-text-field>
+            <v-text-field v-model="record.name" label="Name" data-test="input-name"></v-text-field>
           </v-col>
         </v-row>
       </template>
@@ -67,11 +67,11 @@
       <v-divider></v-divider>
 
       <v-card-actions class="bg-surface-light">
-        <v-btn text="Cancel" variant="plain" @click="modifyDialog = false" data-testid="modify-cancel-btn"></v-btn>
+        <v-btn text="Cancel" variant="plain" @click="modifyDialog = false" data-test="modify-cancel-btn"></v-btn>
 
         <v-spacer></v-spacer>
 
-        <v-btn text="Save" prepend-icon="mdi-content-save" @click="save(record)" data-testid="modify-save-btn"></v-btn>
+        <v-btn text="Save" prepend-icon="mdi-content-save" @click="save(record)" data-test="modify-save-btn"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -84,9 +84,9 @@
       :text="`Are you sure you want to delete ${associationToDelete?.name || ''}?`"
     >
       <v-card-actions class="bg-surface-light">
-        <v-btn text="Cancel" variant="plain" @click="deleteDialog = false" data-testid="delete-cancel-btn"></v-btn>
+        <v-btn text="Cancel" variant="plain" @click="deleteDialog = false" data-test="delete-cancel-btn"></v-btn>
         <v-spacer></v-spacer>
-        <v-btn text="Delete" prepend-icon="mdi-delete" @click="deleteItem(associationToDelete)" data-testid="delete-delete-btn"></v-btn>
+        <v-btn text="Delete" prepend-icon="mdi-delete" @click="deleteItem(associationToDelete)" data-test="delete-delete-btn"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

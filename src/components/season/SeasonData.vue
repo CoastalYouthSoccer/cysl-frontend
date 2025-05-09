@@ -1,6 +1,6 @@
 <template>
-  <Alert v-if="errorMessage" data-testid="season-alert"/>
-  <div v-if="isLoading" class="d-flex justify-center my-4" data-testid="season-loading">
+  <Alert v-if="errorMessage" data-test="season-alert"/>
+  <div v-if="isLoading" class="d-flex justify-center my-4" data-test="season-loading">
     <v-progress-circular indeterminate color="primary" />
   </div>
   <v-sheet border rounded v-if="!isLoading && seasons.length">
@@ -22,7 +22,7 @@
             text="Add"
             border
             variant="flat"
-            data-testid="add-season-btn"
+            data-test="add-season-btn"
             @click="add"
           ></v-btn>
         </v-toolbar>
@@ -38,8 +38,8 @@
 
       <template v-slot:item.actions="{ item }">
         <div class="d-flex ga-2 justify-end">
-          <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-pencil" size="small" @click="edit(item)" data-testid="edit-season-btn"></v-icon>
-          <v-icon v-if="allowDelete" color="medium-emphasis" icon="mdi-delete" size="small" @click="openDeleteDialog(item)" data-testid="delete-season-btn"></v-icon>
+          <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-pencil" size="small" @click="edit(item)" data-test="edit-season-btn"></v-icon>
+          <v-icon v-if="allowDelete" color="medium-emphasis" icon="mdi-delete" size="small" @click="openDeleteDialog(item)" data-test="delete-season-btn"></v-icon>
         </div>
       </template>
 
@@ -63,19 +63,19 @@
       <template v-slot:text>
         <v-row>
           <v-col cols="12">
-            <v-text-field v-model="record.name" label="Name" data-testid="input-name"></v-text-field>
+            <v-text-field v-model="record.name" label="Name" data-test="input-name"></v-text-field>
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-date-input v-model="record.start_dt" label="Start Date" data-testid="start-date"></v-date-input>
+            <v-date-input v-model="record.start_dt" label="Start Date" data-test="start-date"></v-date-input>
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-number-input v-model="record.season_length" label="Length" data-testid="season-length"></v-number-input>
+            <v-number-input v-model="record.season_length" label="Length" data-test="season-length"></v-number-input>
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-date-input v-model="record.holiday_dates" label="Holiday Dates" multiple data-testid="holiday-dates"></v-date-input>
+            <v-date-input v-model="record.holiday_dates" label="Holiday Dates" multiple data-test="holiday-dates"></v-date-input>
           </v-col>
         </v-row>
       </template>
@@ -83,11 +83,11 @@
       <v-divider></v-divider>
 
       <v-card-actions class="bg-surface-light">
-        <v-btn text="Cancel" variant="plain" @click="modifyDialog = false" data-testid="modify-cancel-btn"></v-btn>
+        <v-btn text="Cancel" variant="plain" @click="modifyDialog = false" data-test="modify-cancel-btn"></v-btn>
 
         <v-spacer></v-spacer>
 
-        <v-btn text="Save" prepend-icon="mdi-content-save" @click="save(record)" data-testid="modify-save-btn"></v-btn>
+        <v-btn text="Save" prepend-icon="mdi-content-save" @click="save(record)" data-test="modify-save-btn"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -100,9 +100,9 @@
       :text="`Are you sure you want to delete ${seasonToDelete?.name || ''}?`"
     >
       <v-card-actions class="bg-surface-light">
-        <v-btn text="Cancel" variant="plain" @click="deleteDialog = false" data-testid="delete-cancel-btn"></v-btn>
+        <v-btn text="Cancel" variant="plain" @click="deleteDialog = false" data-test="delete-cancel-btn"></v-btn>
         <v-spacer></v-spacer>
-        <v-btn text="Delete" prepend-icon="mdi-delete" @click="deleteItem(seasonToDelete)" data-testid="delete-delete-btn"></v-btn>
+        <v-btn text="Delete" prepend-icon="mdi-delete" @click="deleteItem(seasonToDelete)" data-test="delete-delete-btn"></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -147,6 +147,7 @@
     modifyDialog.value = false
     record.value = DEFAULT_RECORD
     getSeasons()
+    isLoading.value = false
   })
 
   function openDeleteDialog(item) {
@@ -189,7 +190,6 @@
     } else {
       seasons.value = data
     }
-    isLoading.value = false
   }
 
   async function createItem(item) {

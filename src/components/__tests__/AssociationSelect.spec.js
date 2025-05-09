@@ -35,7 +35,7 @@ describe('AssociationSelect.vue', () => {
   })
 
   it('renders v-select with association options from API', async () => {
-    const select = wrapper.findComponent('[data-testid="association-select"]')
+    const select = wrapper.findComponent('[data-test="association-select"]')
     expect(select.exists()).toBe(true)
     expect(select.props('items')).toEqual(mockAssociations)
   })
@@ -56,7 +56,7 @@ describe('AssociationSelect.vue', () => {
 //      })
 //    }))
 //
-//    const alert = wrapper.findComponent('[data-testid="association-alert"]')
+//    const alert = wrapper.findComponent('[data-test="association-alert"]')
 //    expect(alert.exists()).toBe(true)
 //    expect(alert.text()).toContain('Error fetching associations: Failed to fetch associations')
 //

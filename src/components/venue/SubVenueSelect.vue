@@ -1,12 +1,12 @@
 <template>
-  <Alert v-if="errorMessage" :msg=errorMessage color="red" data-testid="SubVenues-alert"/>
-  <div v-if="isLoading" class="d-flex justify-center my-4" data-testid="SubVenues-loading">
+  <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="SubVenues-alert"/>
+  <div v-if="isLoading" class="d-flex justify-center my-4" data-test="SubVenues-loading">
     <v-progress-circular indeterminate color="primary" />
   </div>
   <v-select
     v-if="!isLoading && SubVenuess.length" :item-props="itemProps"
     :items="SubVenues" label="SubVenues"
-    v-model="SubVenues" data-testid="SubVenues-select">
+    v-model="SubVenues" data-test="SubVenues-select">
   </v-select>
 </template>
 
