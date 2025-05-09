@@ -15,7 +15,7 @@
             class="me-2"
             prepend-icon="mdi-plus"
             rounded="lg"
-            text="Add Association"
+            text="Add"
             border
             variant="flat"
             data-testid="add-association-btn"

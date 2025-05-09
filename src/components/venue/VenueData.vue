@@ -1,9 +1,13 @@
 <template>
-  <v-sheet border rounded>
+  <Alert v-if="errorMessage" :msg=errorMessage color="red" data-testid="venue-alert"/>
+  <div v-if="isLoading" class="d-flex justify-center my-4" data-testid="venue-loading">
+    <v-progress-circular indeterminate color="primary" />
+  </div>
+  <v-sheet border rounded v-if="!isLoading">
     <v-data-table
       :headers="headers"
-      :hide-default-footer="venues.length < 11"
-      :items="venues"
+      :hide-default-footer="formattedVenues.length < 11"
+      :items="formattedVenues"
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -15,7 +19,7 @@
             class="me-2"
             prepend-icon="mdi-plus"
             rounded="lg"
-            text="Add Venue"
+            text="Add"
             border
             variant="flat"
             data-testid="add-venue-btn"
@@ -34,6 +38,7 @@
 
       <template v-slot:item.actions="{ item }">
         <div class="d-flex ga-2 justify-end">
+          <v-icon color="medium-emphasis" icon="mdi-crosshairs" size="small" @click="loadSubVenues(item)" data-testid="edit-venue-btn"></v-icon>
           <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-pencil" size="small" @click="edit(item)" data-testid="edit-venue-btn"></v-icon>
           <v-icon v-if="allowDelete" color="medium-emphasis" icon="mdi-delete" size="small" @click="openDeleteDialog(item)" data-testid="delete-venue-btn"></v-icon>
         </div>
@@ -63,15 +68,23 @@
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-date-input v-model="record.start_dt" label="Start Date" data-testid="start-date"></v-date-input>
+            <v-text-field v-model="record.address1" label="Address 1" data-testid="address1"></v-text-field>
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-number-input v-model="record.venue_length" label="Length" data-testid="venue-length"></v-number-input>
+            <v-text-field v-model="record.address2" label="Address 2" data-testid="address2"></v-text-field>
           </v-col>
 
           <v-col cols="12" md="6">
-            <v-date-input v-model="record.holiday_dates" label="Holiday Dates" multiple data-testid="holiday-dates"></v-date-input>
+            <v-text-field v-model="record.city" label="City" data-testid="city"></v-text-field>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-text-field v-model="record.state" label="State" data-testid="state"></v-text-field>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-text-field v-model="record.association" label="Association" data-testid="association"></v-text-field>
           </v-col>
         </v-row>
       </template>
@@ -112,12 +125,15 @@
   import { useUserStore } from '@/stores/user'
   import { fetchVenues, deleteVenue, updateVenue, createVenue }
     from '@/services/api.venue.js'
-  import { formatDateToYYYYMMDD } from '@/utils/date';
+  import { formatErrorMessage } from '@/utils/formatMessage.js';
 
   const adapter = useDate()
   const { getAccessTokenSilently } = useAuth0();
 
-  const DEFAULT_RECORD = { name: '', start_dt: null, venue_length: 0, holiday_dates: null}
+  const DEFAULT_RECORD = {
+    name: '', address1: null, address2: null, city: null, state: null,
+    zip_code: null, association: null
+  }
 
   const venues = ref([])
   const venueToDelete = ref(null)
@@ -128,20 +144,61 @@
   const userStore = useUserStore()
   const allowEdit = computed(() => userStore.user.permissions.includes('write:venues'))
   const allowDelete = computed(() => userStore.user.permissions.includes('delete:venues'))
+  const errorMessage = ref(null)
+  const isLoading = ref(true)
 
   const headers = [
     { title: 'Name', key: 'name', align: 'start' },
-    { title: 'Start Date', key: 'start_dt' },
-    { title: 'Length', key: 'venue_length', align: 'end' },
-    { title: 'Holiday Dates', key: 'holiday_dates' },
+    { title: 'Address 1', key: 'address1' },
+    { title: 'Address 2', key: 'address2' },
+    { title: 'City', key: 'city' },
+    { title: 'State', key: 'state' },
+    { title: 'Association', key: 'association' },
     { title: 'Actions', key: 'actions', align: 'end', sortable: false },
   ]
 
+  const formattedVenues = computed(() =>
+    venues.value.map(venue => ({
+      id: venue.id,
+      name: venue.name,
+      address_id: venue.address.id,
+      address1: venue.address?.address1 ?? '',
+      address2: venue.address?.address2 ?? '',
+      city: venue.address?.city ?? '',
+      state: venue.address?.state ?? '',
+      zip_code: venue.address?.zip_code ?? '',
+      association: venue.association?.name ?? '',
+      association_id: venue.association.id
+    }))
+  )
+
+  function inflateVenue(item) {
+    return {
+      id: item.id,
+      name: item.name,
+      address: {
+        id: item.address_id,
+        address1: item.address1,
+        address2: item.address2,
+        city: item.city,
+        state: item.state,
+        zip_code: item.zip_code
+      },
+      association: {
+        id: item.association_id,
+        name: item.association
+      }
+  }
+}
   onMounted(() => {
     modifyDialog.value = false
     record.value = DEFAULT_RECORD
     getVenues()
   })
+
+  function loadSubVenues() {
+    console.log('log')
+  }
 
   function openDeleteDialog(item) {
     venueToDelete.value = item
@@ -178,17 +235,16 @@
     const token = await getAccessTokenSilently();
     const { data, error } = await fetchVenues(token);
 
-    if (data) {
-      venues.value = data;
+    if (error?.message) {
+      errorMessage.value = `Error fetching venues: ${formatErrorMessage(error.message)}`
+      console.error(errorMessage.value)
+    } else {
+      venues.value = data
     }
-
-    if (error && error.message) {
-      console.error('Error fetching venues:', error.message);
+    isLoading.value = false
     }
-  }
 
   async function createItem(item) {
-    item.start_dt = formatDateToYYYYMMDD(item.start_dt);
     const token = await getAccessTokenSilently();
     const { data, error } = await createVenue(item, token);
 
@@ -203,18 +259,18 @@
   }
 
   async function updateItem(item) {
+    const sendItem = inflateVenue(item);
     const token = await getAccessTokenSilently();
-    const { data, error } = await updateVenue(item, token);
+    const { data, error } = await updateVenue(sendItem, token);
 
-    if (data) {
+    if (error?.message) {
+      errorMessage.value = `Error updating venue: ${item.name}, ${formatErrorMessage(error.message)}`
+      console.error(errorMessage.value)
+    } else {
       const index = venues.value.findIndex(venue => venue.id === data.id);
       if (index !== -1) {
         venues.value[index] = data;
       }
-    }
-
-    if (error && error.message) {
-      console.error('Error Updating venue:', error.message);
     }
   }
 
