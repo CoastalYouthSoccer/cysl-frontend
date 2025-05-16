@@ -7,9 +7,6 @@ export const fetchAssociations = async (token, params = {}) => {
   const config = {
     url: url,
     method: "GET",
-    headers: {
-      "content-type": "application/json",
-    },
   };
 
   const { data, error } = await callApi(config, token);

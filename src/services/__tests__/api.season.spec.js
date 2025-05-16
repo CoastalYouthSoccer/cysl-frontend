@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import * as seasonApi from '../api.season' // adjust path
-import { callApi } from '../api.service'   // adjust path
+import * as seasonApi from '../api.season'
+import { callApi } from '../api.service'
 
 vi.mock('../api.service', () => ({
   callApi: vi.fn()
