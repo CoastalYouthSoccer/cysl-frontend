@@ -103,10 +103,12 @@ export const useUserStore = defineStore('user', {
     emailEnabled: (state) => state.user.emailEnabled,
     smsEnabled: (state) => state.user.smsEnabled,
     associations: (state) => state.user.associations,
-    isReferee: (state) => state.user?.roles?.includes('referee') || false,
-    isAssignor: (state) => state.user?.roles?.includes('assignor') || false,
-    isAdmin: (state) => state.user?.roles?.includes('admin') || false,
-    isCoach: (state) => state.user?.roles?.includes('coach') || false,
+    isReferee: (state) => state.user?.roles?.includes('Referee') || false,
+    isAssignor: (state) => state.user?.roles?.includes('Assignor') || false,
+    isAdmin: (state) => state.user?.roles?.includes('Administrator') || false,
+    isCoach: (state) => state.user?.roles?.includes('Coach') || false,
+    isLeagueRep: (state) => state.user?.roles?.includes('League Rep') || false,
+    isAssociationRep: (state) => state.user?.roles?.includes('Association Rep') || false,
     isSocialLogin: (state) => state.user.socialLogin
   }
 });

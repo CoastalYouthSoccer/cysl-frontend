@@ -13,7 +13,7 @@
       </v-row>
       <v-row justify="center">
         <v-col sm="2" lg="2">
-          <v-checkbox v-model="isReferee" label="Referee?" data-test="isReferee" :disabled="true"/>
+          <v-checkbox v-model="isAdmin" label="Administrator?" data-test="isAdministrator" :disabled="true"/>
         </v-col>
         <v-col sm="2" lg="2">
           <v-checkbox v-model="isAssignor" label="Assignor?" data-test="isAssignor" :disabled="true"/>
@@ -21,8 +21,21 @@
       </v-row>
       <v-row justify="center">
         <v-col sm="2" lg="2">
-          <v-btn color="success" rounded type="submit" data-test="update">Update</v-btn>
+          <v-checkbox v-model="isReferee" label="Referee?" data-test="isReferee" :disabled="true"/>
         </v-col>
+        <v-col sm="2" lg="2">
+          <v-checkbox v-model="isCoach" label="Coach?" data-test="isCoach" :disabled="true"/>
+        </v-col>
+      </v-row>
+        <v-row justify="center">
+        <v-col sm="2" lg="2">
+          <v-checkbox v-model="isLeagueRep" label="League Rep?" data-test="isLeagueRep" :disabled="true"/>
+        </v-col>
+        <v-col sm="2" lg="2">
+          <v-checkbox v-model="isAssociationRep" label="Association Rep?" data-test="isAssociationRep" :disabled="true"/>
+        </v-col>
+      </v-row>
+      <v-row justify="center">
         <v-col sm="2" lg="2">
           <v-btn color="info" rounded type="button" @click="cancel" data-test="cancel">Cancel</v-btn>
         </v-col>
@@ -34,31 +47,20 @@
 </template>
 
 <script setup>
-  import { watch, ref } from "vue";
-  import { useAuth0 } from "@auth0/auth0-vue";
-  const { getAccessTokenSilently, user, isAuthenticated } = useAuth0();
+  import { ref } from "vue";
   import Alert from "@/components/Alert.vue";
+  import { storeToRefs } from 'pinia';
+  import { useUserStore } from '@/stores/user';
 
+  const userStore = useUserStore()
+  const { isAssignor, isReferee, isAdmin, isCoach, isLeagueRep,
+          isAssociationRep, firstName, lastName } = storeToRefs(userStore)
   const baseURL = window.location.origin;
 
   const msg = ref(null);
-  const firstName = ref(null);
-  const lastName = ref(null);
-  const isReferee = ref(false);
-  const isAssignor = ref(false);
-  const isAdmin = ref(false);
 
   const apiError = ref(false);
   const valid = ref(false);
-
-  watch(user, function() {
-    firstName.value = user.value?.given_name
-    lastName.value = user.value?.family_name;
-    isReferee.value = user.value?.user_roles.includes("referee");
-    isAssignor.value = user.value?.user_roles.includes("assignor");
-    isAdmin.value = user.value?.user_roles.includes("admin");
-    valid.value = isAuthenticated;
-  });
 
   function cancel() {
     console.log('cancel')
