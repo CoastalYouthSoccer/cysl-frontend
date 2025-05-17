@@ -82,10 +82,6 @@
           <v-col cols="12" md="6">
             <v-text-field v-model="record.state" label="State" data-test="input-state"></v-text-field>
           </v-col>
-
-<!--          <v-col cols="12" md="6">
-            <v-text-field v-model="record.association" label="Association" data-test="association"></v-text-field>
-          </v-col> -->
         </v-row>
       </template>
 
@@ -213,7 +209,6 @@
   }
 
   function editSubVenue(item) {
-    console.log(item)
     router.push({ name: 'SubVenue',
       query: {venueId: item.id, venueName: item.name}
     })
