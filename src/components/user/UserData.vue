@@ -1,6 +1,6 @@
 <template>
-  <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="venue-alert"/>
-  <div v-if="isLoading" class="d-flex justify-center my-4" data-test="venue-loading">
+  <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="userData-alert"/>
+  <div v-if="isLoading" class="d-flex justify-center my-4" data-test="userData-loading">
     <v-progress-circular indeterminate color="primary" />
   </div>
   <v-sheet border rounded v-if="!isLoading">
@@ -31,7 +31,7 @@
 
       <template v-slot:item.actions="{ item }">
         <div class="d-flex ga-2 justify-end">
-          <v-icon v-if="allowEdit" icon="mdi-content-save" size="small" @click="save(item)" data-test="edit-user-btn"></v-icon>
+          <v-icon v-if="allowEdit" icon="mdi-content-save" size="small" @click="save(item)" data-test="save-user-btn"></v-icon>
         </div>
       </template>
 
@@ -55,8 +55,7 @@
   import { useAuth0 } from '@auth0/auth0-vue';
 
   import { useUserStore } from '@/stores/user'
-  import { fetchUsers, deleteUser, updateUser }
-    from '@/services/api.user.js'
+  import { fetchUsers, updateUser } from '@/services/api.user.js'
   import { formatErrorMessage } from '@/utils/formatMessage.js';
 
   const adapter = useDate()
@@ -65,7 +64,6 @@
   const DEFAULT_RECORD = { name: '' }
 
   const users = ref([])
-  const userToDelete = ref(null)
   const record = ref(DEFAULT_RECORD)
   const userStore = useUserStore()
   const allowEdit = computed(() => userStore.user.permissions.includes('write:users'))

@@ -38,7 +38,6 @@ const mockRoles = [
 vi.mock('@/services/api.user.js', () => ({
   fetchUsers: vi.fn(),
   fetchRoles: vi.fn(),
-  deleteUser: vi.fn(),
   updateUser: vi.fn(),
 }))
 
@@ -85,33 +84,33 @@ describe('UserData.vue', () => {
     expect(wrapper.text()).toContain('User 1')
   })
 
-//  it('edits existing user when isEditing = true', async () => {
-//    // Simulate existing user
-//    api.updateUser.mockResolvedValue({
-//      data: { ...user, name: 'User Updated' },
-//      error: null,
-//    })
-//
-//    console.log(wrapper.html())
-//
-//    wrapper.vm.users.push(user)
-//    await wrapper.vm.$nextTick()
-//
-//    wrapper.vm.isEditing = true
-//    wrapper.vm.record = { ...wrapper.vm.users[0] }
-//    wrapper.vm.modifyDialog = true
-//    await wrapper.vm.$nextTick()
-//
-//    const nameInput = wrapper.findAllComponents('[data-test="input-name"]')
-//    expect(nameInput.exists()).toBe(true)
-//    await nameInput.setValue('User Updated')
-//
-//    const saveBtn = wrapper.findComponent('[data-test="modify-save-btn"]')
-//    await saveBtn.trigger('click')
-//
-//    wrapper.vm.users[0] = { ...wrapper.vm.record }
-//    await wrapper.vm.$nextTick()
-//
-//    expect(wrapper.vm.users[0].name).toBe('User Updated')
+  it('shows loading spinner when isLoading is true', async () => {
+    wrapper.vm.isLoading = true
+    await flushPromises()
+    expect(wrapper.find('[data-test="userData-loading"]').exists()).toBe(true)
+  })
+
+  it('renders Alert when errorMessage is present', async () => {
+    wrapper.vm.errorMessage = 'Fetch failed'
+    await flushPromises()
+    const alert = wrapper.find('[data-test="userData-alert"]')
+    expect(alert.exists()).toBe(true)
+  })
+
+  it('renders data table when loading is false', async () => {
+    wrapper.vm.isLoading = false
+    wrapper.vm.users = [{ id: '1', name: 'John', roles: [], associations: [] }]
+    await flushPromises()
+    const sheet = wrapper.findComponent({ name: 'v-sheet' })
+    expect(sheet.exists()).toBe(true)
+  })
+
+//  it('shows edit icon if allowEdit is true', async () => {
+//    wrapper.vm.isLoading = false
+//    wrapper.vm.allowEdit = true
+//    wrapper.vm.users = [{ id: '1', name: 'Editor', roles: [], associations: [] }]
+//    await flushPromises()
+//    const editBtn = wrapper.findComponent('[data-test="save-user-btn"]')
+//    expect(editBtn.exists()).toBe(true)
 //  })
 })
