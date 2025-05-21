@@ -16,11 +16,7 @@ const vuetify = createVuetify({
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
-const associationsMock = [
-  { id: '1', name: 'Main Association' },
-  { id: '2', name: 'Secondary Association' }
-]
-
+const associationsMock = ['Main Association', 'Secondary Association']
 
 describe('AssociationChip.vue', () => {
   let wrapper
@@ -42,7 +38,7 @@ describe('AssociationChip.vue', () => {
         ],
       },
       props: {
-        assignedAssociations: [{ id: '1', name: 'Main Association' }],
+        assignedAssociations: ['Main Association'],
       }
     })
   })
@@ -64,16 +60,13 @@ describe('AssociationChip.vue', () => {
   it('toggles association selection on click and emits updated associations', async () => {
     const chips = wrapper.findAllComponents('.v-chip')
 
-    // Click "Editor" to assign it
     await chips[1].trigger('click')
     await nextTick()
 
     const events = wrapper.emitted('update:assignedAssociations')
     expect(events).toBeTruthy()
     const updated = events[0][0]
-    expect(updated).toEqual([
-      { id: '1', name: 'Main Association' },
-      { id: '2', name: 'Secondary Association' }
-    ])
+    expect(updated).toEqual(['Main Association','Secondary Association'])
   })
 })
+

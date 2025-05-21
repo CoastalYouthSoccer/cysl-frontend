@@ -2,12 +2,12 @@
   <div>
     <v-chip
       v-for="association in getAssociations"
-      :key="association.id"
+      :key="association"
       class="ma-1"
       prepend-icon="mdi-home"
       :color="isAssigned(association) ? 'primary' : 'grey lighten-1'"
       :text-color="isAssigned(association) ? 'white' : 'black'"
-      :text="association.name"
+      :text="association"
       variant="elevated"
       clickable
       label
@@ -36,11 +36,11 @@ const emit = defineEmits(['update:assignedAssociations'])
 const localAssigned = ref([...props.assignedAssociations])
 
 const isAssigned = (association) => {
-  return localAssigned.value.some(r => r.id === association.id)
+  return localAssigned.value.some(r => r === association)
 }
 const toggleAssociation = (association) => {
   if (isAssigned(association)) {
-    localAssigned.value = localAssigned.value.filter(r => r.id !== association.id)
+    localAssigned.value = localAssigned.value.filter(r => r !== association)
   } else {
     localAssigned.value.push(association)
   }

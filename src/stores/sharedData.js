@@ -16,7 +16,11 @@ export const useShareStore = defineStore('share', {
         console.error(errorMessage)
         return
       }
-      this.associations = data
+      const temp = data.reduce((acc, data) => {
+        acc.push(data.name)
+        return acc
+      }, [])
+      this.associations = temp
     },
     async setRoles(token) {
       const { data, error } = await fetchRoles(token);

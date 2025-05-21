@@ -31,7 +31,7 @@
 
       <template v-slot:item.actions="{ item }">
         <div class="d-flex ga-2 justify-end">
-          <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-content-save" size="small" @click="edit(item)" data-test="edit-user-btn"></v-icon>
+          <v-icon v-if="allowEdit" icon="mdi-content-save" size="small" @click="save(item)" data-test="edit-user-btn"></v-icon>
         </div>
       </template>
 
@@ -50,8 +50,7 @@
 </template>
 
 <script setup>
-  import { onMounted, ref, shallowRef, computed } from 'vue'
-  import { storeToRefs } from 'pinia';
+  import { onMounted, ref, computed } from 'vue'
   import { useDate } from 'vuetify'
   import { useAuth0 } from '@auth0/auth0-vue';
 
@@ -86,24 +85,10 @@
     isLoading.value = false
   })
 
-  function edit (item) {
-    record.value = { ...item }
-  }
-
   function save (item) {
     updateItem(item)
   }
 
-  function roleInList(roles, id) {
-    console.log(roles)
-    for (const role in roles) {
-      console.log(role)
-      if (role.includes(id)) {
-        return true;
-      }
-    }
-    return false;
-  }
   async function getUsers() {
     const token = await getAccessTokenSilently();
     const { data, error } = await fetchUsers(token);
@@ -117,6 +102,7 @@
   }
 
   async function updateItem(item) {
+    console.log(item)
     const token = await getAccessTokenSilently();
     const { data, error } = await updateUser(item, token);
 
@@ -128,25 +114,8 @@
     }
 
     if (error && error.message) {
-      console.error('Error Updating user:', error.message);
+      errorMessage.value = `Error Updating user: ${formatErrorMessage(error.message)}`
+      console.error(errorMessage.value)
     }
-  }
-
-  async function deleteApiItem(user) {
-    const token = await getAccessTokenSilently();
-    const { data, error } = await deleteUser(user.id, token);
-
-    if (error.message === null) {
-      const index = users.value.findIndex(s => s.id === user.id);
-      if (index !== -1) {
-        users.value.splice(index, 1);
-      }
-    }
-
-    if (error && error.message) {
-      console.error('Error Deleting user:', error.message);
-    }
-
-    deleteDialog.value = false
   }
 </script>
