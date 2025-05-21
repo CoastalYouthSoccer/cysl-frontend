@@ -2,16 +2,6 @@
   <v-form id="profile-form" v-model="valid">
     <v-container :fluid=true>
       <v-row justify="center">
-        <v-col sm="4" lg="4">
-          <v-text-field label="First Name" type="text" v-model="firstName" data-test="firstName" :disabled="true"/>
-        </v-col>
-        </v-row>
-        <v-row justify="center">
-        <v-col sm="4" lg="4">
-          <v-text-field label="Last Name" type="text" v-model="lastName" data-test="lastName" :disabled="true"/>
-        </v-col>
-      </v-row>
-      <v-row justify="center">
         <v-col sm="2" lg="2">
           <v-checkbox v-model="isAdmin" label="Administrator?" data-test="isAdministrator" :disabled="true"/>
         </v-col>

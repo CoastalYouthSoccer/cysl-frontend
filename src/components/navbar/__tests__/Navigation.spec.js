@@ -31,12 +31,9 @@ describe('Navigation', () => {
         stubs: ['router-link'],
       }
     });
-//    wrapper.vm.$nextTick();
   });
 
   it('renders the button and app bar', async () => {
- //   const { isAuthenticated } = useAuth0();
- //   isAuthenticated.value = false;
     auth0.useAuth0 = vi.fn().mockReturnValue({
       isAuthenticated: false,
       isLoading: false

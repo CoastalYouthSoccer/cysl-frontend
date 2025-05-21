@@ -38,7 +38,7 @@ const routes = [
         })
       },
     ],
-    beforeEnter: [authGuard, roleGuard(['admin'])]
+    beforeEnter: [authGuard, roleGuard(['Administrator'])]
   },
   {
     path: '/assignor',
@@ -52,7 +52,7 @@ const routes = [
         component: () => import("@/views/FieldGames.vue")
       },
     ],
-    beforeEnter: [authGuard, roleGuard(['admin', 'assignor'])]
+    beforeEnter: [authGuard, roleGuard(['Administrator', 'Assignor'])]
   },
   {
     path: "/assignr-referee",
@@ -77,7 +77,7 @@ const routes = [
     path: "/call",
     name: "TheCall",
     component: () => import("@/views/TheCall.vue"),
-    beforeEnter: [authGuard,roleGuard(['admin', 'assignor', 'referee'])]
+    beforeEnter: [authGuard,roleGuard(['Administrator', 'Assignor', 'Referee'])]
   },
   {
     path: "/:catchAll(.*)",

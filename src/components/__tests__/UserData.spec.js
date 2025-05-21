@@ -117,7 +117,8 @@ describe('UserData.vue', () => {
     wrapper.vm.modifyDialog = true
     await wrapper.vm.$nextTick()
 
-    const nameInput = wrapper.findComponent('[data-test="input-name"]')
+    const nameInput = wrapper.findAllComponents('[data-test="input-name"]')
+    console.log(wrapper.html())
     expect(nameInput.exists()).toBe(true)
     await nameInput.setValue('User Updated')
 

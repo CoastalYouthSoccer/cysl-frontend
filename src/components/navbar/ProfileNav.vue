@@ -5,9 +5,6 @@
 
   <v-menu activator="#profile-activator" open-on-hover>
     <v-list bg-color="primary" :nav=true>
-      <v-list-item to="/profile" data-test="list-item">
-        <v-list-item-title>Profile</v-list-item-title>
-      </v-list-item>
       <v-list-item href="#" @click="clickLogout">
         <v-list-item-title>Logout</v-list-item-title>
       </v-list-item>

@@ -12,9 +12,9 @@ export const useUserStore = defineStore('user', {
       emailEnabled: false,
       courierId: null,
       userId: null,
-      roles: [],
+      userRoles: [],
       permissions: [],
-      associations: []
+      userAssociations: []
     }
   }),
   actions: {
@@ -48,20 +48,20 @@ export const useUserStore = defineStore('user', {
     setUserId(id) {
       this.user.userId = id;
     },
-    setRoles(roles) {
-      this.user.roles = roles;
+    setUserRoles(roles) {
+      this.user.userRoles = roles;
     },
     setPermissions(permissions) {
       this.user.permissions = permissions;
     },
-    setAssociations(associations) {
-      this.user.associations = associations;
+    setUserAssociations(associations) {
+      this.user.userAssociations = associations;
     },
     clearUser() {
       this.user = null
       this.user.permissions = []
-      this.user.roles = []
-      this.user.associations = []
+      this.user.userRoles = []
+      this.user.userAssociations = []
     },
     setUser(user) {
       if (user) {
@@ -84,7 +84,7 @@ export const useUserStore = defineStore('user', {
   },
   getters: {
     firstName: (state) => state.user.firstName,
-    lastName:(state) => state.user.lastName,
+    lastName: (state) => state.user.lastName,
     isAuthenticated: (state) => !!state.user,
     userId: (state) => state.user.userId,
 
@@ -102,13 +102,13 @@ export const useUserStore = defineStore('user', {
     courierId: (state) => state.user.courierId,
     emailEnabled: (state) => state.user.emailEnabled,
     smsEnabled: (state) => state.user.smsEnabled,
-    associations: (state) => state.user.associations,
-    isReferee: (state) => state.user?.roles?.includes('Referee') || false,
-    isAssignor: (state) => state.user?.roles?.includes('Assignor') || false,
-    isAdmin: (state) => state.user?.roles?.includes('Administrator') || false,
-    isCoach: (state) => state.user?.roles?.includes('Coach') || false,
-    isLeagueRep: (state) => state.user?.roles?.includes('League Rep') || false,
-    isAssociationRep: (state) => state.user?.roles?.includes('Association Rep') || false,
+    userAssociations: (state) => state.user.userAssociations,
+    isReferee: (state) => state.user?.userRoles?.includes('Referee') || false,
+    isAssignor: (state) => state.user?.userRoles?.includes('Assignor') || false,
+    isAdmin: (state) => state.user?.userRoles?.includes('Administrator') || false,
+    isCoach: (state) => state.user?.userRoles?.includes('Coach') || false,
+    isLeagueRep: (state) => state.user?.userRoles?.includes('League Rep') || false,
+    isAssociationRep: (state) => state.user?.userRoles?.includes('Association Rep') || false,
     isSocialLogin: (state) => state.user.socialLogin
   }
 });
