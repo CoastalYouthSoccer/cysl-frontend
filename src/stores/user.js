@@ -18,36 +18,6 @@ export const useUserStore = defineStore('user', {
     }
   }),
   actions: {
-    setFirstName(name) {
-      this.user.firstName = name;
-    },
-    setLastName(name) {
-      this.user.lastName = name;
-    },
-    setAuthenticated(authenticated) {
-      this.user.userIsAuthenticated = authenticated;
-    },
-    setEmail(email){
-      this.user.email = email;
-    },
-    setPhone(phone) {
-      this.user.phone = phone;
-    },
-    setCourierId(courierId) {
-      this.user.courierId = courierId;
-    },
-    setEmailEnabled(enable) {
-      this.user.emailEnabled = enable;
-    },
-    setSMSEnabled(enable) {
-      this.user.smsEnabled = enable;
-    },
-    setSocialLogin(active) {
-      this.user.socialLogin = active;
-    },
-    setUserId(id) {
-      this.user.userId = id;
-    },
     setUserRoles(roles) {
       this.user.userRoles = roles;
     },
@@ -58,10 +28,20 @@ export const useUserStore = defineStore('user', {
       this.user.userAssociations = associations;
     },
     clearUser() {
-      this.user = null
-      this.user.permissions = []
-      this.user.userRoles = []
-      this.user.userAssociations = []
+      this.user = {
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        socialLogin: false,
+        smsEnabled: false,
+        emailEnabled: false,
+        courierId: null,
+        userId: null,
+        userRoles: [],
+        permissions: [],
+        userAssociations: []
+      }
     },
     setUser(user) {
       if (user) {
@@ -85,7 +65,7 @@ export const useUserStore = defineStore('user', {
   getters: {
     firstName: (state) => state.user.firstName,
     lastName: (state) => state.user.lastName,
-    isAuthenticated: (state) => !!state.user,
+    isAuthenticated: (state) => !!state.user.email,
     userId: (state) => state.user.userId,
 
     fullName(state) {
