@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import RoleChip from '@/components/user/RoleChip.vue'
+import AssociationChip from '@/components/user/AssociationChip.vue'
 import { createTestingPinia } from '@pinia/testing'
 import { nextTick } from 'vue'
 
@@ -16,16 +16,17 @@ const vuetify = createVuetify({
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
-const rolesMock = [
-  { id: '1', name: 'Admin', description: 'Full access' },
-  { id: '2', name: 'Editor', description: 'Can edit content' }
+const associationsMock = [
+  { id: '1', name: 'Main Association' },
+  { id: '2', name: 'Secondary Association' }
 ]
 
-describe('RoleChip.vue', () => {
+
+describe('AssociationChip.vue', () => {
   let wrapper
 
   beforeEach(() => {
-    wrapper = mount(RoleChip, {
+    wrapper = mount(AssociationChip, {
       global: {
         plugins: [
           createTestingPinia({
@@ -33,7 +34,7 @@ describe('RoleChip.vue', () => {
             stubActions: false,
             initialState: {
               share: {
-                roles: rolesMock
+                associations: associationsMock
               }
             }
           }),
@@ -41,37 +42,38 @@ describe('RoleChip.vue', () => {
         ],
       },
       props: {
-        assignedRoles: [{ id: '1', name: 'Admin', description: 'Full access' }],
+        assignedAssociations: [{ id: '1', name: 'Main Association' }],
       }
     })
   })
 
-  it('renders all roles as chips', () => {
+  it('renders all associations as chips', () => {
     const chips = wrapper.findAllComponents('.v-chip')
     expect(chips.length).toBe(2)
-    expect(chips[0].text()).toContain('Admin')
-    expect(chips[1].text()).toContain('Editor')
+    expect(chips[0].text()).toContain('Main Association')
+    expect(chips[1].text()).toContain('Secondary Association')
   })
 
-  it('colors assigned roles as primary', async () => {
+  it('colors assigned associations as primary', async () => {
     const chips = wrapper.findAllComponents('.v-chip')
-    expect(chips[0].props('color')).toBe('primary') // Admin is assigned
-    expect(chips[1].props('color')).toBe('grey lighten-1') // Editor is not
+    console.log(wrapper.html())
+    expect(chips[0].props('color')).toBe('primary')
+    expect(chips[1].props('color')).toBe('grey lighten-1')
   })
 
-  it('toggles role selection on click and emits updated roles', async () => {
+  it('toggles association selection on click and emits updated associations', async () => {
     const chips = wrapper.findAllComponents('.v-chip')
 
     // Click "Editor" to assign it
     await chips[1].trigger('click')
     await nextTick()
 
-    const events = wrapper.emitted('update:assignedRoles')
+    const events = wrapper.emitted('update:assignedAssociations')
     expect(events).toBeTruthy()
     const updated = events[0][0]
     expect(updated).toEqual([
-      { id: '1', name: 'Admin', description: 'Full access' },
-      { id: '2', name: 'Editor', description: 'Can edit content' }
+      { id: '1', name: 'Main Association' },
+      { id: '2', name: 'Secondary Association' }
     ])
   })
 })
