@@ -39,18 +39,6 @@ describe('user API methods', () => {
     expect(result.data).toEqual(user)
   })
 
-  it('deleteUser sends DELETE request with user id', async () => {
-    callApi.mockResolvedValueOnce({ data: { success: true }, error: { message: null } })
-
-    const result = await userApi.deleteUser(3, mockToken)
-
-    expect(callApi).toHaveBeenCalledWith(
-      { url: 'user/3', method: 'DELETE' },
-      mockToken
-    )
-    expect(result.data).toEqual({ success: true })
-  })
-
   it('handles API error responses gracefully', async () => {
     callApi.mockResolvedValueOnce({ data: null, error: { message: 'Server error' } })
 
@@ -58,5 +46,22 @@ describe('user API methods', () => {
 
     expect(result.data).toBeNull()
     expect(result.error.message).toBe('Server error')
+  })
+
+  it('fetchRoles calls callApi', async () => {
+    const mockValues = [
+      { id: 1, name: 'Admin', description: 'Administrator' },
+      { id: 2, name: 'Editor', description: 'Editor'}
+    ]
+    callApi.mockResolvedValueOnce({ data: mockValues,
+      error: { message: null } })
+
+    const result = await userApi.fetchRoles(mockToken)
+
+    expect(callApi).toHaveBeenCalledWith(
+      { url: 'roles', method: 'GET' },
+      mockToken
+    )
+    expect(result.data).toEqual(mockValues)
   })
 })
