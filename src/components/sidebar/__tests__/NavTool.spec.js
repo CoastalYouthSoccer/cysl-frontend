@@ -1,36 +1,66 @@
 import { describe, it, expect } from 'vitest'
-import { shallowMount } from '@vue/test-utils'
+import { mount } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
-import NavTools from '@/components/sidebar/NavTools.vue'
+import NavTool from '@/components/sidebar/NavTool.vue'
+import { vuetify } from '@/vuetify-setup'
 
-function mountWithRoles(roles) {
-  return shallowMount(NavTools, {
-    global: {
-      plugins: [
-        createTestingPinia({
-          stubActions: false,
-          initialState: {
-            user: { ...roles }
-          }
-        })
-      ]
-    }
-  })
-}
+global.ResizeObserver = require('resize-observer-polyfill')
 
-describe('NavTools.vue', () => {
+describe('NavTool.vue', () => {
   it('renders Field Coordinator for assignor', () => {
-    const wrapper = mountWithRoles({ isAssignor: true, isAdmin: false })
+    const wrapper = mount(NavTool, {
+      global: {
+        plugins: [
+          vuetify,
+          createTestingPinia({
+          initialState: {
+            user: {
+              user: {
+                userRoles: ['Assignor'],
+              },
+            },
+          },
+        })],
+      },
+    })
     expect(wrapper.find('[data-test="nav-item-field-coordinator"]').exists()).toBe(true)
   })
 
   it('renders Field Coordinator for admin', () => {
-    const wrapper = mountWithRoles({ isAssignor: false, isAdmin: true })
+    const wrapper = mount(NavTool, {
+      global: {
+        plugins: [
+          vuetify,
+          createTestingPinia({
+          initialState: {
+            user: {
+              user: {
+                userRoles: ['Administrator'],
+              },
+            },
+          },
+        })],
+      },
+    })
     expect(wrapper.find('[data-test="nav-item-field-coordinator"]').exists()).toBe(true)
   })
 
   it('does not render Field Coordinator if not assignor or admin', () => {
-    const wrapper = mountWithRoles({ isAssignor: false, isAdmin: false })
+    const wrapper = mount(NavTool, {
+      global: {
+        plugins: [
+          vuetify,
+          createTestingPinia({
+          initialState: {
+            user: {
+              user: {
+                userRoles: ['Referee'],
+              },
+            },
+          },
+        })],
+      },
+    })
     expect(wrapper.find('[data-test="nav-item-field-coordinator"]').exists()).toBe(false)
   })
 })
