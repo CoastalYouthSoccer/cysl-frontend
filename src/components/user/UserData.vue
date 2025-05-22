@@ -100,7 +100,6 @@
   }
 
   async function updateItem(item) {
-    console.log(item)
     const token = await getAccessTokenSilently();
     const { data, error } = await updateUser(item, token);
 

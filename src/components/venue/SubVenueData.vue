@@ -135,7 +135,6 @@
   ]
 
   onMounted(async() => {
-    console.log(props.venueId, props.venueName)
     modifyDialog.value = false
     record.value = DEFAULT_RECORD
     const token = await getAccessTokenSilently();

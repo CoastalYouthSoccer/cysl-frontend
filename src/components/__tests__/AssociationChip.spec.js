@@ -52,7 +52,6 @@ describe('AssociationChip.vue', () => {
 
   it('colors assigned associations as primary', async () => {
     const chips = wrapper.findAllComponents('.v-chip')
-    console.log(wrapper.html())
     expect(chips[0].props('color')).toBe('primary')
     expect(chips[1].props('color')).toBe('grey lighten-1')
   })

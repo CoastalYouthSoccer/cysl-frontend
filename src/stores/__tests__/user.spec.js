@@ -72,7 +72,6 @@ describe('useUserStore', () => {
 
     store.clearUser()
 
-    console.log(store.user)
     expect(store.user).toStrictEqual({
       courierId: null,
       email: "",

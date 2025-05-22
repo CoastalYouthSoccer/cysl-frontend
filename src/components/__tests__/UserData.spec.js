@@ -30,6 +30,25 @@ const mockUsers = [
   }
 ]
 
+const mockUpdatedUser = {
+  id: 1,
+  name: 'Updated User',
+  roles: [{
+    name: 'Referee',
+    id: 1,
+    description: 'Referee'
+  }, {
+    name: 'Coach',
+    id: 2,
+    description: 'Coach'
+  }, {
+    name: 'Assignor',
+    id: 3,
+    description: 'Assignor'
+  }],
+  associations: ['Test Association']
+}
+
 const mockRoles = [
   { id: '1', name: 'Admin', description: 'Full access' },
   { id: '2', name: 'Editor', description: 'Can edit content' }
@@ -59,6 +78,10 @@ describe('UserData.vue', () => {
       data: mockRoles,
       error: null,
     })
+    api.updateUser.mockResolvedValue({
+      data: mockUsers[0],
+      error: null,
+    })
     wrapper = mount(UserData, {
       global: {
         stubs: ['v-icon', 'v-number-input'],
@@ -70,6 +93,13 @@ describe('UserData.vue', () => {
             initialState: {
               share: {
                 roles: mockRoles
+              },
+              user: {
+                user: {
+                  permissions: ['write:users'],
+                  userRoles: [],
+                  userAssociations: []
+                }
               }
             }
           })
@@ -105,12 +135,12 @@ describe('UserData.vue', () => {
     expect(sheet.exists()).toBe(true)
   })
 
-//  it('shows edit icon if allowEdit is true', async () => {
-//    wrapper.vm.isLoading = false
-//    wrapper.vm.allowEdit = true
-//    wrapper.vm.users = [{ id: '1', name: 'Editor', roles: [], associations: [] }]
-//    await flushPromises()
-//    const editBtn = wrapper.findComponent('[data-test="save-user-btn"]')
-//    expect(editBtn.exists()).toBe(true)
+//  it('calls update function when save button is clicked', async () => {
+//    const saveBtn = wrapper.find('[data-test="save-user-btn"]')
+//    expect(saveBtn.exists()).toBe(true)
+
+//    await saveBtn.trigger('click')
+
+//    expect(wrapper.html()).toContain('Updated User')
 //  })
 })

@@ -64,4 +64,32 @@ describe('user API methods', () => {
     )
     expect(result.data).toEqual(mockValues)
   })
+
+  it('Delete User - successfully', async () => {
+    const mockData = { success: true }
+    const mockToken = 'test-token'
+    const userId = 'user-123'
+
+    callApi.mockResolvedValue({ data: mockData, error: null })
+
+    const result = await userApi.deleteUser(userId, mockToken)
+
+    expect(callApi).toHaveBeenCalledWith(
+      { url: `user/${userId}`, method: 'DELETE' },
+      mockToken
+    )
+    expect(result).toEqual({ data: mockData, error: null })
+  })
+
+  it('Delete User - failure', async () => {
+    const mockError = { message: 'User not found' }
+    const mockToken = 'test-token'
+    const userId = 'user-123'
+
+    callApi.mockResolvedValue({ data: null, error: mockError })
+
+    const result = await userApi.deleteUser(userId, mockToken)
+
+    expect(result).toEqual({ data: null, error: mockError })
+  })
 })
