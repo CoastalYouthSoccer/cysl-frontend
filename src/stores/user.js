@@ -12,56 +12,36 @@ export const useUserStore = defineStore('user', {
       emailEnabled: false,
       courierId: null,
       userId: null,
-      roles: [],
+      userRoles: [],
       permissions: [],
-      associations: []
+      userAssociations: []
     }
   }),
   actions: {
-    setFirstName(name) {
-      this.user.firstName = name;
-    },
-    setLastName(name) {
-      this.user.lastName = name;
-    },
-    setAuthenticated(authenticated) {
-      this.user.userIsAuthenticated = authenticated;
-    },
-    setEmail(email){
-      this.user.email = email;
-    },
-    setPhone(phone) {
-      this.user.phone = phone;
-    },
-    setCourierId(courierId) {
-      this.user.courierId = courierId;
-    },
-    setEmailEnabled(enable) {
-      this.user.emailEnabled = enable;
-    },
-    setSMSEnabled(enable) {
-      this.user.smsEnabled = enable;
-    },
-    setSocialLogin(active) {
-      this.user.socialLogin = active;
-    },
-    setUserId(id) {
-      this.user.userId = id;
-    },
-    setRoles(roles) {
-      this.user.roles = roles;
+    setUserRoles(roles) {
+      this.user.userRoles = roles;
     },
     setPermissions(permissions) {
       this.user.permissions = permissions;
     },
-    setAssociations(associations) {
-      this.user.associations = associations;
+    setUserAssociations(associations) {
+      this.user.userAssociations = associations;
     },
     clearUser() {
-      this.user = null
-      this.user.permissions = []
-      this.user.roles = []
-      this.user.associations = []
+      this.user = {
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        socialLogin: false,
+        smsEnabled: false,
+        emailEnabled: false,
+        courierId: null,
+        userId: null,
+        userRoles: [],
+        permissions: [],
+        userAssociations: []
+      }
     },
     setUser(user) {
       if (user) {
@@ -84,8 +64,8 @@ export const useUserStore = defineStore('user', {
   },
   getters: {
     firstName: (state) => state.user.firstName,
-    lastName:(state) => state.user.lastName,
-    isAuthenticated: (state) => !!state.user,
+    lastName: (state) => state.user.lastName,
+    isAuthenticated: (state) => !!state.user.email,
     userId: (state) => state.user.userId,
 
     fullName(state) {
@@ -102,11 +82,13 @@ export const useUserStore = defineStore('user', {
     courierId: (state) => state.user.courierId,
     emailEnabled: (state) => state.user.emailEnabled,
     smsEnabled: (state) => state.user.smsEnabled,
-    associations: (state) => state.user.associations,
-    isReferee: (state) => state.user?.roles?.includes('referee') || false,
-    isAssignor: (state) => state.user?.roles?.includes('assignor') || false,
-    isAdmin: (state) => state.user?.roles?.includes('admin') || false,
-    isCoach: (state) => state.user?.roles?.includes('coach') || false,
+    userAssociations: (state) => state.user.userAssociations,
+    isReferee: (state) => state.user?.userRoles?.includes('Referee') || false,
+    isAssignor: (state) => state.user?.userRoles?.includes('Assignor') || false,
+    isAdmin: (state) => state.user?.userRoles?.includes('Administrator') || false,
+    isCoach: (state) => state.user?.userRoles?.includes('Coach') || false,
+    isLeagueRep: (state) => state.user?.userRoles?.includes('League Rep') || false,
+    isAssociationRep: (state) => state.user?.userRoles?.includes('Association Rep') || false,
     isSocialLogin: (state) => state.user.socialLogin
   }
 });

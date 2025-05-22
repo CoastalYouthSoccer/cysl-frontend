@@ -14,12 +14,14 @@
   import { watch } from 'vue'
   import { useAuth0 } from '@auth0/auth0-vue'
   import { useUserStore } from '@/stores/user'
+  import { useShareStore } from '@/stores/sharedData'
 
   import Navigation from "@/components/navbar/Navigation.vue"
   import AppFooter from "@/components/AppFooter.vue";
 
   const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0()
   const userStore = useUserStore()
+  const shareStore = useShareStore()
 
   watch(
   () => ({ loading: isLoading.value, authed: isAuthenticated.value }),
@@ -44,9 +46,11 @@
         const permissions = payload['permissions'] || []
         const associations = payload['associations'] || []
 
-        userStore.setRoles(roles)
+        userStore.setUserRoles(roles)
         userStore.setPermissions(permissions)
-        userStore.setAssociations(associations)
+        userStore.setUserAssociations(associations)
+        shareStore.setAssociations(token)
+        shareStore.setRoles(token)
       } catch (err) {
         console.error('Error loading access token claims:', err)
       }

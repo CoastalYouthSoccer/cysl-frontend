@@ -1,9 +1,9 @@
 <template>
-  <v-btn id="menu-activator" data-test="referee-btn">Referee</v-btn>
-  <v-menu activator="#menu-activator" open-on-hover>
+  <v-btn id="referee-activator" data-test="referee-btn">Referee</v-btn>
+  <v-menu activator="#referee-activator" open-on-hover>
     <v-list bg-color="primary" :nav=true>
       <v-list-item to="/assignr-referee">
-        <v-list-item-title>Assignr Documentation</v-list-item-title>
+        <v-list-item-title data-test="assignr-referee">Assignr Documentation</v-list-item-title>
       </v-list-item>
       <v-list-item href="/spring2024rules">
         <v-list-item-title>CYSL 2024 Spring Rules</v-list-item-title>

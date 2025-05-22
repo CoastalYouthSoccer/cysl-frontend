@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { flushPromises, mount } from '@vue/test-utils'
 import { describe, it, expect, beforeEach } from 'vitest'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
@@ -20,22 +20,23 @@ describe('RefereeNav', () => {
       props: {},
       global: {
         plugins: [vuetify],
-      }
+      },
+      attachTo: document.body,
     });
-    await wrapper.vm.$nextTick(); // Wait for Vue to render
   });
 
-  it('renders the button and menu', () => {
+  it('renders the button and menu', async () => {
     const button = wrapper.findComponent('[data-test="referee-btn"]')
     expect(button.exists()).toBe(true)
     expect(button.text()).toBe('Referee')
-
-//    const menu = wrapper.findComponent('[data-test="assignor-activator"]')
-//    expect(menu.exists()).toBe(true)
-
-//    const listItems = wrapper.findAllComponents('.v-list-item')
+//    await button.trigger('mouseenter')
+//    await wrapper.vm.$nextTick()
+//    await wrapper.vm.$nextTick()
+//    const menuItem = document.querySelector('[data-test="assignr-referee"]')
+//    expect(menuItem).not.toBeNull()
+//    expect(menuItem?.textContent).toBe('Assignr Documentation')
+//    const listItems = wrapper.findAllComponents({ name: 'v-list-item' })
 //    expect(listItems.length).toBe(3)
-
 //    const listItemTitles = listItems.map(item => item.findComponent({ name: 'v-list-item-title' }).text())
 //    expect(listItemTitles).toEqual([
 //      'Assignr Documentation',

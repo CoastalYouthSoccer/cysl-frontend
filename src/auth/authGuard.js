@@ -12,7 +12,7 @@ export function roleGuard(allowedRoles = []) {
       return next(false)
     }
 
-    const userRoles = userStore.user.roles || []
+    const userRoles = userStore.user.userRoles || []
     const hasAccess = allowedRoles.some(role => userRoles.includes(role))
 
     if (hasAccess) {

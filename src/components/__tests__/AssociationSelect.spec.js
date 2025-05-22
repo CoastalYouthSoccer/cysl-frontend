@@ -1,16 +1,11 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import { expect, it, describe, vi, beforeEach } from 'vitest'
 import AssociationSelect from '@/components/association/AssociationSelect.vue';
-import * as associationApi from '@/services/api.association.js'
+import Alert from '@/components/Alert.vue'
 import { vuetify } from '@/vuetify-setup'
+import { createTestingPinia } from '@pinia/testing'
 
 global.ResizeObserver = require('resize-observer-polyfill')
-
-vi.mock('@auth0/auth0-vue', () => ({
-  useAuth0: () => ({
-    getAccessTokenSilently: vi.fn().mockResolvedValue('fake-token')
-  })
-}))
 
 const mockAssociations = [
   { id: 1, name: 'Main Association' },
@@ -20,14 +15,20 @@ const mockAssociations = [
 describe('AssociationSelect.vue', () => {
   let wrapper
   beforeEach(async () => {
-    vi.spyOn(associationApi, 'fetchAssociations').mockResolvedValue({
-      data: mockAssociations,
-      error: { message: null }
-    })
-
     wrapper = mount(AssociationSelect, {
       global: {
-        plugins: [vuetify],
+        plugins: [
+          createTestingPinia({
+            createSpy: vi.fn,
+            stubActions: false,
+            initialState: {
+              share: {
+                associations: mockAssociations
+              }
+            }
+          }),
+          vuetify
+        ],
     },
   })
 
@@ -47,20 +48,4 @@ describe('AssociationSelect.vue', () => {
     expect(wrapper.emitted().associationChange).toBeTruthy()
     expect(wrapper.emitted().associationChange[0]).toEqual([mockAssociations[1]])
   })
-
-//  it('handles error in fetchAssociations gracefully', async () => {
-//    vi.mock('@/services/api.association.js', () => ({
-//      fetchAssociations: vi.fn().mockResolvedValue({
-//        data: null,
-//        error: { message: ['Failed to fetch associations']}
-//      })
-//    }))
-//
-//    const alert = wrapper.findComponent('[data-test="association-alert"]')
-//    expect(alert.exists()).toBe(true)
-//    expect(alert.text()).toContain('Error fetching associations: Failed to fetch associations')
-//
-//    await Promise.resolve()
-//
-//  })
 })

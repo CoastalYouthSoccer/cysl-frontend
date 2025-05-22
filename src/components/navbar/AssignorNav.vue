@@ -8,7 +8,7 @@
       <v-list-item href="/spring2024rules">
         <v-list-item-title>CYSL 2024 Spring Rules</v-list-item-title>
       </v-list-item>
-      <v-list-item href="/field-coordinator">
+      <v-list-item href="/assignor/field-coordinator">
         <v-list-item-title>Field Coordinator</v-list-item-title>
       </v-list-item>
     </v-list>

@@ -1,43 +1,39 @@
-import { describe, it, expect, vi } from 'vitest';
-import { fetchAssociations } from '../api.association';
-import * as apiService from '../api.service';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import * as apiAssociation from '../api.association';
+import { callApi } from '../api.service';
 
-describe('fetchAssociations', () => {
+vi.mock('../api.service', () => ({
+  callApi: vi.fn()
+}))
+
+const mockToken = 'mock-token'
+
+describe('Associations API Methods', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
   it('should call callApi with correct config and return data on success', async () => {
     const mockResponse = { data: [{ id: 1, name: 'Association 1' }] };
-    const callApiSpy = vi.spyOn(apiService, 'callApi').mockResolvedValueOnce(mockResponse);
 
-    const result = await fetchAssociations();
+    callApi.mockResolvedValueOnce({ data: mockResponse.data, error: { message: null } })
 
-    expect(callApiSpy).toHaveBeenCalledWith({
-      url: 'associations',
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-      },
-    });
+    const result = await apiAssociation.fetchAssociations(mockToken);
 
-    expect(result).toEqual({ data: mockResponse.data, error: undefined });
+    expect(callApi).toHaveBeenCalledWith(
+      {url: 'associations', method: 'GET'},
+      mockToken
+    )
 
-    callApiSpy.mockRestore(); // Clean up the spy after the test
+    expect(result.data).toEqual(mockResponse.data);
   });
 
   it('should return an error message on failure', async () => {
-    const mockError = { error: { message: 'Request failed' } };
-    const callApiSpy = vi.spyOn(apiService, 'callApi').mockResolvedValueOnce(mockError);
+    callApi.mockResolvedValueOnce({ data: null, error: { message: 'Server error' } })
 
-    const result = await fetchAssociations();
+    const result = await apiAssociation.fetchAssociations(mockToken);
 
-    expect(callApiSpy).toHaveBeenCalledWith({
-      url: 'associations',
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-      },
-    });
-
-    expect(result).toEqual({ data: null, error: mockError.error });
-
-    callApiSpy.mockRestore(); // Clean up the spy after the test
+    expect(result.data).toBeNull()
+    expect(result.error.message).toBe('Server error')
   });
 });

@@ -1,11 +1,11 @@
 import { callApi } from "./api.service";
 
-export const fetchAssociations = async (token, params = {}) => {
+export const fetchUsers = async (token, params = {}) => {
   const query = new URLSearchParams(params).toString();
-  const url = query ? `associations?${query}` : 'associations';
+  const url = query ? `users?${query}` : 'users';
 
   const config = {
-    url: url,
+    url,
     method: "GET",
   };
 
@@ -16,26 +16,11 @@ export const fetchAssociations = async (token, params = {}) => {
   };
 };
 
-
-export const createAssociation = async (associationData, token) => {
+export const updateUser = async (userData, token) => {
   const config = {
-    url: 'association',
-    method: "POST",
-    data: associationData
-  };
-
-  const { data, error } = await callApi(config, token);
-  return {
-    data: data || null,
-    error,
-  };
-};
-
-export const updateAssociation = async (associationData, token) => {
-  const config = {
-    url: 'association',
+    url: 'user',
     method: "PATCH",
-    data: associationData
+    data: userData
   };
 
   const { data, error } = await callApi(config, token);
@@ -45,10 +30,26 @@ export const updateAssociation = async (associationData, token) => {
   };
 };
 
-export const deleteAssociation = async (associationId, token) => {
+export const deleteUser = async (userId, token) => {
   const config = {
-    url: `association/${associationId}`,
+    url: `user/${userId}`,
     method: "DELETE",
+  };
+
+  const { data, error } = await callApi(config, token);
+  return {
+    data: data || null,
+    error,
+  };
+};
+
+export const fetchRoles = async (token, params = {}) => {
+  const query = new URLSearchParams(params).toString();
+  const url = query ? `roles?${query}` : 'roles';
+
+  const config = {
+    url,
+    method: "GET",
   };
 
   const { data, error } = await callApi(config, token);
