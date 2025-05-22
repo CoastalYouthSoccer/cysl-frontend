@@ -1,6 +1,7 @@
 <template>
   <v-app>
     <Navigation app/>
+    <NavDrawer app/>
     <v-main>
       <v-container fluid>
         <RouterView/>
@@ -16,7 +17,8 @@
   import { useUserStore } from '@/stores/user'
   import { useShareStore } from '@/stores/sharedData'
 
-  import Navigation from "@/components/navbar/Navigation.vue"
+  import NavDrawer from "@/components/sidebar/NavDrawer.vue";
+  import Navigation from './components/navbar/Navigation.vue';
   import AppFooter from "@/components/AppFooter.vue";
 
   const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0()
