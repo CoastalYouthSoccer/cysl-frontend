@@ -32,27 +32,20 @@
       </v-row>
     </v-container>
   </v-form>
-  <Alert :text=msg color="success" v-if="msg && !apiError"/>
-  <Alert :text=msg color="red-darken-4" v-if="msg && apiError"/>
 </template>
 
 <script setup>
   import { ref } from "vue";
-  import Alert from "@/components/Alert.vue";
   import { storeToRefs } from 'pinia';
   import { useUserStore } from '@/stores/user';
 
   const userStore = useUserStore()
   const { isAssignor, isReferee, isAdmin, isCoach, isLeagueRep,
-          isAssociationRep, firstName, lastName } = storeToRefs(userStore)
-  const baseURL = window.location.origin;
+          isAssociationRep } = storeToRefs(userStore)
 
-  const msg = ref(null);
-
-  const apiError = ref(false);
   const valid = ref(false);
 
   function cancel() {
     console.log('cancel')
   }
-  </script>
+</script>
