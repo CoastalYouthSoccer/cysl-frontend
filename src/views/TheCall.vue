@@ -10,7 +10,7 @@
         <v-expansion-panel-text>
           <p class="font-weight-bold">Earrings need to be removed, or player must not play.</p>
           <p class="font-italic pt-4">Law 4.1 - Safety</p>
-          <p class="pt-2">All items of jewellery (necklaces, rings, bracelets, earrings, leather bands, rubber bands, etc.) are forbidden and must be removed. Using tape to cover jewellery is not permitted.
+          <p class="pt-2">All items of jewelry (necklaces, rings, bracelets, earrings, leather bands, rubber bands, etc.) are forbidden and must be removed. Using tape to cover jewellery is not permitted.
             The players must be inspected before the start of the match and substitutes before they enter the field of play. If a player is wearing or using unauthorised/dangerous equipment or jewellery, the referee must order the player to:</p>
             <ul>
               <li>remove the item</li>

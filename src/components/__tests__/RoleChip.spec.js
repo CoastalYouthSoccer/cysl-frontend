@@ -4,7 +4,6 @@ import RoleChip from '@/components/user/RoleChip.vue'
 import { createTestingPinia } from '@pinia/testing'
 import { nextTick } from 'vue'
 
-// Mock Vuetify
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
