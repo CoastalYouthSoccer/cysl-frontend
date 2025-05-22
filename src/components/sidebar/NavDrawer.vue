@@ -6,22 +6,22 @@
     class="bg-grey-lighten-4"
   >
     <v-list dense>
-      <PublicNav/>
-      <Documentation/>
-      <Resource/>
-      <Tool/>
-      <Maintenance/>
+      <NavPublic/>
+      <NavDocumentation/>
+      <NavResource/>
+      <NavTool/>
+      <NavMaintenance/>
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import PublicNav from './PublicNav.vue'
-import Documentation from './Documentation.vue'
-import Tool from './Tool.vue'
-import Maintenance from './Maintenance.vue'
-import Resource from './Resource.vue'
+import NavPublic from './NavPublic.vue'
+import NavDocumentation from './NavDocumentation.vue'
+import NavTool from './NavTool.vue'
+import NavMaintenance from './NavMaintenance.vue'
+import NavResource from './NavResource.vue'
 
 const drawer = ref(true)
 
