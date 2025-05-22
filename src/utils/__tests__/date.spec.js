@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { formatDateToYYYYMMDD } from '@/utils/formatDate.js' // adjust path if needed
+import { formatDateToYYYYMMDD } from '@/utils/date.js'
 
 describe('formatDateToYYYYMMDD', () => {
   it('formats a standard Date string correctly', () => {
@@ -12,7 +12,7 @@ describe('formatDateToYYYYMMDD', () => {
   })
 
   it('pads month and day correctly', () => {
-    const date = new Date('2024-03-04')
+    const date = '3/4/2024'
     expect(formatDateToYYYYMMDD(date)).toBe('2024-03-04')
   })
 
