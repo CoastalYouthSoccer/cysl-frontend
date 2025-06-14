@@ -18,14 +18,14 @@ export const fetchGames = async (accessToken, params) => {
   };
 };
 
-export const fetchAssignrGames = async (accessparams) => {
+export const fetchAssignrGames = async (token, params) => {
   const config = {
     url: 'assignr-games',
     method: "GET",
     params: params
   };
 
-  const { data, error } = await callApi(config);
+  const { data, error } = await callApi(config, token);
   return {
     data: data || null,
     error,

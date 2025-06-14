@@ -2,7 +2,7 @@
   <div v-if="errorExist">
     <Alert
       :msg="errorMsg"
-      :color="red"
+      color="red"
     />
   </div>
   <h1>Field Coordinator Screen</h1>
@@ -10,7 +10,7 @@
     <v-container>
       <v-row>
         <v-col cols="4">
-          <v-date-input v-model="gameDate" label="Date"></v-date-input>
+          <v-date-input v-model="gameDate" label="Date" :rules="[rules.required]"></v-date-input>
         </v-col>
         <v-col cols="8">
           <VenueSelect @venueChange="handleVenueChange"/>
@@ -21,7 +21,7 @@
           <v-spacer></v-spacer>
         </v-col>
         <v-col>
-          <v-btn color="primary" @click="returnGames(gameDate, gameDate, venue)">
+          <v-btn color="primary" @click="returnGames(gameDate, venue)">
             Submit
           </v-btn>
         </v-col>
@@ -48,7 +48,7 @@
       <v-sheet
           class="d-flex align-center justify-center flex-wrap text-center mx-auto px-4"
           elevation="4"
-          width="80%"
+          width="100%"
           rounded
       >
         <div>
@@ -57,6 +57,10 @@
               <thead>
                 <tr>
                   <th id="time">Time</th>
+                  <th id="grade">Grade</th>
+                  <th id="gender">Gender</th>
+                  <th id="awayTeam">Away Team</th>
+                  <th id="homeTeam">Home Team</th>
                   <th id="referee">Center</th>
                   <th id="ar1">AR1</th>
                   <th id="ar2">AR2</th>
@@ -65,8 +69,21 @@
               <tbody>
                 <tr v-for="(game, time) in timeSlots" :key="time">
                   <td>{{ time }}</td>
-                  <td v-for="(official, officialIndex) in game.officials" :key="officialIndex">
-                    {{ official.first_name }} {{ official.last_name }}
+                  <td>{{  game.grade }}</td>
+                  <td>{{  game.gender }}</td>
+                  <td>{{ game.away_team }}</td>
+                  <td>{{ game.home_team }}</td>
+                  <td v-for="(official, officialIndex) in game.officials">
+                    <v-chip
+                      :key="officialIndex"
+                      class="ma-1"
+                      :color="official.accepted ? 'green' : 'red'"
+                      text-color="white"
+                      :text="`${official.first_name} ${official.last_name}`"
+                      variant="elevated"
+                      clickable
+                      label
+                    ></v-chip>
                   </td>
                 </tr>
               </tbody>
@@ -95,21 +112,37 @@ const errorExist = ref(false)
 const errorMsg = ref(null)
 const errorType = ref(null)
 
+const rules = {
+  required: value => !!value || 'Required.',
+}
+
 function handleVenueChange(value) {
   venue.value = value.name;
 }
 
-async function returnGames(startDt, endDt, venue) {
+async function returnGames(gameDate, venue) {
+  if (!gameDate) {
+    errorExist.value = true;
+    errorMsg.value = "Date must be provided";
+    return
+  }
+  if (!venue) {
+    errorExist.value = true;
+    errorMsg.value = "Venue must be provided";
+    return
+  }
+
+  const token = await getAccessTokenSilently();
   loading.value = true;
   errorExist.value = false;
   errorType.value = "success";
   dataExists.value = false;
   const params = {
-    start_dt: startDt,
-    end_dt: endDt,
+    start_dt: gameDate,
+    end_dt: gameDate,
     venue: venue
   }
-  const { data, error } = await fetchAssignrGames(params);
+  const { data, error } = await fetchAssignrGames(token, params);
 
   if (data) {
     games.value = data;
