@@ -57,32 +57,31 @@
               <thead>
                 <tr>
                   <th id="time">Time</th>
-                  <th id="grade">Grade</th>
+                  <th id="age">Age</th>
                   <th id="gender">Gender</th>
                   <th id="awayTeam">Away Team</th>
+                  <th id="awayScore">Away Score</th>
                   <th id="homeTeam">Home Team</th>
-                  <th id="referee">Center</th>
-                  <th id="ar1">AR1</th>
-                  <th id="ar2">AR2</th>
+                  <th id="homeScore">Home Score</th>
+                  <th id="referees">Referees</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(game, time) in timeSlots" :key="time">
                   <td>{{ time }}</td>
-                  <td>{{  game.grade }}</td>
-                  <td>{{  game.gender }}</td>
+                  <td>{{ game.age_group }}</td>
+                  <td>{{ game.gender }}</td>
                   <td>{{ game.away_team }}</td>
+                  <td>{{ game.report.away_score }}</td>
                   <td>{{ game.home_team }}</td>
-                  <td v-for="(official, officialIndex) in game.officials">
-                    <v-chip
+                  <td>{{ game.report.away_score }}</td>
+                  <td>
+                    <v-chip v-for="(official, officialIndex) in game.officials"
                       :key="officialIndex"
-                      class="ma-1"
                       :color="official.accepted ? 'green' : 'red'"
                       text-color="white"
                       :text="`${official.first_name} ${official.last_name}`"
-                      variant="elevated"
-                      clickable
-                      label
+                      @click="viewReport(game.report)"
                     ></v-chip>
                   </td>
                 </tr>
@@ -92,10 +91,46 @@
       </v-sheet>
     </v-row>
   </v-container>
+  <v-dialog v-model="viewDialog" max-width="500">
+    <v-card
+      title="Game Report Summary"
+    >
+      <template v-slot:text>
+        <v-row>
+          <v-col cols="12">
+            <v-text-field v-model="record.author" label="Author"
+            data-test="input-author" disabled></v-text-field>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-checkbox v-model="record.misconducts" label="Misconducts"
+            data-test="box-misconducts" disabled></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-checkbox v-model="record.ejections" label="Ejections"
+            data-test="box-ejections" disabled></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-checkbox v-model="record.no_show" label="No Show"
+            data-test="box-no-show" disabled></v-checkbox>
+          </v-col>
+        </v-row>
+      </template>
+
+      <v-divider></v-divider>
+
+      <v-card-actions class="bg-surface-light">
+        <v-btn text="Close" variant="plain" @click="viewDialog = false" data-test="close-btn"></v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, shallowRef, computed } from 'vue'
 import { useAuth0 } from "@auth0/auth0-vue";
 import Alert from "@/components/Alert.vue";
 
@@ -111,6 +146,14 @@ const gameDate = ref(null)
 const errorExist = ref(false)
 const errorMsg = ref(null)
 const errorType = ref(null)
+const viewDialog = shallowRef(false)
+const record = ref(null)
+
+
+function viewReport (item) {
+  record.value = { ...item }
+  viewDialog.value = true
+}
 
 const rules = {
   required: value => !!value || 'Required.',
