@@ -5,7 +5,7 @@
       color="red"
     />
   </div>
-  <h1>Field Coordinator Screen</h1>
+  <div :class="['text-h3']">Field Coordinator Screen</div>
   <v-form>
     <v-container>
       <v-row>
@@ -13,7 +13,7 @@
           <v-date-input v-model="gameDate" label="Date" :rules="[rules.required]"></v-date-input>
         </v-col>
         <v-col cols="8">
-          <VenueSelect @venueChange="handleVenueChange"/>
+          <VenueSelect @venueChange="handleVenueChange" :rules="[rules.required]"/>
         </v-col>
       </v-row>
       <v-row>
@@ -21,7 +21,10 @@
           <v-spacer></v-spacer>
         </v-col>
         <v-col>
-          <v-btn color="primary" @click="returnGames(gameDate, venue)">
+          <v-btn
+            color="primary"
+            @click="returnGames(gameDate, venue)"
+            data-test="submit-btn">
             Submit
           </v-btn>
         </v-col>
@@ -41,7 +44,7 @@
   <v-container v-if="dataExists">
     <v-row>
       <v-col>
-        <h1>{{ venue }} - {{ formattedDate }}</h1>
+        <div :class="['text-h4']" data-test="header">{{ venue }} - {{ formattedDate }}</div>
       </v-col>
     </v-row>
     <v-row v-for="(timeSlots, fieldName) in games" style="padding: 20px;">
@@ -52,7 +55,7 @@
           rounded
       >
         <div>
-          <h2 class="text-h4 font-weight-black" style="padding: 20px;">{{ fieldName }}</h2>
+          <div :class="['text-h5']">{{ fieldName }}</div>
           <v-table>
               <thead>
                 <tr>
@@ -149,7 +152,6 @@ const errorType = ref(null)
 const viewDialog = shallowRef(false)
 const record = ref(null)
 
-
 function viewReport (item) {
   record.value = { ...item }
   viewDialog.value = true
@@ -206,7 +208,7 @@ const formattedDate = computed(() => {
   if (gameDate.value == null) {
     return null;
   }
-  const date = new Date(gameDate.value);
+  const date = new Date(`${gameDate.value}T00:00:00`);
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
   const year = date.getFullYear();

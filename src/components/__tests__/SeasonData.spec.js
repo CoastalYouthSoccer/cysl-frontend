@@ -2,10 +2,7 @@ import { mount, flushPromises } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import SeasonData from '@/components/season/SeasonData.vue'
-import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
 import { vuetify } from '@/vuetify-setup'
-import { VDateInput } from 'vuetify/components'
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
