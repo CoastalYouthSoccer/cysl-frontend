@@ -6,6 +6,13 @@ import { createTestingPinia } from '@pinia/testing'
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
+vi.mock('@/components/venue/VenueSelect.vue', () => ({
+  default: {
+    name: 'VenueSelect',
+    template: '<div data-test="venue-select-mock" />'
+  }
+}))
+
 // Mock Auth0
 vi.mock("@auth0/auth0-vue", () => ({
   useAuth0: () => ({
