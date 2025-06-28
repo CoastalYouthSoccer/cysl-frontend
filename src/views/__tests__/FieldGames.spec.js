@@ -147,6 +147,15 @@ describe('FieldGames.vue', () => {
     expect(header.text()).toContain('Test Venue - 05/31/2025')
   })
 
+  it('displays loading spinner when isLoading is true', async () => {
+    wrapper.vm.isLoading = true
+
+    await wrapper.vm.$nextTick()
+
+    const loadingDiv = wrapper.find('[data-test="game-loading"]')
+    expect(loadingDiv.exists()).toBe(true)
+    expect(wrapper.find('v-progress-circular-stub').exists()).toBe(true)
+  })
 //  it('displays game data table and chips', async () => {
 //    wrapper.vm.venue = 'Test Venue'
 //    wrapper.vm.gameDate = '2025-06-01'

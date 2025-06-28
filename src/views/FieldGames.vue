@@ -32,7 +32,7 @@
     </v-container>
   </v-form>
 
-  <div class="text-center" v-if="loading">
+  <div class="text-center" v-if="isLoading" data-test="game-loading">
     <v-progress-circular
       color="primary"
       :size="200"
@@ -143,7 +143,7 @@ const { getAccessTokenSilently } = useAuth0();
 
 let venue = ref()
 const dataExists = ref(false)
-const loading = ref(false)
+const isLoading = ref(false)
 const games = ref(null)
 const gameDate = ref(null)
 const errorExist = ref(false)
@@ -178,7 +178,7 @@ async function returnGames(gameDate, venue) {
   }
 
   const token = await getAccessTokenSilently();
-  loading.value = true;
+  isLoading.value = true;
   errorExist.value = false;
   errorType.value = "success";
   dataExists.value = false;
@@ -201,7 +201,7 @@ async function returnGames(gameDate, venue) {
     errorType.value = "error";
   }
 
-  loading.value = false;
+  isLoading.value = false;
 }
 
 const formattedDate = computed(() => {
