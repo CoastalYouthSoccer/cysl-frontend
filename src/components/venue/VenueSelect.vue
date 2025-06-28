@@ -4,7 +4,7 @@
     <v-progress-circular indeterminate color="primary" />
   </div>
   <v-select
-    v-if="!isLoading && venues.length" :item-props="itemProps"
+    v-if="!isLoading && (venues?.length > 0)" :item-props="itemProps"
     :items="venues" label="Venue"
     v-model="venue" data-test="venue-select">
   </v-select>
