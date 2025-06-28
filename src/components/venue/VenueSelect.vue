@@ -1,5 +1,5 @@
 <template>
-  <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="venue-alert"/>
+  <Alert v-if="errorMessage" :msg=errorMessage color="red"/>
   <div v-if="isLoading" class="d-flex justify-center my-4" data-test="venue-loading">
     <v-progress-circular indeterminate color="primary" />
   </div>
@@ -40,7 +40,6 @@ onBeforeMount(async() => {
 
   if (error?.message) {
     errorMessage.value = `Error fetching venues: ${formatErrorMessage(error.message)}`
-    console.error(errorMessage.value)
   } else {
     venues.value = data
   }
