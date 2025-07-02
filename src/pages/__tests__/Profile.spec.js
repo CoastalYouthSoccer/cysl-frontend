@@ -2,14 +2,8 @@ import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
 import Profile from '@/pages/Profile.vue'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-
-const vuetify = createVuetify({
-  components,
-  directives,
-})
+import { useUserStore } from '@/stores/user'
+import { vuetify } from '@/vuetify-setup'
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
@@ -20,45 +14,39 @@ describe('Profile.vue', () => {
     wrapper = mount(Profile, {
       global: {
         plugins: [vuetify, createTestingPinia({
-          initialState: {
-            user: {
-              isAdmin: true,
-              isAssignor: false,
-              isReferee: true,
-              isCoach: false,
-              isLeagueRep: false,
-              isAssociationRep: true
-            }
-          }
+          stubActions: false,
+          createSpy: vi.fn
         })]
       }
-    })
-  })
-
-  it('renders all role checkboxes as disabled', () => {
-    const checkboxes = [
-      'isAdministrator',
-      'isAssignor',
-      'isReferee',
-      'isCoach',
-      'isLeagueRep',
-      'isAssociationRep'
-    ]
-
-    checkboxes.forEach(testId => {
-      const checkbox = wrapper.get(`[data-test="${testId}"]`)
-      expect(checkbox.exists()).toBe(true)
-//      expect(checkbox.attributes('disabled')).toBeDefined()
     })
   })
 
   it('cancel button triggers cancel method', async () => {
     const logSpy = vi.spyOn(console, 'log')
 
-    const cancelButton = wrapper.get('[data-test="cancel"]')
+    const cancelButton = wrapper.findComponent('[data-test="cancel"]')
     await cancelButton.trigger('click')
 
     expect(logSpy).toHaveBeenCalledWith('cancel')
     logSpy.mockRestore()
+  })
+
+  it('renders all checkboxes with correct labels and data bindings', () => {
+    const checkboxes = [
+      { test: 'isAdministrator', label: 'Administrator?' },
+      { test: 'isAssignor', label: 'Assignor?' },
+      { test: 'isReferee', label: 'Referee?' },
+      { test: 'isCoach', label: 'Coach?' },
+      { test: 'isLeagueRep', label: 'League Rep?' },
+      { test: 'isAssociationRep', label: 'Association Rep?' }
+    ]
+
+    checkboxes.forEach(({ test, label }) => {
+      const cb = wrapper.findComponent(`[data-test="${test}"]`)
+      expect(cb.exists()).toBe(true)
+      expect(cb.text()).toContain(label)
+      expect(cb.attributes('class')).toContain('v-input--disabled')
+
+    })
   })
 })
