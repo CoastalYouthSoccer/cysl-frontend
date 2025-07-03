@@ -1,10 +1,5 @@
 <template>
-  <div v-if="errorExist">
-    <Alert
-      :msg="errorMsg"
-      color="red"
-    />
-  </div>
+  <Alert if=""errorMessage :msg="errorMessage" color="red" data-test="games-alert"/>
   <div :class="['text-h3']">Field Coordinator Screen</div>
   <v-form>
     <v-container>
@@ -146,8 +141,7 @@ const dataExists = ref(false)
 const isLoading = ref(false)
 const games = ref(null)
 const gameDate = ref(null)
-const errorExist = ref(false)
-const errorMsg = ref(null)
+const errorMessage = ref(null)
 const errorType = ref(null)
 const viewDialog = shallowRef(false)
 const record = ref(null)
@@ -167,19 +161,16 @@ function handleVenueChange(value) {
 
 async function returnGames(gameDate, venue) {
   if (!gameDate) {
-    errorExist.value = true;
-    errorMsg.value = "Date must be provided";
+    errorMessage.value = "Date must be provided";
     return
   }
   if (!venue) {
-    errorExist.value = true;
-    errorMsg.value = "Venue must be provided";
+    errorMessage.value = "Venue must be provided";
     return
   }
 
   const token = await getAccessTokenSilently();
   isLoading.value = true;
-  errorExist.value = false;
   errorType.value = "success";
   dataExists.value = false;
   const params = {
@@ -194,11 +185,8 @@ async function returnGames(gameDate, venue) {
     dataExists.value = true;
   }
 
-  if (error.message) {
-    console.error('Error fetching games:', error.message);
-    errorExist.value = true;
-    errorMsg.value = error.message;
-    errorType.value = "error";
+  if (error?.message) {
+    errorMessage.value = `Error Fetching Games: ${formatErrorMessage(error.message)}`
   }
 
   isLoading.value = false;

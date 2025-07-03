@@ -6,6 +6,8 @@ import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
 import { vuetify } from '@/vuetify-setup'
 
+global.ResizeObserver = require('resize-observer-polyfill')
+
 vi.mock('@/services/api.association.js', () => ({
   fetchAssociations: vi.fn(),
   createAssociation: vi.fn(),
@@ -134,5 +136,44 @@ describe('AssociationData.vue', () => {
 
     expect(api.deleteAssociation).toHaveBeenCalledWith(1, 'mock-token')
     expect(wrapper.text()).not.toContain('Another Association')
+  })
+
+  it('shows loading spinner when isLoading is true', async () => {
+    wrapper.vm.isLoading = true
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.get('[data-test="association-loading"]').exists()).toBe(true)
+  })
+
+  it('shows error alert when errorMessage is set', async () => {
+    api.fetchAssociations.mockResolvedValueOnce({
+      data: [],
+      error: {message: 'error with Associations'}
+    })
+
+    const wrapper = mount(AssociationData, {
+      global: {
+        stubs: ['v-progress-circular', 'v-select', 'v-dialog', 'v-divider', 'v-checkbox'],
+        plugins: [
+          vuetify,
+          createTestingPinia({
+            createSpy: vi.fn,
+            initialState: {
+              user: {
+                user: {
+                  permissions: ['read:associations'],
+                },
+              },
+            }
+          })
+        ],
+      }
+    })
+
+    await flushPromises()
+
+    const alert = wrapper.findComponent({ name: 'Alert' })
+    expect(alert.exists()).toBe(true)
+    expect(alert.props('msg')).toBe('Error Fetching Associations: error with Associations')
   })
 })

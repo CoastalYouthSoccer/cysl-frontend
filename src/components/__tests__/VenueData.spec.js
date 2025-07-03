@@ -177,4 +177,43 @@ describe('VenueData.vue', () => {
     expect(api.deleteVenue).toHaveBeenCalledWith(1, 'mock-token')
     expect(wrapper.text()).not.toContain('Spring')
   })
+
+  it('shows loading spinner when isLoading is true', async () => {
+    wrapper.vm.isLoading = true
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.get('[data-test="venue-loading"]').exists()).toBe(true)
+  })
+
+  it('shows error alert when errorMessage is set', async () => {
+    api.fetchVenues.mockResolvedValueOnce({
+      data: [],
+      error: {message: 'error with Venues'}
+    })
+
+    const wrapper = mount(VenueData, {
+      global: {
+        stubs: ['v-progress-circular', 'v-select', 'v-dialog', 'v-divider', 'v-checkbox'],
+        plugins: [
+          vuetify,
+          createTestingPinia({
+            createSpy: vi.fn,
+            initialState: {
+              user: {
+                user: {
+                  permissions: ['read:venues'],
+                },
+              },
+            }
+          })
+        ],
+      }
+    })
+
+    await flushPromises()
+
+    const alert = wrapper.findComponent({ name: 'Alert' })
+    expect(alert.exists()).toBe(true)
+    expect(alert.props('msg')).toBe('Error Fetching Venues: error with Venues')
+  })
 })

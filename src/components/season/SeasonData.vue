@@ -1,12 +1,12 @@
 <template>
-  <Alert v-if="errorMessage" data-test="season-alert"/>
+  <Alert v-if="errorMessage" :msg=errorMessage data-test="season-alert"/>
   <div v-if="isLoading" class="d-flex justify-center my-4" data-test="season-loading">
     <v-progress-circular indeterminate color="primary" />
   </div>
-  <v-sheet border rounded v-if="!isLoading && seasons.length">
+  <v-sheet border rounded v-if="!isLoading && seasons?.length">
     <v-data-table
       :headers="headers"
-      :hide-default-footer="seasons.length < 11"
+      :hide-default-footer="seasons?.length < 11"
       :items="seasons"
     >
       <template v-slot:top>
@@ -185,7 +185,7 @@
     const token = await getAccessTokenSilently();
     const { data, error } = await fetchSeasons(token);
     if (error?.message) {
-      errorMessage.value = `Error fetching Seasons: ${formatErrorMessage(error.message)}`
+      errorMessage.value = `Error Fetching Seasons: ${formatErrorMessage(error.message)}`
     } else {
       seasons.value = data
     }

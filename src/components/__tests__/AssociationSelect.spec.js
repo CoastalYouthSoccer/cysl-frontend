@@ -1,7 +1,6 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import { expect, it, describe, vi, beforeEach } from 'vitest'
 import AssociationSelect from '@/components/association/AssociationSelect.vue';
-import Alert from '@/components/Alert.vue'
 import { vuetify } from '@/vuetify-setup'
 import { createTestingPinia } from '@pinia/testing'
 
@@ -12,9 +11,27 @@ const mockAssociations = [
   { id: 2, name: 'Secondary Association' }
 ]
 
+vi.mock('@/services/api.association.js', () => ({
+  fetchAssociations: vi.fn(),
+  createAssociation: vi.fn(),
+  deleteAssociation: vi.fn(),
+  updateAssociation: vi.fn(),
+}))
+import * as api from '@/services/api.association.js'
+
 describe('AssociationSelect.vue', () => {
   let wrapper
   beforeEach(async () => {
+    api.fetchAssociations.mockResolvedValue({
+      data: [
+        {
+          id: 1,
+          name: 'Spring',
+        },
+      ],
+      error: null,
+    })
+
     wrapper = mount(AssociationSelect, {
       global: {
         plugins: [

@@ -1,7 +1,9 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import { expect, it, describe, vi, beforeEach } from 'vitest'
+import { createTestingPinia } from '@pinia/testing'
+
 import SeasonSelect from '@/components/season/SeasonSelect.vue';
-import * as seasonApi from '@/services/api.season.js'
+import * as api from '@/services/api.season.js'
 import { vuetify } from '@/vuetify-setup'
 
 global.ResizeObserver = require('resize-observer-polyfill')
@@ -20,7 +22,7 @@ const mockSeasons = [
 describe('SeasonSelect.vue', () => {
   let wrapper
   beforeEach(async () => {
-    vi.spyOn(seasonApi, 'fetchSeasons').mockResolvedValue({
+    vi.spyOn(api, 'fetchSeasons').mockResolvedValue({
       data: mockSeasons,
       error: { message: null }
     })
@@ -48,19 +50,43 @@ describe('SeasonSelect.vue', () => {
     expect(wrapper.emitted().seasonChange[0]).toEqual([mockSeasons[1]])
   })
 
-//  it('handles error in fetchSeasons gracefully', async () => {
-//    vi.mock('@/services/api.season.js', () => ({
-//      fetchSeasons: vi.fn().mockResolvedValue({
-//        data: null,
-//        error: { message: ['Failed to fetch seasons']}
-//      })
-//    }))
-//
-//    const alert = wrapper.findComponent('[data-test="season-alert"]')
-//    expect(alert.exists()).toBe(true)
-//    expect(alert.text()).toContain('Error fetching seasons: Failed to fetch seasons')
-//
-//    await Promise.resolve()
-//
-//  })
+  it('shows loading spinner when isLoading is true', async () => {
+    wrapper.vm.isLoading = true
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.get('[data-test="season-loading"]').exists()).toBe(true)
+  })
+
+  it('shows error alert when errorMessage is set', async () => {
+    api.fetchSeasons.mockResolvedValueOnce({
+      data: [],
+      error: {message: 'error with Seasons'}
+    })
+
+    const wrapper = mount(SeasonSelect, {
+      global: {
+        stubs: ['v-progress-circular', 'v-select', 'v-dialog', 'v-divider', 'v-checkbox'],
+        plugins: [
+          vuetify,
+          createTestingPinia({
+            createSpy: vi.fn,
+            initialState: {
+              user: {
+                user: {
+                  permissions: ['read:seasons'],
+                },
+              },
+            }
+          })
+        ],
+      }
+    })
+
+    await flushPromises()
+
+
+    const alert = wrapper.findComponent({ name: 'Alert' })
+    expect(alert.exists()).toBe(true)
+    expect(alert.props('msg')).toBe('Error Fetching Seasons: error with Seasons')
+  })
 })

@@ -1,6 +1,6 @@
 <template>
-  <Alert v-if="errorMessage" data-test="season-alert"/>
-  <div v-if="isLoading" class="d-flex justify-center my-4" data-test="season-loading">
+  <Alert v-if="errorMessage" :msg=errorMessage data-test="association-alert"/>
+  <div v-if="isLoading" class="d-flex justify-center my-4" data-test="association-loading">
     <v-progress-circular indeterminate color="primary" />
   </div>
   <v-sheet border rounded>
@@ -115,10 +115,12 @@
 
   const associations = ref([])
   const associationToDelete = ref(null)
+  const errorMessage = ref(null)
   const record = ref(DEFAULT_RECORD)
   const modifyDialog = shallowRef(false)
   const deleteDialog = shallowRef(false)
   const isEditing = shallowRef(false)
+  const isLoading = ref(true)
   const userStore = useUserStore()
   const allowEdit = computed(() => userStore.user.permissions.includes('write:associations'))
   const allowDelete = computed(() => userStore.user.permissions.includes('delete:associations'))
@@ -174,7 +176,7 @@
     }
 
     if (error?.message) {
-      errorMessage.value = `Error fetching Associations ${formatErrorMessage(error.message)}`;
+      errorMessage.value = `Error Fetching Associations: ${formatErrorMessage(error.message)}`;
     }
   }
 
