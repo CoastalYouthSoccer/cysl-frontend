@@ -1,10 +1,10 @@
 <template>
-  <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="venue-alert"/>
+  <Alert v-if="errorMessage" :msg=errorMessage color="red"/>
   <div v-if="isLoading" class="d-flex justify-center my-4" data-test="venue-loading">
     <v-progress-circular indeterminate color="primary" />
   </div>
   <v-select
-    v-if="!isLoading && venues.length" :item-props="itemProps"
+    v-if="!isLoading && (venues?.length > 0)" :item-props="itemProps"
     :items="venues" label="Venue"
     v-model="venue" data-test="venue-select">
   </v-select>
@@ -40,7 +40,6 @@ onBeforeMount(async() => {
 
   if (error?.message) {
     errorMessage.value = `Error fetching venues: ${formatErrorMessage(error.message)}`
-    console.error(errorMessage.value)
   } else {
     venues.value = data
   }

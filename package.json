@@ -7,6 +7,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
+    "test-debug": "vitest --ui",
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
@@ -25,6 +26,7 @@
     "@pinia/testing": "^1.0.1",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vitest/coverage-v8": "^2.0.3",
+    "@vitest/ui": "^2.1.9",
     "@vue/test-utils": "^2.4.6",
     "jsdom": "^24.1.0",
     "resize-observer-polyfill": "^1.5.1",

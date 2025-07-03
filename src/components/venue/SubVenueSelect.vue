@@ -4,16 +4,16 @@
     <v-progress-circular indeterminate color="primary" />
   </div>
   <v-select
-    v-if="!isLoading && SubVenuess.length" :item-props="itemProps"
+    v-if="!isLoading && SubVenues?.length" :item-props="itemProps"
     :items="SubVenues" label="SubVenues"
-    v-model="SubVenues" data-test="SubVenues-select">
+    v-model="SubVenue" data-test="SubVenues-select">
   </v-select>
 </template>
 
 <script setup>
 import { ref, onBeforeMount, watch } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue';
-import { fetchSubVenues } from '@/services/api.SubVenues.js'
+import { fetchSubVenues } from '@/services/api.subvenue.js'
 import { formatErrorMessage } from '@/utils/formatMessage.js'
 
 const props = defineProps({
@@ -21,14 +21,14 @@ const props = defineProps({
   venue_name: String
 })
 const { getAccessTokenSilently } = useAuth0();
-const emit = defineEmits(['SubVenuesChange']);
+const emit = defineEmits(['SubVenueChange']);
 const SubVenues = ref(null);
 const SubVenue = ref(null);
 const errorMessage = ref(null)
 const isLoading = ref(true)
 
-watch(SubVenues, (newValue) => {
-  emit('SubVenuesChange', newValue)
+watch(SubVenue, (newValue) => {
+  emit('SubVenueChange', newValue)
 })
 
 function itemProps(item) {
@@ -43,7 +43,6 @@ onBeforeMount(async() => {
 
   if (error?.message) {
     errorMessage.value = `Error fetching SubVenues: ${formatErrorMessage(error.message)}`
-    console.error(errorMessage.value)
   } else {
     SubVenues.value = data
   }

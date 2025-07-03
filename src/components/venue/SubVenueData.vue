@@ -1,13 +1,13 @@
 <template>
   {{ isLoading }}
   <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="subVenues-alert"/>
-<!--  <div v-if="isLoading" class="d-flex justify-center my-4" data-test="subVenues-loading">
+  <div v-if="isLoading" class="d-flex justify-center my-4" data-test="subVenues-loading">
     <v-progress-circular indeterminate color="primary" />
-  </div> -->
+  </div>
   <v-sheet border rounded v-if="!isLoading">
     <v-data-table
       :headers="headers"
-      :hide-default-footer="subVenues.length < 11"
+      :hide-default-footer="subVenues?.length < 11"
       :items="subVenues"
     >
       <template v-slot:top>
@@ -23,14 +23,14 @@
             text="Add"
             border
             variant="flat"
-            data-test="add-subVenues-btn"
+            data-test="add-subVenue-btn"
             @click="add"
           ></v-btn>
         </v-toolbar>
       </template>
 
       <template v-slot:item.title="{ value }">
-        <v-chip :text="value" border="thin opacity-25" prepend-icon="mdi-subVenues" label>
+        <v-chip :text="value" border="thin opacity-25" prepend-icon="mdi-venue" label>
           <template v-slot:prepend>
             <v-icon color="medium-emphasis"></v-icon>
           </template>
@@ -40,7 +40,7 @@
       <template v-slot:item.actions="{ item }">
         <div class="d-flex ga-2 justify-end">
           <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-pencil" size="small" @click="edit(item)" data-test="edit-subVenues-btn"></v-icon>
-          <v-icon v-if="allowDelete" color="medium-emphasis" icon="mdi-delete" size="small" @click="openDeleteDialog(item)" data-test="delete-subVenues-btn"></v-icon>
+          <v-icon v-if="allowDelete" color="medium-emphasis" icon="mdi-delete" size="small" @click="openDeleteDialog(item)" data-test="delete-subVenue-btn"></v-icon>
         </div>
       </template>
 
@@ -142,7 +142,6 @@
 
     if (error?.message) {
       errorMessage.value = `Error fetching subVenues: ${formatErrorMessage(error.message)}`
-      console.error(errorMessage.value)
     } else {
       subVenues.value = data
     }
@@ -212,12 +211,12 @@
     }
   }
 
-  async function deleteApiItem(subVenues) {
+  async function deleteApiItem(subVenue) {
     const token = await getAccessTokenSilently();
-    const { data, error } = await deleteSubVenue(subVenues.id, token);
+    const { data, error } = await deleteSubVenue(subVenue.id, token);
 
     if (error.message === null) {
-      const index = subVenues.value.findIndex(s => s.id === subVenues.id);
+      const index = subVenues.value.findIndex(s => s.id === subVenue.id);
       if (index !== -1) {
         subVenues.value.splice(index, 1);
       }
