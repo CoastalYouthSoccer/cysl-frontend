@@ -38,8 +38,7 @@ async function getSeasons() {
   const token = await getAccessTokenSilently();
   const { data, error } = await fetchSeasons(token);
   if (error?.message) {
-    errorMessage.value = `Error fetching seasons: ${formatErrorMessage(error.message)}`
-    console.error(errorMessage.value)
+    errorMessage.value = `Error Fetching Seasons: ${formatErrorMessage(error.message)}`
   } else {
     seasons.value = data
   }

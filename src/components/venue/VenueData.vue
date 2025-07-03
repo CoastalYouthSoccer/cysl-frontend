@@ -201,8 +201,7 @@
     const { data, error } = await fetchVenues(token);
 
     if (error?.message) {
-      errorMessage.value = `Error fetching venues: ${formatErrorMessage(error.message)}`
-      console.error(errorMessage.value)
+      errorMessage.value = `Error Fetching Venues: ${formatErrorMessage(error.message)}`
     } else {
       venues.value = data
     }
@@ -254,8 +253,8 @@
     }
 
 
-    if (error && error.message) {
-      console.error('Error Creating venue:', error.message);
+    if (error?.message) {
+      errorMessage.value = `Error Creating Venue: ${formatErrorMessage(error.message)}`
     }
   }
 
@@ -265,8 +264,7 @@
     const { data, error } = await updateVenue(sendItem, token);
 
     if (error?.message) {
-      errorMessage.value = `Error updating venue: ${item.name}, ${formatErrorMessage(error.message)}`
-      console.error(errorMessage.value)
+      errorMessage.value = `Error Updating Venue: ${item.name}, ${formatErrorMessage(error.message)}`
     } else {
       const index = venues.value.findIndex(venue => venue.id === data.id);
       if (index !== -1) {
@@ -286,8 +284,8 @@
       }
     }
 
-    if (error && error.message) {
-      console.error('Error Deleting venues:', error.message);
+    if (error?.message) {
+      errorMessage.value = `Error Deleting Venue: ${formatErrorMessage(error.message)}`
     }
 
     deleteDialog.value = false

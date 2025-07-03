@@ -120,6 +120,7 @@ describe('SubVenueData.vue', () => {
     const deleteIcon = wrapper.findComponent('[data-test="delete-subVenue-btn"]')
     await deleteIcon.trigger('click')
 
+    expect(wrapper.findComponent('[data-test="delete-cancel-btn"]').exists()).toBe(true)
     const confirmBtn = wrapper.findComponent('[data-test="delete-delete-btn"]')
     expect(confirmBtn.exists()).toBe(true)
     await confirmBtn.trigger('click')

@@ -189,9 +189,8 @@
     }
 
 
-    if (error && error.message) {
-      errorMessage.value = `Error adding subVenue: ${item.name}, ${formatErrorMessage(error.message)}`
-      console.error('Error Creating subVenues:', error.message);
+    if (error?.message) {
+      errorMessage.value = `Error Creating Sub-Venue: ${item.name}, ${formatErrorMessage(error.message)}`
     }
   }
 
@@ -201,8 +200,7 @@
     const { data, error } = await updateSubVenue(item, token);
 
     if (error?.message) {
-      errorMessage.value = `Error updating subVenues: ${item.name}, ${formatErrorMessage(error.message)}`
-      console.error(errorMessage.value)
+      errorMessage.value = `Error Updating SubVenue: ${item.name}, ${formatErrorMessage(error.message)}`
     } else {
       const index = subVenues.value.findIndex(subVenues => subVenues.id === data.id);
       if (index !== -1) {
@@ -222,9 +220,8 @@
       }
     }
 
-    if (error && error.message) {
-      errorMessage.value = `Error deleting SubVenue: ${item.name}, ${formatErrorMessage(error.message)}`
-      console.error('Error Deleting subVenues:', error.message);
+    if (error?.message) {
+      errorMessage.value = `Error Deleting SubVenue: ${item.name}, ${formatErrorMessage(error.message)}`
     }
 
     deleteDialog.value = false

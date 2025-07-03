@@ -185,8 +185,7 @@
     const token = await getAccessTokenSilently();
     const { data, error } = await fetchSeasons(token);
     if (error?.message) {
-      errorMessage.value = `Error fetching seasons: ${formatErrorMessage(error.message)}`
-      console.error(errorMessage.value)
+      errorMessage.value = `Error fetching Seasons: ${formatErrorMessage(error.message)}`
     } else {
       seasons.value = data
     }
@@ -202,8 +201,8 @@
     }
 
 
-    if (error && error.message) {
-      console.error('Error Creating season:', error.message);
+    if (error?.message) {
+      errorMessage.value = `Error Creating Season: ${formatErrorMessage(error.message)}`
     }
   }
 
@@ -218,8 +217,8 @@
       }
     }
 
-    if (error && error.message) {
-      console.error('Error Updating season:', error.message);
+    if (error?.message) {
+      errorMessage.value = `Error Updating Season: ${formatErrorMessage(error.message)}`
     }
   }
 
@@ -234,8 +233,8 @@
       }
     }
 
-    if (error && error.message) {
-      console.error('Error Deleting seasons:', error.message);
+    if (error?.message) {
+      errorMessage.value = `Error Deleting Season: ${formatErrorMessage(error.message)}`
     }
 
     deleteDialog.value = false
