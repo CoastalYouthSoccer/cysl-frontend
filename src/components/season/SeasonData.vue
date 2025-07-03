@@ -225,7 +225,7 @@
 
   async function deleteApiItem(season) {
     const token = await getAccessTokenSilently();
-    const { data, error } = await deleteSeason(season.id, token);
+    const { error } = await deleteSeason(season.id, token);
 
     if (error.message === null) {
       const index = seasons.value.findIndex(s => s.id === season.id);

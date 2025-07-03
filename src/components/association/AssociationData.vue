@@ -205,7 +205,7 @@
 
   async function deleteApiItem(association) {
     const token = await getAccessTokenSilently();
-    const { data, error } = await deleteAssociation(association.id, token);
+    const { error } = await deleteAssociation(association.id, token);
 
     if (error.message === null) {
       const index = associations.value.findIndex(s => s.id === association.id);

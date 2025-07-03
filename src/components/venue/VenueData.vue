@@ -277,7 +277,7 @@
 
   async function deleteApiItem(venue) {
     const token = await getAccessTokenSilently();
-    const { data, error } = await deleteVenue(venue.id, token);
+    const { error } = await deleteVenue(venue.id, token);
 
     if (error.message === null) {
       const index = venues.value.findIndex(s => s.id === venue.id);
