@@ -92,8 +92,7 @@
     const { data, error } = await fetchUsers(token);
 
     if (error?.message) {
-      errorMessage.value = `Error fetching users: ${formatErrorMessage(error.message)}`
-      console.error(errorMessage.value)
+      errorMessage.value = `Error Fetching Users: ${formatErrorMessage(error.message)}`
     } else {
       users.value = data
     }
@@ -110,9 +109,8 @@
       }
     }
 
-    if (error && error.message) {
-      errorMessage.value = `Error Updating user: ${formatErrorMessage(error.message)}`
-      console.error(errorMessage.value)
+    if (error?.message) {
+      errorMessage.value = `Error Updating User: ${formatErrorMessage(error.message)}`
     }
   }
 </script>

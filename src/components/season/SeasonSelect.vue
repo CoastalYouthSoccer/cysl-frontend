@@ -1,10 +1,10 @@
 <template>
-  <Alert v-if="errorMessage" data-test="season-alert"/>
+  <Alert v-if="errorMessage" :msg=errorMessage data-test="season-alert"/>
   <div v-if="isLoading" class="d-flex justify-center my-4" data-test="season-loading">
     <v-progress-circular indeterminate color="primary" />
   </div>
   <v-select
-    v-if="!isLoading && seasons.length" :item-props="itemProps" :items="seasons" label="Season"
+    v-if="!isLoading && seasons?.length" :item-props="itemProps" :items="seasons" label="Season"
     v-model="season" data-test="season-select">
   </v-select>
 </template>
@@ -38,8 +38,7 @@ async function getSeasons() {
   const token = await getAccessTokenSilently();
   const { data, error } = await fetchSeasons(token);
   if (error?.message) {
-    errorMessage.value = `Error fetching seasons: ${formatErrorMessage(error.message)}`
-    console.error(errorMessage.value)
+    errorMessage.value = `Error Fetching Seasons: ${formatErrorMessage(error.message)}`
   } else {
     seasons.value = data
   }

@@ -1,4 +1,8 @@
 <template>
+  <Alert v-if="errorMessage" :msg=errorMessage data-test="association-alert"/>
+  <div v-if="isLoading" class="d-flex justify-center my-4" data-test="association-loading">
+    <v-progress-circular indeterminate color="primary" />
+  </div>
   <v-sheet border rounded>
     <v-data-table
       :headers="headers"
@@ -100,7 +104,9 @@
   import { useUserStore } from '@/stores/user'
   import { fetchAssociations, deleteAssociation, updateAssociation, createAssociation }
     from '@/services/api.association.js'
+  import Alert from '../Alert.vue';
   import { formatDateToYYYYMMDD } from '@/utils/date';
+  import { formatErrorMessage } from '@/utils/formatMessage.js'
 
   const adapter = useDate()
   const { getAccessTokenSilently } = useAuth0();
@@ -109,10 +115,12 @@
 
   const associations = ref([])
   const associationToDelete = ref(null)
+  const errorMessage = ref(null)
   const record = ref(DEFAULT_RECORD)
   const modifyDialog = shallowRef(false)
   const deleteDialog = shallowRef(false)
   const isEditing = shallowRef(false)
+  const isLoading = ref(true)
   const userStore = useUserStore()
   const allowEdit = computed(() => userStore.user.permissions.includes('write:associations'))
   const allowDelete = computed(() => userStore.user.permissions.includes('delete:associations'))
@@ -167,8 +175,8 @@
       associations.value = data;
     }
 
-    if (error && error.message) {
-      console.error('Error fetching associations:', error.message);
+    if (error?.message) {
+      errorMessage.value = `Error Fetching Associations: ${formatErrorMessage(error.message)}`;
     }
   }
 
@@ -182,8 +190,8 @@
     }
 
 
-    if (error && error.message) {
-      console.error('Error Creating association:', error.message);
+    if (error?.message) {
+      errorMessage.value = `Error Creating Associations: ${formatErrorMessage(error.message)}`
     }
   }
 
@@ -198,14 +206,14 @@
       }
     }
 
-    if (error && error.message) {
-      console.error('Error Updating association:', error.message);
+    if (error?.message) {
+      errorMessage.value = `Error Updating Associations: ${formatErrorMessage(error.message)}`
     }
   }
 
   async function deleteApiItem(association) {
     const token = await getAccessTokenSilently();
-    const { data, error } = await deleteAssociation(association.id, token);
+    const { error } = await deleteAssociation(association.id, token);
 
     if (error.message === null) {
       const index = associations.value.findIndex(s => s.id === association.id);
@@ -214,8 +222,8 @@
       }
     }
 
-    if (error && error.message) {
-      console.error('Error Deleting associations:', error.message);
+    if (error?.message) {
+      errorMessage.value = `Error Deleting Associations: ${formatErrorMessage(error.message)}`
     }
 
     deleteDialog.value = false

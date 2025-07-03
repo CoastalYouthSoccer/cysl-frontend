@@ -144,4 +144,43 @@ describe('SeasonData.vue', () => {
     expect(api.deleteSeason).toHaveBeenCalledWith(1, 'mock-token')
     expect(wrapper.text()).not.toContain('Spring')
   })
+
+  it('shows loading spinner when isLoading is true', async () => {
+    wrapper.vm.isLoading = true
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.get('[data-test="season-loading"]').exists()).toBe(true)
+  })
+
+  it('shows error alert when errorMessage is set', async () => {
+    api.fetchSeasons.mockResolvedValueOnce({
+      data: [],
+      error: {message: 'error with Seasons'}
+    })
+
+    const wrapper = mount(SeasonData, {
+      global: {
+        stubs: ['v-progress-circular', 'v-select', 'v-dialog', 'v-divider', 'v-checkbox'],
+        plugins: [
+          vuetify,
+          createTestingPinia({
+            createSpy: vi.fn,
+            initialState: {
+              user: {
+                user: {
+                  permissions: ['read:seasons'],
+                },
+              },
+            }
+          })
+        ],
+      }
+    })
+
+    await flushPromises()
+
+    const alert = wrapper.findComponent({ name: 'Alert' })
+    expect(alert.exists()).toBe(true)
+    expect(alert.props('msg')).toBe('Error Fetching Seasons: error with Seasons')
+  })
 })

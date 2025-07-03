@@ -1,5 +1,4 @@
 <template>
-  {{ isLoading }}
   <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="subVenues-alert"/>
   <div v-if="isLoading" class="d-flex justify-center my-4" data-test="subVenues-loading">
     <v-progress-circular indeterminate color="primary" />
@@ -39,7 +38,7 @@
 
       <template v-slot:item.actions="{ item }">
         <div class="d-flex ga-2 justify-end">
-          <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-pencil" size="small" @click="edit(item)" data-test="edit-subVenues-btn"></v-icon>
+          <v-icon v-if="allowEdit" color="medium-emphasis" icon="mdi-pencil" size="small" @click="edit(item)" data-test="edit-subVenue-btn"></v-icon>
           <v-icon v-if="allowDelete" color="medium-emphasis" icon="mdi-delete" size="small" @click="openDeleteDialog(item)" data-test="delete-subVenue-btn"></v-icon>
         </div>
       </template>
@@ -190,8 +189,8 @@
     }
 
 
-    if (error && error.message) {
-      console.error('Error Creating subVenues:', error.message);
+    if (error?.message) {
+      errorMessage.value = `Error Creating Sub-Venue: ${item.name}, ${formatErrorMessage(error.message)}`
     }
   }
 
@@ -201,8 +200,7 @@
     const { data, error } = await updateSubVenue(item, token);
 
     if (error?.message) {
-      errorMessage.value = `Error updating subVenues: ${item.name}, ${formatErrorMessage(error.message)}`
-      console.error(errorMessage.value)
+      errorMessage.value = `Error Updating SubVenue: ${item.name}, ${formatErrorMessage(error.message)}`
     } else {
       const index = subVenues.value.findIndex(subVenues => subVenues.id === data.id);
       if (index !== -1) {
@@ -213,7 +211,7 @@
 
   async function deleteApiItem(subVenue) {
     const token = await getAccessTokenSilently();
-    const { data, error } = await deleteSubVenue(subVenue.id, token);
+    const { error } = await deleteSubVenue(subVenue.id, token);
 
     if (error.message === null) {
       const index = subVenues.value.findIndex(s => s.id === subVenue.id);
@@ -222,8 +220,8 @@
       }
     }
 
-    if (error && error.message) {
-      console.error('Error Deleting subVenues:', error.message);
+    if (error?.message) {
+      errorMessage.value = `Error Deleting SubVenue: ${item.name}, ${formatErrorMessage(error.message)}`
     }
 
     deleteDialog.value = false
