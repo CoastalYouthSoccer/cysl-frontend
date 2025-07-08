@@ -148,13 +148,48 @@ describe('FieldGames.vue', () => {
   })
 
   it('displays loading spinner when isLoading is true', async () => {
+    wrapper.vm.games = {
+        "Field 1": {
+          "10:00 AM": {
+              "officials": [
+                  {
+                      "accepted": true,
+                      "position": "Referee",
+                      "first_name": "Homer",
+                      "last_name": "Simpson"
+                  },
+                  {
+                      "accepted": true,
+                      "position": "Asst. Referee",
+                      "first_name": "Marge",
+                      "last_name": "Simpson"
+                  },
+                  {
+                      "accepted": false,
+                      "position": "Asst. Referee",
+                      "first_name": "Bart",
+                      "last_name": "Simpson"
+                  }
+              ],
+              "home_team": "Springfield-1",
+              "away_team": "Springfield-2",
+              "age_group": "U12",
+              "gender": "Boys",
+              "report": {
+                  "author": "Homer Simpson",
+                  "misconducts": true,
+                  "ejections": false,
+                  "no_show": false,
+                  "home_score": 0,
+                  "away_score": 2
+              }
+          }
+        }
+      }
+
     wrapper.vm.isLoading = true
-
     await wrapper.vm.$nextTick()
-
-    const loadingDiv = wrapper.find('[data-test="game-loading"]')
-    expect(loadingDiv.exists()).toBe(true)
-    expect(wrapper.find('v-progress-circular-stub').exists()).toBe(true)
+    expect(wrapper.get('[data-test="loading"]').exists()).toBe(true)
   })
 //  it('displays game data table and chips', async () => {
 //    wrapper.vm.venue = 'Test Venue'

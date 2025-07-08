@@ -1,245 +1,198 @@
 <template>
-  <v-container>
-    <!-- Date Filter + Save All -->
-    <v-row class="mb-4">
-      <v-col cols="12" md="4">
-        <v-text-field
-          v-model="selectedDate"
-          label="Select Date"
-          type="date"
-          prepend-icon="mdi-calendar"
-        />
-      </v-col>
-      <v-col cols="12" md="4">
-        <v-btn
-          :disabled="!dirtyGames.length"
-          color="primary"
-          @click="saveAllGames"
-        >
-          Save All
-        </v-btn>
+  <Alert if=""errorMessage :msg="errorMessage" color="red" data-test="games-alert"/>
+  <div :class="['text-h3']">Field Coordinator Screen</div>
+  <v-form>
+    <v-container>
+      <v-row>
+        <v-col cols="4">
+          <v-date-input v-model="gameDate" label="Date" :rules="[rules.required]"></v-date-input>
+        </v-col>
+        <v-col cols="8">
+          <VenueSelect @venueChange="handleVenueChange" :rules="[rules.required]"/>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="2">
+          <v-spacer></v-spacer>
+        </v-col>
+        <v-col>
+          <v-btn
+            color="primary"
+            @click="returnGames(gameDate, venue)"
+            data-test="submit-btn">
+            Submit
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-form>
+
+  <Loading v-if="isLoading"/>
+
+  <v-container v-if="dataExists">
+    <v-row>
+      <v-col>
+        <div :class="['text-h4']" data-test="header">{{ venue }} - {{ formattedDate }}</div>
       </v-col>
     </v-row>
-
-    <!-- Data Table -->
-    <v-data-table
-      :headers="headers"
-      :items="filteredGames"
-      item-value="id"
-      class="elevation-1"
-    >
-      <!-- Venue Dropdown -->
-      <template #item.venue="{ item }">
-        <v-select
-          :items="venueOptions"
-          v-model="item.venue"
-          hide-details
-          density="compact"
-          style="min-width: 150px"
-          @update:modelValue="markDirty(item)"
-        />
-      </template>
-
-      <!-- SubVenue / Home / Away -->
-      <template #item.subVenue="{ item }">
-        <v-text-field
-          v-model="item.subVenue"
-          density="compact"
-          hide-details
-          @input="markDirty(item)"
-        />
-      </template>
-
-      <template #item.homeTeam="{ item }">
-        <v-text-field
-          v-model="item.homeTeam"
-          density="compact"
-          hide-details
-          @input="markDirty(item)"
-        />
-      </template>
-
-      <template #item.awayTeam="{ item }">
-        <v-text-field
-          v-model="item.awayTeam"
-          density="compact"
-          hide-details
-          @input="markDirty(item)"
-        />
-      </template>
-
-      <!-- Time Picker -->
-      <template #item.time="{ item }">
-        <v-menu
-          v-model="item.timeMenu"
-          :close-on-content-click="false"
-          max-width="290"
-          min-width="auto"
-        >
-          <template #activator="{ props }">
-            <v-text-field
-              v-model="item.time"
-              v-bind="props"
-              hide-details
-              density="compact"
-              style="max-width: 100px"
-              readonly
-              @click.stop
-            />
-          </template>
-          <v-card>
-            <v-time-picker
-              v-model="tempTimes[item.id]"
-              format="24hr"
-              @update:modelValue="(val) => applyTimeChange(val, item)"
-            />
-          </v-card>
-        </v-menu>
-      </template>
-
-      <!-- Actions: Save / Cancel / Status -->
-      <template #item.actions="{ item }">
-        <v-icon v-if="item.dirty" color="orange" class="me-1">mdi-pencil</v-icon>
-        <v-icon v-else-if="item.justSaved" color="green" class="me-1">mdi-check</v-icon>
-
-        <v-btn
-          icon
-          color="green"
-          @click="saveGame(item)"
-          :disabled="!item.dirty"
-        >
-          <v-icon>mdi-content-save</v-icon>
-        </v-btn>
-
-        <v-btn
-          icon
-          color="grey"
-          @click="resetGame(item)"
-          :disabled="!item.dirty"
-        >
-          <v-icon>mdi-undo</v-icon>
-        </v-btn>
-      </template>
-    </v-data-table>
+    <v-row v-for="(timeSlots, fieldName) in games" style="padding: 20px;">
+      <v-sheet
+          class="d-flex align-center justify-center flex-wrap text-center mx-auto px-4"
+          elevation="4"
+          width="100%"
+          rounded
+      >
+        <div>
+          <div :class="['text-h5']">{{ fieldName }}</div>
+          <v-table>
+              <thead>
+                <tr>
+                  <th id="time">Time</th>
+                  <th id="age">Age</th>
+                  <th id="gender">Gender</th>
+                  <th id="awayTeam">Away Team</th>
+                  <th id="awayScore">Away Score</th>
+                  <th id="homeTeam">Home Team</th>
+                  <th id="homeScore">Home Score</th>
+                  <th id="referees">Referees</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(game, time) in timeSlots" :key="time">
+                  <td>{{ time }}</td>
+                  <td>{{ game.age_group }}</td>
+                  <td>{{ game.gender }}</td>
+                  <td>{{ game.away_team }}</td>
+                  <td>{{ game.report.away_score }}</td>
+                  <td>{{ game.home_team }}</td>
+                  <td>{{ game.report.away_score }}</td>
+                  <td>
+                    <v-chip v-for="(official, officialIndex) in game.officials"
+                      :key="officialIndex"
+                      :color="official.accepted ? 'green' : 'red'"
+                      text-color="white"
+                      :text="`${official.first_name} ${official.last_name}`"
+                      @click="viewReport(game.report)"
+                    ></v-chip>
+                  </td>
+                </tr>
+              </tbody>
+            </v-table>
+        </div>
+      </v-sheet>
+    </v-row>
   </v-container>
+  <v-dialog v-model="viewDialog" max-width="500">
+    <v-card
+      title="Game Report Summary"
+    >
+      <template v-slot:text>
+        <v-row>
+          <v-col cols="12">
+            <v-text-field v-model="record.author" label="Author"
+            data-test="input-author" disabled></v-text-field>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-checkbox v-model="record.misconducts" label="Misconducts"
+            data-test="box-misconducts" disabled></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-checkbox v-model="record.ejections" label="Ejections"
+            data-test="box-ejections" disabled></v-checkbox>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-checkbox v-model="record.no_show" label="No Show"
+            data-test="box-no-show" disabled></v-checkbox>
+          </v-col>
+        </v-row>
+      </template>
+
+      <v-divider></v-divider>
+
+      <v-card-actions class="bg-surface-light">
+        <v-btn text="Close" variant="plain" @click="viewDialog = false" data-test="close-btn"></v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, shallowRef, computed } from 'vue'
+import { useAuth0 } from "@auth0/auth0-vue";
+import Alert from "@/components/Alert.vue";
 
-const venueOptions = ref(['Main Stadium', 'East Complex', 'West Field', 'North Arena'])
+import { fetchAssignrGames } from '@/services/api.game.js'
 
-const games = ref([
-  {
-    id: 1,
-    venue: 'Main Stadium',
-    subVenue: 'Field A',
-    date: '2025-07-05',
-    time: '15:00',
-    homeTeam: 'Team A',
-    awayTeam: 'Team B',
-    timeMenu: false,
-    dirty: false,
-    justSaved: false,
-  },
-  {
-    id: 2,
-    venue: 'Main Stadium',
-    subVenue: 'Field B',
-    date: '2025-07-05',
-    time: '16:30',
-    homeTeam: 'Team C',
-    awayTeam: 'Team D',
-    timeMenu: false,
-    dirty: false,
-    justSaved: false,
-  },
-  {
-    id: 3,
-    venue: 'East Complex',
-    subVenue: 'Field 1',
-    date: '2025-07-06',
-    time: '14:00',
-    homeTeam: 'Team E',
-    awayTeam: 'Team F',
-    timeMenu: false,
-    dirty: false,
-    justSaved: false,
-  },
-])
+const { getAccessTokenSilently } = useAuth0();
 
-const originalData = ref({})
-const tempTimes = ref({})
+let venue = ref()
+const dataExists = ref(false)
+const isLoading = ref(false)
+const games = ref(null)
+const gameDate = ref(null)
+const errorMessage = ref(null)
+const errorType = ref(null)
+const viewDialog = shallowRef(false)
+const record = ref(null)
 
-// Populate tracking maps on mount
-onMounted(() => {
-  games.value.forEach(game => {
-    originalData.value[game.id] = { ...game }
-    tempTimes.value[game.id] = game.time
-  })
+function viewReport (item) {
+  record.value = { ...item }
+  viewDialog.value = true
+}
+
+const rules = {
+  required: value => !!value || 'Required.',
+}
+
+function handleVenueChange(value) {
+  venue.value = value.name;
+}
+
+async function returnGames(gameDate, venue) {
+  if (!gameDate) {
+    errorMessage.value = "Date must be provided";
+    return
+  }
+  if (!venue) {
+    errorMessage.value = "Venue must be provided";
+    return
+  }
+
+  const token = await getAccessTokenSilently();
+  isLoading.value = true;
+  errorType.value = "success";
+  dataExists.value = false;
+  const params = {
+    start_dt: gameDate,
+    end_dt: gameDate,
+    venue: venue
+  }
+  const { data, error } = await fetchAssignrGames(token, params);
+
+  if (data) {
+    games.value = data;
+    dataExists.value = true;
+  }
+
+  if (error?.message) {
+    errorMessage.value = `Error Fetching Games: ${formatErrorMessage(error.message)}`
+  }
+
+  isLoading.value = false;
+}
+
+const formattedDate = computed(() => {
+  if (gameDate.value == null) {
+    return null;
+  }
+  const date = new Date(`${gameDate.value}T00:00:00`);
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${month}/${day}/${year}`;
 })
-
-// Headers
-const headers = [
-  { title: 'Venue', key: 'venue' },
-  { title: 'Sub-Venue', key: 'subVenue' },
-  { title: 'Date', key: 'date' },
-  { title: 'Time', key: 'time' },
-  { title: 'Home Team', key: 'homeTeam' },
-  { title: 'Away Team', key: 'awayTeam' },
-  { title: 'Actions', key: 'actions', sortable: false },
-]
-
-// Date filter
-const selectedDate = ref(null)
-const filteredGames = computed(() => {
-  if (!selectedDate.value) return games.value
-  return games.value.filter(g => g.date === selectedDate.value)
-})
-
-// Dirty logic
-const markDirty = (game) => {
-  const original = originalData.value[game.id]
-  const changed =
-    game.time !== original.time ||
-    game.venue !== original.venue ||
-    game.subVenue !== original.subVenue ||
-    game.homeTeam !== original.homeTeam ||
-    game.awayTeam !== original.awayTeam
-
-  game.dirty = changed
-  game.justSaved = false
-}
-
-const applyTimeChange = (newTime, game) => {
-  game.time = newTime
-  markDirty(game)
-  game.timeMenu = false
-}
-
-const saveGame = (game) => {
-  console.log('Saved:', { ...game })
-  originalData.value[game.id] = { ...game }
-  game.dirty = false
-  game.justSaved = true
-  setTimeout(() => {
-    game.justSaved = false
-  }, 2000)
-}
-
-const resetGame = (game) => {
-  const original = originalData.value[game.id]
-  Object.assign(game, { ...original })
-  game.dirty = false
-  game.justSaved = false
-  tempTimes.value[game.id] = original.time
-}
-
-const dirtyGames = computed(() =>
-  games.value.filter(g => g.dirty)
-)
-
-const saveAllGames = () => {
-  dirtyGames.value.forEach(saveGame)
-}
 </script>

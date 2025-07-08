@@ -1,8 +1,7 @@
 <template>
   <Alert v-if="errorMessage" :msg=errorMessage data-test="season-alert"/>
-  <div v-if="isLoading" class="d-flex justify-center my-4" data-test="season-loading">
-    <v-progress-circular indeterminate color="primary" size="small"/>
-  </div>
+  <Loading v-if="isLoading"/>
+
   <v-sheet border rounded v-if="!isLoading && seasons?.length">
     <v-data-table
       :headers="headers"

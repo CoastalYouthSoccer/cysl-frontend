@@ -1,14 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
+import { vuetify } from '@/vuetify-setup'
 import Alert from '@/components/Alert.vue'
-
-const vuetify = createVuetify({
-  components,
-  directives,
-})
 
 global.ResizeObserver = require('resize-observer-polyfill')
 

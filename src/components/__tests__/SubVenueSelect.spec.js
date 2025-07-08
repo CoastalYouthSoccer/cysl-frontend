@@ -124,7 +124,7 @@ describe('SubVenueSelect.vue', () => {
   it('displays loading spinner when isLoading is true', async () => {
     fetchSubVenues.mockResolvedValueOnce({
       data: [],
-      error: {message: 'error with venues'}
+      error: {}
     })
 
     const wrapper = mount(SubVenueSelect, {
@@ -150,8 +150,7 @@ describe('SubVenueSelect.vue', () => {
 
     await wrapper.vm.$nextTick()
 
-    const loadingDiv = wrapper.find('[data-test="SubVenues-loading"]')
-    expect(loadingDiv.exists()).toBe(true)
+    expect(wrapper.get('[data-test="loading"]').exists()).toBe(true)
     expect(wrapper.find('v-progress-circular-stub').exists()).toBe(true)
   })
 })

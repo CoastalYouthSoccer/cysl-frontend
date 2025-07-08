@@ -124,7 +124,7 @@ describe('VenueSelect.vue', () => {
   it('displays loading spinner when isLoading is true', async () => {
     fetchAssignrVenues.mockResolvedValueOnce({
       data: [],
-      error: {message: 'error with venues'}
+      error: {}
     })
 
     const wrapper = mount(VenueSelect, {
@@ -147,11 +147,7 @@ describe('VenueSelect.vue', () => {
     })
 
     wrapper.vm.isLoading = true
-
     await wrapper.vm.$nextTick()
-
-    const loadingDiv = wrapper.find('[data-test="venue-loading"]')
-    expect(loadingDiv.exists()).toBe(true)
-    expect(wrapper.find('v-progress-circular-stub').exists()).toBe(true)
+    expect(wrapper.get('[data-test="loading"]').exists()).toBe(true)
   })
 })

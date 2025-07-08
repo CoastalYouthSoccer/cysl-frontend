@@ -1,6 +1,7 @@
 <template>
   <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="venue-alert"/>
   <Loading v-if="isLoading"/>
+
   <v-sheet border rounded v-if="!isLoading">
     <v-data-table
       :headers="headers"
