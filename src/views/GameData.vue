@@ -1,4 +1,6 @@
 <template>
+  <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="gameData-alert"/>
+  <Loading v-if="isLoading"/>
   <v-container>
     <!-- Date Filter + Save All -->
     <v-row class="mb-4">
@@ -50,75 +52,41 @@
         />
       </template>
 
-      <template #item.homeTeam="{ item }">
-        <v-text-field
-          v-model="item.homeTeam"
-          density="compact"
-          hide-details
-          @input="markDirty(item)"
-        />
-      </template>
-
-      <template #item.awayTeam="{ item }">
-        <v-text-field
-          v-model="item.awayTeam"
-          density="compact"
-          hide-details
-          @input="markDirty(item)"
-        />
-      </template>
-
       <!-- Time Picker -->
       <template #item.time="{ item }">
-        <v-menu
-          v-model="item.timeMenu"
-          :close-on-content-click="false"
-          max-width="290"
-          min-width="auto"
-        >
-          <template #activator="{ props }">
-            <v-text-field
-              v-model="item.time"
-              v-bind="props"
-              hide-details
-              density="compact"
-              style="max-width: 100px"
-              readonly
-              @click.stop
-            />
-          </template>
-          <v-card>
-            <v-time-picker
-              v-model="tempTimes[item.id]"
-              format="24hr"
-              @update:modelValue="(val) => applyTimeChange(val, item)"
-            />
-          </v-card>
-        </v-menu>
+        <v-text-field
+          v-model="item.time"
+          density="compact"
+          hide-details
+          @input="markDirty(item)"
+        />
       </template>
 
       <!-- Actions: Save / Cancel / Status -->
       <template #item.actions="{ item }">
-        <v-icon v-if="item.dirty" color="orange" class="me-1">mdi-pencil</v-icon>
-        <v-icon v-else-if="item.justSaved" color="green" class="me-1">mdi-check</v-icon>
-
+        <div class="d-flex ga-2 justify-end">
+          <v-icon v-if="item.dirty" color="orange" class="me-1" icon="mdi-pencil" size="small"></v-icon>
+          <v-icon v-else-if="item.justSaved" color="green" class="me-1" icon="mid-check" size="small"></v-icon>
         <v-btn
           icon
           color="green"
+          size="x-small"
           @click="saveGame(item)"
           :disabled="!item.dirty"
         >
-          <v-icon>mdi-content-save</v-icon>
+          <v-icon icon="mdi-content-save"></v-icon>
         </v-btn>
 
         <v-btn
           icon
           color="grey"
+          size="x-small"
           @click="resetGame(item)"
           :disabled="!item.dirty"
         >
-          <v-icon>mdi-undo</v-icon>
+          <v-icon icon="mdi-undo"></v-icon>
         </v-btn>
+      </div>
       </template>
     </v-data-table>
   </v-container>
@@ -138,7 +106,6 @@ const games = ref([
     time: '15:00',
     homeTeam: 'Team A',
     awayTeam: 'Team B',
-    timeMenu: false,
     dirty: false,
     justSaved: false,
   },
@@ -150,7 +117,6 @@ const games = ref([
     time: '16:30',
     homeTeam: 'Team C',
     awayTeam: 'Team D',
-    timeMenu: false,
     dirty: false,
     justSaved: false,
   },
@@ -162,7 +128,6 @@ const games = ref([
     time: '14:00',
     homeTeam: 'Team E',
     awayTeam: 'Team F',
-    timeMenu: false,
     dirty: false,
     justSaved: false,
   },
@@ -184,7 +149,7 @@ const headers = [
   { title: 'Venue', key: 'venue' },
   { title: 'Sub-Venue', key: 'subVenue' },
   { title: 'Date', key: 'date' },
-  { title: 'Time', key: 'time' },
+  { title: 'Time', key: 'time', width: '135px' },
   { title: 'Home Team', key: 'homeTeam' },
   { title: 'Away Team', key: 'awayTeam' },
   { title: 'Actions', key: 'actions', sortable: false },
@@ -209,12 +174,6 @@ const markDirty = (game) => {
 
   game.dirty = changed
   game.justSaved = false
-}
-
-const applyTimeChange = (newTime, game) => {
-  game.time = newTime
-  markDirty(game)
-  game.timeMenu = false
 }
 
 const saveGame = (game) => {

@@ -87,7 +87,7 @@ describe('FieldGames.vue', () => {
   })
 
   it('shows error if venue is missing on submit', async () => {
-    wrapper.vm.gameDate = '2025-05-31'
+    wrapper.vm.gameDate = 'Fri May 30 2025 00:00:00 GMT-0400 (Eastern Daylight Time)'
     const submitBtn = wrapper.findComponent('[data-test="submit-btn"]')
     await submitBtn.trigger('click')
     await flushPromises()
@@ -100,7 +100,7 @@ describe('FieldGames.vue', () => {
 
   it('renders Header', async() => {
     wrapper.vm.venue = 'Test Venue'
-    wrapper.vm.gameDate = '2025-05-31'
+    wrapper.vm.gameDate = 'Fri May 30 2025 00:00:00 GMT-0400 (Eastern Daylight Time)'
     wrapper.vm.games = {
         "Field 1": {
           "10:00 AM": {
@@ -144,7 +144,7 @@ describe('FieldGames.vue', () => {
     await flushPromises()
     const header = wrapper.get('[data-test="header"]')
     expect(header.exists()).toBe(true)
-    expect(header.text()).toContain('Test Venue - 05/31/2025')
+    expect(header.text()).toContain('Test Venue - 05/30/2025')
   })
 
   it('displays loading spinner when isLoading is true', async () => {

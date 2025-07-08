@@ -1,7 +1,7 @@
 <template>
   <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="userData-alert"/>
   <div v-if="isLoading" class="d-flex justify-center my-4" data-test="userData-loading">
-    <v-progress-circular indeterminate color="primary" />
+    <v-progress-circular indeterminate color="primary" size="small"/>
   </div>
   <v-sheet border rounded v-if="!isLoading">
     <v-data-table

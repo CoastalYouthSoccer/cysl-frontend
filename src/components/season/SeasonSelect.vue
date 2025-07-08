@@ -1,7 +1,7 @@
 <template>
   <Alert v-if="errorMessage" :msg=errorMessage data-test="season-alert"/>
   <div v-if="isLoading" class="d-flex justify-center my-4" data-test="season-loading">
-    <v-progress-circular indeterminate color="primary" />
+    <v-progress-circular indeterminate color="primary" size="small"/>
   </div>
   <v-select
     v-if="!isLoading && seasons?.length" :item-props="itemProps" :items="seasons" label="Season"

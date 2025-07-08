@@ -18,7 +18,7 @@
   import { useShareStore } from '@/stores/sharedData'
 
   import NavDrawer from "@/components/sidebar/NavDrawer.vue";
-  import Navigation from './components/navbar/Navigation.vue';
+  import Navigation from '@/components/navbar/Navigation.vue';
   import AppFooter from "@/components/AppFooter.vue";
 
   const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0()
