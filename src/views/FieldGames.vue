@@ -186,13 +186,13 @@ async function returnGames(gameDate, venue) {
 }
 
 const formattedDate = computed(() => {
-  if (gameDate.value == null) {
-    return null;
-  }
-  const date = new Date(`${gameDate.value}T00:00:00`);
+  if (!gameDate.value) return null;
+
+  const date = new Date(gameDate.value); // use as-is
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const day = date.getDate().toString().padStart(2, '0');
   const year = date.getFullYear();
   return `${month}/${day}/${year}`;
-})
+});
+
 </script>
