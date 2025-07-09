@@ -11,21 +11,21 @@
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@auth0/auth0-vue": "^2.3.3",
-    "@mdi/font": "7.0.96",
+    "@auth0/auth0-vue": "^2.4.0",
+    "@mdi/font": "^7.0.96",
     "axios": "^1.10.0",
     "pinia": "^3.0.3",
-    "roboto-fontface": "*",
-    "unplugin-vue-components": "^0.27.2",
+    "roboto-fontface": "^0.10.0",
+    "unplugin-vue-components": "^0.27.5",
     "vue": "^3.5.17",
-    "vue-pdf-embed": "^2.0.4",
-    "vue-router": "^4.4.0",
+    "vue-pdf-embed": "^2.1.2",
+    "vue-router": "^4.5.1",
     "vuetify": "^3.9.0"
   },
   "devDependencies": {
     "@pinia/testing": "^1.0.2",
     "@vitejs/plugin-vue": "^5.2.4",
-    "@vitest/coverage-v8": "^2.0.3",
+    "@vitest/coverage-v8": "^2.1.9",
     "@vitest/ui": "^2.1.9",
     "@vue/test-utils": "^2.4.6",
     "jsdom": "^24.1.3",
