@@ -11,143 +11,95 @@ const mockVenues = [
   { id: 2, name: 'Arena B', city: 'Cityplace' }
 ]
 
-vi.mock('@auth0/auth0-vue', () => ({
-  useAuth0: () => ({
-    getAccessTokenSilently: vi.fn().mockResolvedValue('fake-token')
-  })
-}))
-
-vi.mock('@/services/api.venue.js', () => ({
-  fetchAssignrVenues: vi.fn()
-}))
-
-import { fetchAssignrVenues } from '@/services/api.venue.js'
-
 describe('VenueSelect.vue', () => {
-  it('renders v-select with venue options from API', async () => {
-    fetchAssignrVenues.mockResolvedValueOnce({
-      data: mockVenues,
-      error: {}
+  const factory = (selected = null) => {
+    return mount(VenueSelect, {
+      global: {
+        plugins: [createTestingPinia({
+          stubActions: false,
+          createSpy: vi.fn,
+          initialState: {
+            sharedStore: {
+              venues: [],
+              isLoading: false,
+              errorMessage: null
+            }
+          }
+        })],
+      },
+      props: { selected }
     })
+  }
 
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('renders v-select with venues when loaded', async () => {
     const wrapper = mount(VenueSelect, {
       global: {
-        stubs: ['v-progress-circular', 'v-select', 'v-dialog', 'v-divider', 'v-checkbox'],
         plugins: [
           vuetify,
           createTestingPinia({
-            createSpy: vi.fn,
-            initialState: {
-              user: {
-                user: {
-                  permissions: ['read:venues'],
-                },
-              },
+          initialState: {
+            sharedStore: {
+              venues: mockVenues
             }
-          })
-        ],
+          }
+        })],
       }
     })
-    await flushPromises()
 
-    const select = wrapper.findComponent('[data-test="venue-select"]')
+    await flushPromises()
+    const select = wrapper.get('[data-test="venue-select"]')
     expect(select.exists()).toBe(true)
-    expect(select.props('items')).toEqual(mockVenues)
   })
 
-  it('emits venueChange on selection', async () => {
-    fetchAssignrVenues.mockResolvedValueOnce({
-      data: mockVenues,
-      error: {}
-    })
-
+  it('pre-fills selected venue when provided', async () => {
+    const selected = mockVenues[1]
     const wrapper = mount(VenueSelect, {
+      props: { selected },
       global: {
-        stubs: ['v-progress-circular', 'v-select', 'v-dialog', 'v-divider', 'v-checkbox'],
         plugins: [
           vuetify,
           createTestingPinia({
-            createSpy: vi.fn,
-            initialState: {
-              user: {
-                user: {
-                  permissions: ['read:venues'],
-                },
-              },
+          initialState: {
+            sharedStore: {
+              venues: mockVenues
             }
-          })
-        ],
+          }
+        })]
       }
     })
 
     await flushPromises()
-
-    wrapper.vm.venue = mockVenues[1]
-    await wrapper.vm.$nextTick()
-
-    expect(wrapper.emitted().venueChange).toBeTruthy()
-    expect(wrapper.emitted().venueChange[0]).toEqual([mockVenues[1]])
+    const select = wrapper.get('[data-test="venue-select"]')
+    expect(select.exists()).toBe(true)
+    expect(wrapper.vm.venue).toEqual(selected)
   })
 
-  it('shows error if unable to load venues', async () => {
-    fetchAssignrVenues.mockResolvedValueOnce({
-      data: [],
-      error: {message: 'error with venues'}
-    })
-
+  it('emits venueChange when venue is updated', async () => {
     const wrapper = mount(VenueSelect, {
+      props: { selected: null },
       global: {
-        stubs: ['v-progress-circular', 'v-select', 'v-dialog', 'v-divider', 'v-checkbox'],
         plugins: [
           vuetify,
           createTestingPinia({
-            createSpy: vi.fn,
-            initialState: {
-              user: {
-                user: {
-                  permissions: ['read:venues'],
-                },
-              },
+          stubActions: false,
+          initialState: {
+            sharedStore: {
+              venues: mockVenues
             }
-          })
-        ],
+          }
+        })]
       }
     })
 
     await flushPromises()
+    wrapper.vm.venue = mockVenues[0]
+    await flushPromises()
 
-    const alert = wrapper.findComponent({ name: 'Alert' })
-    expect(alert.exists()).toBe(true)
-    expect(alert.props('msg')).toBe('Error fetching venues: error with venues')
-  })
-
-  it('displays loading spinner when isLoading is true', async () => {
-    fetchAssignrVenues.mockResolvedValueOnce({
-      data: [],
-      error: {}
-    })
-
-    const wrapper = mount(VenueSelect, {
-      global: {
-        stubs: ['v-progress-circular', 'v-select', 'v-dialog', 'v-divider', 'v-checkbox'],
-        plugins: [
-          vuetify,
-          createTestingPinia({
-            createSpy: vi.fn,
-            initialState: {
-              user: {
-                user: {
-                  permissions: ['read:venues'],
-                },
-              },
-            }
-          })
-        ],
-      }
-    })
-
-    wrapper.vm.isLoading = true
-    await wrapper.vm.$nextTick()
-    expect(wrapper.get('[data-test="loading"]').exists()).toBe(true)
+    expect(wrapper.emitted('venueChange')).toBeTruthy()
+    expect(wrapper.emitted('venueChange')[0]).toEqual([mockVenues[0]])
   })
 })

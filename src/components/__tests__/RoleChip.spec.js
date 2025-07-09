@@ -3,15 +3,7 @@ import { mount } from '@vue/test-utils'
 import RoleChip from '@/components/user/RoleChip.vue'
 import { createTestingPinia } from '@pinia/testing'
 import { nextTick } from 'vue'
-
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-
-const vuetify = createVuetify({
-  components,
-  directives,
-})
+import { vuetify } from '@/vuetify-setup'
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
@@ -31,7 +23,7 @@ describe('RoleChip.vue', () => {
             createSpy: vi.fn,
             stubActions: false,
             initialState: {
-              share: {
+              sharedStore: {
                 roles: rolesMock
               }
             }

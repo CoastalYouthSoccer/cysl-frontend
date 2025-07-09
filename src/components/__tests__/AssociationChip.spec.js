@@ -3,16 +3,7 @@ import { mount } from '@vue/test-utils'
 import AssociationChip from '@/components/user/AssociationChip.vue'
 import { createTestingPinia } from '@pinia/testing'
 import { nextTick } from 'vue'
-
-// Mock Vuetify
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-
-const vuetify = createVuetify({
-  components,
-  directives,
-})
+import { vuetify } from '@/vuetify-setup'
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
@@ -29,7 +20,7 @@ describe('AssociationChip.vue', () => {
             createSpy: vi.fn,
             stubActions: false,
             initialState: {
-              share: {
+              sharedStore: {
                 associations: associationsMock
               }
             }

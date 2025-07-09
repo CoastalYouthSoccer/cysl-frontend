@@ -53,6 +53,8 @@
         userStore.setUserAssociations(associations)
         shareStore.setAssociations(token)
         shareStore.setRoles(token)
+        shareStore.setVenues(token)
+        shareStore.setSubVenues(token)
       } catch (err) {
         console.error('Error loading access token claims:', err)
       }

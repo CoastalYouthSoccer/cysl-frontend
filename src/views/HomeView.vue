@@ -1,10 +1,11 @@
 <template>
   <v-container>
     This is the home page of CYSL Management system
-    <GameData></GameData>
+    <VenueSelect :selected="venue" @venueChange="(val) => venue = val" />
   </v-container>
 </template>
 <script setup>
-import GameData from './GameData.vue';
+import VenueSelect from '@/components/venue/VenueSelect.vue';
+const venue = ref('Some Venue')
 
 </script>

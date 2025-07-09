@@ -39,7 +39,7 @@ describe('AssociationSelect.vue', () => {
             createSpy: vi.fn,
             stubActions: false,
             initialState: {
-              share: {
+              sharedStore: {
                 associations: mockAssociations
               }
             }
