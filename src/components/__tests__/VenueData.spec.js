@@ -181,8 +181,7 @@ describe('VenueData.vue', () => {
   it('shows loading spinner when isLoading is true', async () => {
     wrapper.vm.isLoading = true
     await wrapper.vm.$nextTick()
-
-    expect(wrapper.get('[data-test="venue-loading"]').exists()).toBe(true)
+    expect(wrapper.get('[data-test="loading"]').exists()).toBe(true)
   })
 
   it('shows error alert when errorMessage is set', async () => {

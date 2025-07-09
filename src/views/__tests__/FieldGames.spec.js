@@ -87,7 +87,7 @@ describe('FieldGames.vue', () => {
   })
 
   it('shows error if venue is missing on submit', async () => {
-    wrapper.vm.gameDate = '2025-05-31'
+    wrapper.vm.gameDate = 'Fri May 30 2025 00:00:00 GMT-0400 (Eastern Daylight Time)'
     const submitBtn = wrapper.findComponent('[data-test="submit-btn"]')
     await submitBtn.trigger('click')
     await flushPromises()
@@ -100,7 +100,7 @@ describe('FieldGames.vue', () => {
 
   it('renders Header', async() => {
     wrapper.vm.venue = 'Test Venue'
-    wrapper.vm.gameDate = '2025-05-31'
+    wrapper.vm.gameDate = 'Fri May 30 2025 00:00:00 GMT-0400 (Eastern Daylight Time)'
     wrapper.vm.games = {
         "Field 1": {
           "10:00 AM": {
@@ -144,17 +144,52 @@ describe('FieldGames.vue', () => {
     await flushPromises()
     const header = wrapper.get('[data-test="header"]')
     expect(header.exists()).toBe(true)
-    expect(header.text()).toContain('Test Venue - 05/31/2025')
+    expect(header.text()).toContain('Test Venue - 05/30/2025')
   })
 
   it('displays loading spinner when isLoading is true', async () => {
+    wrapper.vm.games = {
+        "Field 1": {
+          "10:00 AM": {
+              "officials": [
+                  {
+                      "accepted": true,
+                      "position": "Referee",
+                      "first_name": "Homer",
+                      "last_name": "Simpson"
+                  },
+                  {
+                      "accepted": true,
+                      "position": "Asst. Referee",
+                      "first_name": "Marge",
+                      "last_name": "Simpson"
+                  },
+                  {
+                      "accepted": false,
+                      "position": "Asst. Referee",
+                      "first_name": "Bart",
+                      "last_name": "Simpson"
+                  }
+              ],
+              "home_team": "Springfield-1",
+              "away_team": "Springfield-2",
+              "age_group": "U12",
+              "gender": "Boys",
+              "report": {
+                  "author": "Homer Simpson",
+                  "misconducts": true,
+                  "ejections": false,
+                  "no_show": false,
+                  "home_score": 0,
+                  "away_score": 2
+              }
+          }
+        }
+      }
+
     wrapper.vm.isLoading = true
-
     await wrapper.vm.$nextTick()
-
-    const loadingDiv = wrapper.find('[data-test="game-loading"]')
-    expect(loadingDiv.exists()).toBe(true)
-    expect(wrapper.find('v-progress-circular-stub').exists()).toBe(true)
+    expect(wrapper.get('[data-test="loading"]').exists()).toBe(true)
   })
 //  it('displays game data table and chips', async () => {
 //    wrapper.vm.venue = 'Test Venue'

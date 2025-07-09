@@ -1,8 +1,6 @@
 <template>
   <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="subVenues-alert"/>
-  <div v-if="isLoading" class="d-flex justify-center my-4" data-test="subVenues-loading">
-    <v-progress-circular indeterminate color="primary" />
-  </div>
+  <Loading v-if="isLoading"/>
   <v-sheet border rounded v-if="!isLoading">
     <v-data-table
       :headers="headers"
