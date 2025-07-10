@@ -2,15 +2,10 @@
   <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="gameData-alert"/>
   <Loading v-if="isLoading"/>
   <v-container>
-    <!-- Date Filter + Save All -->
+    <!-- Season Filter + Save All -->
     <v-row class="mb-4">
       <v-col cols="12" md="4">
-        <v-text-field
-          v-model="selectedDate"
-          label="Select Date"
-          type="date"
-          prepend-icon="mdi-calendar"
-        />
+        <SeasonSelect/>
       </v-col>
       <v-col cols="12" md="4">
         <v-btn
@@ -32,23 +27,26 @@
     >
       <!-- Venue Dropdown -->
       <template #item.venue="{ item }">
-        <v-select
-          :items="venueOptions"
-          v-model="item.venue"
-          hide-details
-          density="compact"
+        <VenueSelect
+          :selected="item.venue.id"
+          @venueChange="val => {
+            if (item.venue?.id !== val?.id) {
+              item.venue = val
+              item.subVenue = null
+              markDirty(item)
+            }
+          }"
           style="min-width: 150px"
-          @update:modelValue="markDirty(item)"
         />
       </template>
 
-      <!-- SubVenue / Home / Away -->
+      <!-- SubVenue -->
       <template #item.subVenue="{ item }">
-        <v-text-field
-          v-model="item.subVenue"
-          density="compact"
-          hide-details
-          @input="markDirty(item)"
+        <SubVenueSelect
+          :venue_id="item.venue?.id"
+          :selected="item.subVenue?.id"
+          @SubVenueChange="val => { item.subVenue = val; markDirty(item) }"
+          style="min-width: 150px"
         />
       </template>
 
@@ -94,8 +92,12 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import VenueSelect from '@/components/venue/VenueSelect.vue'
+import SubVenueSelect from '@/components/venue/SubVenueSelect.vue'
+import SeasonSelect from '@/components/season/SeasonSelect.vue'
 
-const venueOptions = ref(['Main Stadium', 'East Complex', 'West Field', 'North Arena'])
+const errorMessage = ref(null)
+const isLoading = ref(true)
 
 const games = ref([
   {
@@ -142,6 +144,8 @@ onMounted(() => {
     originalData.value[game.id] = { ...game }
     tempTimes.value[game.id] = game.time
   })
+  isLoading.value = false
+
 })
 
 // Headers

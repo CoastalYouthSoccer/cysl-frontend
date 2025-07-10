@@ -16,6 +16,7 @@
   import { useAuth0 } from '@auth0/auth0-vue'
   import { useUserStore } from '@/stores/user'
   import { useShareStore } from '@/stores/sharedData'
+  import { useVenueSubVenueStore } from './stores/venueSubVenue'
 
   import NavDrawer from "@/components/sidebar/NavDrawer.vue";
   import Navigation from '@/components/navbar/Navigation.vue';
@@ -24,6 +25,7 @@
   const { isLoading, isAuthenticated, user, getAccessTokenSilently } = useAuth0()
   const userStore = useUserStore()
   const shareStore = useShareStore()
+  const venueSubVenueStore = useVenueSubVenueStore()
 
   watch(
   () => ({ loading: isLoading.value, authed: isAuthenticated.value }),
@@ -53,8 +55,10 @@
         userStore.setUserAssociations(associations)
         shareStore.setAssociations(token)
         shareStore.setRoles(token)
-        shareStore.setVenues(token)
-        shareStore.setSubVenues(token)
+        shareStore.setSeasons(token)
+        venueSubVenueStore.setSubVenues(token)
+        venueSubVenueStore.setVenues(token)
+
       } catch (err) {
         console.error('Error loading access token claims:', err)
       }

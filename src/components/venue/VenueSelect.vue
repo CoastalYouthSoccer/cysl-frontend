@@ -1,10 +1,11 @@
 <template>
   <v-select
-    v-if="getVenues?.length > 0"
     :item-props="itemProps"
+    :item-value="'id'"
+    :item-title="'name'"
     :items="getVenues"
-    label="Venue"
-    v-model="venue"
+    v-model="venueId"
+    placeholder="Select a venue"
     data-test="venue-select">
   </v-select>
 </template>
@@ -12,25 +13,26 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia';
-import { useShareStore } from '@/stores/sharedData'
-const shareStore = useShareStore()
-const { getVenues } = storeToRefs(shareStore)
+import { useVenueSubVenueStore } from '@/stores/venueSubVenue';
+const venueSubVenueStore = useVenueSubVenueStore()
+const { getVenues } = storeToRefs(venueSubVenueStore)
 
 const emit = defineEmits(['venueChange']);
 const props = defineProps({
   selected: {
-    type: Object,
+    type: [String, null],
     default: null
   }
 })
-const venue = ref(props.selected ?? null)
+const venueId = ref(props.selected ?? null)
 
-watch(venue, (newValue) => {
-  emit('venueChange', newValue)
+watch(venueId, (newValue) => {
+  const selected = getVenues.value.find(v => v.id === newValue)
+  emit('venueChange', selected)
 })
 
 watch(() => props.selected, (newVal) => {
-  venue.value = newVal
+  venueId.value = newVal
 })
 
 function itemProps(item) {

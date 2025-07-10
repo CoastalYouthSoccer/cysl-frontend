@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia'
 import { fetchAssociations } from '@/services/api.association.js'
 import { fetchRoles } from '@/services/api.user.js'
-import { fetchVenues } from '@/services/api.venue'
-import { fetchSubVenues } from '@/services/api.subvenue'
+import { fetchSeasons } from '@/services/api.season'
 import { formatErrorMessage } from '@/utils/formatMessage.js'
 
 export const useShareStore = defineStore('sharedStore', {
   state: () => ({
     associations: [],
     roles: [],
+    seasons: [],
     venues: [],
     subVenues: []
   }),
@@ -26,6 +26,19 @@ export const useShareStore = defineStore('sharedStore', {
       }, [])
       this.associations = temp
     },
+    async setSeasons(token) {
+      const { data, error } = await fetchSeasons(token);
+      if (error?.message) {
+        const errorMessage = `Error fetching seasons: ${formatErrorMessage(error.message)}`
+        console.error(errorMessage)
+        return
+      }
+      const temp = data.reduce((acc, data) => {
+        acc.push(data.name)
+        return acc
+      }, [])
+      this.seasons = temp
+    },
     async setRoles(token) {
       const { data, error } = await fetchRoles(token);
 
@@ -35,32 +48,11 @@ export const useShareStore = defineStore('sharedStore', {
         return
       }
       this.roles = data
-    },
-    async setVenues(token) {
-      const { data, error } = await fetchVenues(token);
-
-      if (error?.message) {
-        const errorMessage = `Error fetching venues: ${formatErrorMessage(error.message)}`
-        console.error(errorMessage)
-        return
-      }
-      this.venues = data
-    },
-    async setSubVenues(token) {
-      const { data, error } = await fetchSubVenues(token);
-
-      if (error?.message) {
-        const errorMessage = `Error fetching sub-venues: ${formatErrorMessage(error.message)}`
-        console.error(errorMessage)
-        return
-      }
-      this.subVenues = data
     }
   },
   getters: {
     getAssociations: (state) => state.associations,
     getRoles: (state) => state.roles,
-    getVenues: (state) => state.venues,
-    getSubVenues: (state) => state.subVenues
+    getSeasons: (state) => state.seasons
   }
 });

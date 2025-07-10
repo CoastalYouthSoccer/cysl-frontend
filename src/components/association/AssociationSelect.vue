@@ -1,8 +1,10 @@
 <template>
   <v-select
-    v-if="!isLoading && getAssociations.length" :item-props="itemProps"
-    :items="getAssociations" label="Association"
-    v-model="association" data-test="association-select">
+    v-if="getAssociations.length"
+    :item-props="itemProps"
+    :items="getAssociations"
+    v-model="association"
+    data-test="association-select">
   </v-select>
 </template>
 
