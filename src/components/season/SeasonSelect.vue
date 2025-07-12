@@ -12,12 +12,16 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia';
-import {  useShareStore } from '@/stores/sharedData';
+import { useShareStore } from '@/stores/sharedData';
 const seasonStore = useShareStore()
 const { getSeasons } = storeToRefs(seasonStore)
 
-const emit = defineEmits(['seasonChange']);
-const season = ref(null);
+const props = defineProps({
+  modelValue: [String, Object, null]
+})
+const emit = defineEmits(['seasonChange'])
+
+const season = ref(props.modelValue ?? null)
 
 watch(season, (newValue) => {
   emit('seasonChange', newValue)

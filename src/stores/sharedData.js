@@ -20,11 +20,7 @@ export const useShareStore = defineStore('sharedStore', {
         console.error(errorMessage)
         return
       }
-      const temp = data.reduce((acc, data) => {
-        acc.push(data.name)
-        return acc
-      }, [])
-      this.associations = temp
+      this.associations = data
     },
     async setSeasons(token) {
       const { data, error } = await fetchSeasons(token);
@@ -33,11 +29,7 @@ export const useShareStore = defineStore('sharedStore', {
         console.error(errorMessage)
         return
       }
-      const temp = data.reduce((acc, data) => {
-        acc.push(data.name)
-        return acc
-      }, [])
-      this.seasons = temp
+      this.seasons = data
     },
     async setRoles(token) {
       const { data, error } = await fetchRoles(token);
