@@ -33,7 +33,9 @@
           @venueChange="val => {
             if (item?.venue_id !== val?.id) {
               item.venue = val
+              item.venue_id = val?.id
               item.subVenue = null
+              item.sub_venue_id = null
               markDirty(item)
             }
           }"
@@ -47,7 +49,11 @@
         <SubVenueSelect
           :venue_id="item?.venue_id"
           :selected="item?.sub_venue_id"
-          @SubVenueChange="val => { item.subVenue = val; markDirty(item) }"
+          @SubVenueChange="val => {
+            item.subVenue = val
+            item.sub_venue_id = val?.id || null
+            markDirty(item)
+          }"
           style="min-width: 150px"
           density="compact"
         />
@@ -56,22 +62,22 @@
       <!-- Date Picker -->
       <template #item.date="{ item }">
         <v-text-field
-          :model-value="getDate(item).value"
+          :model-value="formatDate(item.game_dt)"
+          @update:model-value="val => updateDate(item, val)"
           type="date"
           hide-details
           density="compact"
-          @input="val => setDate(item, val)"
         />
       </template>
 
       <!-- Time Picker -->
       <template #item.time="{ item }">
         <v-text-field
-          :model-value="getTime(item).value"
+          :model-value="formatTime(item.game_dt)"
+          @update:model-value="val => updateTime(item, val)"
           type="time"
           density="compact"
           hide-details
-          @input="val => setTime(item, val)"
         />
       </template>
 
@@ -151,12 +157,9 @@ const selectedSeason = ref(null)
 const markDirty = (game) => {
   const original = originalData.value[game.id]
   const changed =
-    game.date !== original.date ||
-    game.time !== original.time ||
-    game.venue !== original.venue ||
-    game.subVenue !== original.subVenue ||
-    game.homeTeam !== original.homeTeam ||
-    game.awayTeam !== original.awayTeam
+    game.game_dt !== original.game_dt ||
+    game.venue_id !== original.venue_id ||
+    game.sub_venue_id !== original.sub_venue_id
 
   game.dirty = changed
   game.justSaved = false
@@ -173,7 +176,7 @@ const saveGame = (game) => {
 
 const resetGame = (game) => {
   const original = originalData.value[game.id]
-  Object.assign(game, { ...original })
+  Object.assign(game, JSON.parse(JSON.stringify(original)));
   game.dirty = false
   game.justSaved = false
   tempTimes.value[game.id] = original.time
@@ -185,51 +188,6 @@ const dirtyGames = computed(() =>
 
 const saveAllGames = () => {
   dirtyGames.value.forEach(saveGame)
-}
-
-function getTime(item) {
-  return computed({
-    get() {
-      if (!item.game_dt) return ''
-      const date = new Date(item.game_dt)
-      const hours = String(date.getHours()).padStart(2, '0')
-      const minutes = String(date.getMinutes()).padStart(2, '0')
-      return `${hours}:${minutes}`
-    },
-    set(val) {
-      const [hours, minutes] = val.split(':').map(Number)
-      const date = item.game_dt ? new Date(item.game_dt) : new Date()
-      date.setHours(hours)
-      date.setMinutes(minutes)
-      date.setSeconds(0)
-      date.setMilliseconds(0)
-      item.game_dt = date.toISOString().slice(0, 19).replace('T', ' ')
-      markDirty(item)
-    }
-  })
-}
-
-function getDate(item) {
-  return computed({
-    get() {
-      if (!item.game_dt) return ''
-      const date = new Date(item.game_dt)
-      const year = String(date.getFullYear())
-      const month = String(date.getMonth()+1).padStart(2, '0')
-      const day = String(date.getDate()).padStart(2, '0')
-      return `${year}-${month}-${day}`
-    },
-    set(val) {
-      const [mm, dd, yyyy] = val.split('-').map(Number)
-      const date = item.game_dt ? new Date(item.game_dt) : new Date()
-      date.setMonth(mm)
-      date.setDate(dd)
-      date.setFullYear(yyyy)
-      date.setMilliseconds(0)
-      item.game_dt = date.toISOString().slice(0, 19).replace('T', ' ')
-      markDirty(item)
-    }
-  })
 }
 
 async function handleSeasonChange(season) {
@@ -245,11 +203,57 @@ async function handleSeasonChange(season) {
   const { data, error } = await fetchGames(token, params);
   if (data) {
     games.value = data;
+    originalData.value = {}
+    data.forEach(game => {
+      originalData.value[game.id] = JSON.parse(JSON.stringify(game))
+    })
   }
 
   if (error?.message) {
     errorMessage.value = `Error Fetching Games: ${formatErrorMessage(error.message)}`;
   }
   isLoading.value = false;
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return ''
+  const date = new Date(dateStr)
+  const yyyy = date.getUTCFullYear()
+  const mm = String(date.getUTCMonth() + 1).padStart(2, '0')
+  const dd = String(date.getUTCDate()).padStart(2, '0')
+  return `${yyyy}-${mm}-${dd}`
+}
+
+function updateDate(item, val) {
+  const [yyyy, mm, dd] = val.split('-').map(Number)
+  const date = item.game_dt ? new Date(item.game_dt) : new Date()
+
+  const hh = date.getUTCHours()
+  const min = date.getUTCMinutes()
+  console.log(`hh: ${hh}, min: ${min}`)
+  const utcDate = new Date(Date.UTC(yyyy, mm - 1, dd, hh, min, 0))
+  console.log(`date: ${utcDate.toISOString()}`)
+  item.game_dt = utcDate.toISOString().slice(0, 19).replace('T', ' ')
+  markDirty(item)
+}
+
+function formatTime(dateStr) {
+  if (!dateStr) return ''
+  const date = new Date(dateStr)
+  const hh = String(date.getUTCHours()).padStart(2, '0')
+  const mm = String(date.getUTCMinutes()).padStart(2, '0')
+  return `${hh}:${mm}`
+}
+
+function updateTime(item, val) {
+  const [hh, mm] = val.split(':').map(Number)
+  const date = item.game_dt ? new Date(item.game_dt) : new Date()
+  const yyyy = date.getUTCFullYear()
+  const mmIndex = date.getUTCMonth()
+  const dd = date.getUTCDate()
+  const utcDate = new Date(Date.UTC(yyyy, mmIndex, dd, hh, mm, 0))
+  item.game_dt = utcDate.toISOString().slice(0, 19).replace('T', ' ')
+
+  markDirty(item)
 }
 </script>

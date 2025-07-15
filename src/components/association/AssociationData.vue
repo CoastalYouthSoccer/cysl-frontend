@@ -178,6 +178,7 @@
     if (error?.message) {
       errorMessage.value = `Error Fetching Associations: ${formatErrorMessage(error.message)}`;
     }
+    isLoading.value = false
   }
 
   async function createItem(item) {

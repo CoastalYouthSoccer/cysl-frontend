@@ -1,5 +1,5 @@
 <template>
-  <Alert if=""errorMessage :msg="errorMessage" color="red" data-test="games-alert"/>
+  <Alert v-if="errorMessage" :msg="errorMessage" color="red" data-test="games-alert"/>
   <div :class="['text-h3']">Field Coordinator Screen</div>
   <v-form>
     <v-container>
@@ -8,7 +8,7 @@
           <v-date-input v-model="gameDate" label="Date" :rules="[rules.required]"></v-date-input>
         </v-col>
         <v-col cols="8">
-          <VenueSelect @venueChange="handleVenueChange" :rules="[rules.required]"/>
+          <VenueAssignrSelect @venueChange="handleVenueChange" :rules="[rules.required]"/>
         </v-col>
       </v-row>
       <v-row>

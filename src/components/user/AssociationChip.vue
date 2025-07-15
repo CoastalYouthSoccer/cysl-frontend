@@ -7,7 +7,7 @@
       prepend-icon="mdi-home"
       :color="isAssigned(association) ? 'primary' : 'grey lighten-1'"
       :text-color="isAssigned(association) ? 'white' : 'black'"
-      :text="association"
+      :text="association.name"
       variant="elevated"
       clickable
       label

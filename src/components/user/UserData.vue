@@ -29,21 +29,29 @@
         ></AssociationChip>
       </template>
 
-      <template v-slot:item.actions="{ item }">
+      <!-- Actions: Save / Cancel / Status -->
+      <template #item.actions="{ item }">
         <div class="d-flex ga-2 justify-end">
-          <v-icon v-if="allowEdit" icon="mdi-content-save" size="small" @click="save(item)" data-test="save-user-btn"></v-icon>
-        </div>
-      </template>
-
-      <template v-slot:no-data>
+          <v-icon v-if="item.dirty" color="orange" class="me-1" icon="mdi-pencil" size="small"></v-icon>
+          <v-icon v-else-if="item.justSaved" color="green" class="me-1" icon="mid-check" size="small"></v-icon>
         <v-btn
-          prepend-icon="mdi-backup-restore"
-          rounded="lg"
-          text="Reset data"
-          variant="text"
-          border
+          icon
+          color="green"
+          size="x-small"
+          @click="save(item)"
+        >
+          <v-icon icon="mdi-content-save"></v-icon>
+        </v-btn>
+
+        <v-btn
+          icon
+          color="grey"
+          size="x-small"
           @click="reset"
-        ></v-btn>
+        >
+          <v-icon icon="mdi-undo"></v-icon>
+        </v-btn>
+      </div>
       </template>
     </v-data-table>
   </v-sheet>

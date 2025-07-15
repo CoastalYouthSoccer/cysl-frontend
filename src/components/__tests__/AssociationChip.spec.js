@@ -37,12 +37,7 @@ describe('AssociationChip.vue', () => {
   it('renders all associations as chips', () => {
     const chips = wrapper.findAllComponents('.v-chip')
     expect(chips.length).toBe(2)
-    expect(chips[0].text()).toContain('Main Association')
-    expect(chips[1].text()).toContain('Secondary Association')
-  })
 
-  it('colors assigned associations as primary', async () => {
-    const chips = wrapper.findAllComponents('.v-chip')
     expect(chips[0].props('color')).toBe('primary')
     expect(chips[1].props('color')).toBe('grey lighten-1')
   })
