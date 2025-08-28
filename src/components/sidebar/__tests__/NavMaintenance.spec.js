@@ -6,6 +6,28 @@ import { vuetify } from '@/vuetify-setup'
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
+vi.mock('vue-router', () => ({
+  useRoute: () => (
+    {
+      name: 'AssignrReferee',
+      path: '/assignr-referee',
+      params: {},
+      query: {},
+      meta: {}
+    }, {
+      name: 'CYSLSpring2025Rules',
+      path: '/spring2025rules',
+      params: {},
+      query: {},
+      meta: {}
+    }
+  ),
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn()
+  })
+}))
+
 describe('NavMaintenance.vue', () => {
   it('shows all items when user is admin', () => {
     const wrapper = mount(NavMaintenance, {

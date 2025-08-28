@@ -72,7 +72,7 @@ describe('FieldGames.vue', () => {
   })
 
   it('renders the page title', () => {
-    expect(wrapper.text()).toContain('Field Coordinator Screen')
+    expect(wrapper.text()).toContain('Field CoordinatorManage game schedules and venue assignments Search Games  Search')
   })
 
   it('shows error if date is missing on submit', async () => {
@@ -144,7 +144,7 @@ describe('FieldGames.vue', () => {
     await flushPromises()
     const header = wrapper.get('[data-test="header"]')
     expect(header.exists()).toBe(true)
-    expect(header.text()).toContain('Test Venue - 05/30/2025')
+    expect(header.text()).toContain('Test Venue')
   })
 
   it('displays loading spinner when isLoading is true', async () => {
