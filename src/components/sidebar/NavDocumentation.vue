@@ -58,6 +58,7 @@
       :class="{ 'v-list-item--active': currentRoute === 'assignr-assignors' }"
       class="nav-subitem"
       value="assignr-assignors"
+      data-test="nav-item-assignor-documentation"
       @click="navigateTo('AssignrDocumentation')"
     >
       <template #prepend>
@@ -91,6 +92,7 @@
       :class="{ 'v-list-item--active': currentRoute === 'assignr-referees' }"
       class="nav-subitem"
       value="assignr-referees"
+      data-test="nav-item-referee-documentation"
       @click="navigateTo('AssignrReferee')"
     >
       <template #prepend>
@@ -124,6 +126,7 @@
       :class="{ 'v-list-item--active': currentRoute === 'spring-rules' }"
       class="nav-subitem"
       value="spring-rules"
+      data-test="nav-item-rule-documentation"
       @click="navigateTo('CYSLSpring2025Rules')"
     >
       <template #prepend>

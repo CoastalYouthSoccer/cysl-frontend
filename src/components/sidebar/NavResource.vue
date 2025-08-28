@@ -60,6 +60,7 @@
       :class="{ 'v-list-item--active': currentRoute === 'assignr-assignors' }"
       class="nav-subitem"
       value="assignr-assignors"
+      data-test="nav-item-make-call"
       @click="navigateTo('TheCall')"
     >
       <template #prepend>

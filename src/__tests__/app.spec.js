@@ -44,9 +44,6 @@ vi.mock('vue-router', async () => {
 vi.mock('@/components/sidebar/NavDrawer.vue', () => ({
   default: { template: '<div>NavDrawer</div>' }
 }))
-vi.mock('@/components/navbar/Navigation.vue', () => ({
-  default: { template: '<div>Navigation</div>' }
-}))
 vi.mock('@/components/AppFooter.vue', () => ({
   default: { template: '<div>AppFooter</div>' }
 }))
@@ -95,7 +92,6 @@ describe('App.vue layout', () => {
   it('mounts and renders the layout structure', async () => {
     await flushPromises()
     expect(wrapper.html()).toContain('NavDrawer')
-    expect(wrapper.html()).toContain('Navigation')
     expect(wrapper.html()).toContain('AppFooter')
   })
 })
