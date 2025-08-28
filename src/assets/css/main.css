@@ -1,0 +1,221 @@
+.v-application {
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Navigation Styling */
+.nav-header {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 1px solid #dee2e6;
+}
+
+.rail-toggle {
+  transition: all 0.3s ease;
+}
+
+.nav-title {
+  transition: all 0.3s ease;
+}
+
+.nav-list {
+  padding-top: 0;
+}
+
+.nav-list .v-list-item {
+  margin: 2px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.nav-list .v-list-item:hover {
+  background-color: rgba(25, 118, 210, 0.08);
+}
+
+.nav-list .v-list-item--active {
+  background-color: rgba(25, 118, 210, 0.12);
+  color: #1976d2;
+}
+
+.nav-subitem {
+  padding-left: 56px !important;
+  font-size: 0.875rem;
+}
+
+/* App Bar Styling */
+.app-header {
+  background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%) !important;
+  backdrop-filter: blur(10px);
+}
+
+.app-title {
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+.user-profile-btn {
+  transition: all 0.2s ease;
+}
+
+.user-profile-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Main Content Styling */
+.main-content {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  min-height: 100vh;
+}
+
+.content-container {
+  max-width: 1400px;
+  padding: 24px;
+}
+
+.breadcrumb-nav {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  padding: 8px 16px !important;
+  backdrop-filter: blur(10px);
+}
+
+.page-header {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 24px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.add-button {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%) !important;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+.add-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(76, 175, 80, 0.4) !important;
+}
+
+/* Data Table Card */
+.data-table-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+
+.card-header {
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+  border-bottom: 1px solid #e0e0e0;
+  padding: 20px 24px;
+}
+
+.search-field {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+}
+
+/* Professional Table Styling */
+.professional-table {
+  background: transparent;
+}
+
+.professional-table :deep(.v-data-table__wrapper) {
+  border-radius: 0;
+}
+
+.professional-table :deep(.v-data-table-header) {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  font-weight: 600;
+  color: #37474f;
+}
+
+.professional-table :deep(.v-data-table-header th) {
+  border-bottom: 2px solid #e0e0e0 !important;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.professional-table :deep(tbody tr) {
+  transition: all 0.2s ease;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.professional-table :deep(tbody tr:hover) {
+  background: linear-gradient(135deg, rgba(25, 118, 210, 0.04) 0%, rgba(25, 118, 210, 0.02) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.professional-table :deep(td) {
+  padding: 16px 12px;
+  vertical-align: middle;
+}
+
+/* Chip Styling */
+.v-chip {
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.25px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .content-container {
+    padding: 16px;
+  }
+  
+  .page-header {
+    padding: 16px;
+  }
+  
+  .page-header .d-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .card-header .d-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .search-field {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+/* Loading and Transition Effects */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+/* Custom Scrollbar */
+:deep(.v-data-table__wrapper::-webkit-scrollbar) {
+  height: 8px;
+}
+
+:deep(.v-data-table__wrapper::-webkit-scrollbar-track) {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+:deep(.v-data-table__wrapper::-webkit-scrollbar-thumb) {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+:deep(.v-data-table__wrapper::-webkit-scrollbar-thumb:hover) {
+  background: #a8a8a8;
+}
