@@ -61,8 +61,8 @@ const routes = [
     beforeEnter: authGuard
   },
   {
-    path: "/spring2024rules",
-    name: "CYSLSpring2024Rules",
+    path: "/spring2025rules",
+    name: "CYSLSpring2025Rules",
     component: () => import("@/views/GameRules2024.vue"),
     beforeEnter: authGuard
     ,
