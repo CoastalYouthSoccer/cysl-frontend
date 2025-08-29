@@ -40,7 +40,6 @@
                 v-model="gameDate"
                 label="Select Date"
                 :rules="[rules.required]"
-                prepend-inner-icon="mdi-calendar"
                 variant="outlined"
                 density="comfortable"
               ></v-date-input>

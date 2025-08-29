@@ -1,23 +1,23 @@
 <template>
   <!-- Documentation Section -->
   <v-list-group value="tools" class="nav-group">
-    <template #activator="{ props, IsToolsOpen }">
+    <template #activator="{ props, isOpen }">
       <v-list-item
         v-bind="props"
         class="nav-activator"
-        :class="{ 'group-active': IsToolsOpen }"
+        :class="{ 'group-active': isOpen }"
       >
         <template #prepend>
           <v-avatar
             size="32"
             class="nav-icon"
-            :color="IsToolsOpen ? 'info' : 'surface-variant'"
+            :color="isOpen ? 'info' : 'surface-variant'"
             variant="tonal"
           >
             <v-icon
-              :icon="IsToolsOpen ? 'mdi-wrench' : 'mdi-wrench-outline'"
+              :icon="isOpen ? 'mdi-wrench' : 'mdi-wrench-outline'"
               size="small"
-              :color="IsToolsOpen ? 'info' : 'medium-emphasis'"
+              :color="isOpen ? 'info' : 'medium-emphasis'"
             ></v-icon>
           </v-avatar>
         </template>
@@ -31,17 +31,17 @@
         <template #append>
           <div class="d-flex align-center">
             <v-chip
-              v-if="visibleCount > 0"
-              :color="IsToolsOpen ? 'info' : 'surface-variant'"
+              v-if="availableCount > 0"
+              :color="isOpen ? 'info' : 'surface-variant'"
               variant="tonal"
               size="x-small"
               class="mr-2 count-chip"
             >
-              {{ visibleCount }}
+              {{ availableCount }}
             </v-chip>
             <v-icon
-              :icon="IsToolsOpen ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-              :color="IsToolsOpen ? 'info' : 'medium-emphasis'"
+              :icon="isOpen ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+              :color="isOpen ? 'info' : 'medium-emphasis'"
               size="small"
               class="expand-icon"
             ></v-icon>
@@ -82,6 +82,33 @@
         View Referees assigned at a Venue
       </v-list-item-subtitle>
     </v-list-item>
+
+    <v-card
+      v-if="!hasAnyResourceAccess"
+      variant="tonal"
+      color="surface-variant"
+      class="mx-4 my-2"
+      density="compact"
+    >
+      <v-card-text class="py-3 px-4">
+        <div class="d-flex align-center text-center">
+          <v-icon
+            icon="mdi-information-outline"
+            size="small"
+            class="mr-3"
+            color="medium-emphasis"
+          ></v-icon>
+          <div class="flex-grow-1">
+            <div class="text-caption font-weight-medium text-medium-emphasis">
+              No Tools available for your current role
+            </div>
+            <div class="text-caption text-disabled mt-1">
+              Contact your administrator for access
+            </div>
+          </div>
+        </div>
+      </v-card-text>
+    </v-card>
   </v-list-group>
 </template>
 
@@ -103,10 +130,17 @@ const ROUTES = {
 const userStore = useUserStore()
 const { isAssignor, isAdmin } = storeToRefs(userStore)
 
-// Computed properties
-const hasFieldCoordinatorAccess = computed(() =>
-  isAssignor.value || isAdmin.value
-)
+// Check if user has access to any resources
+const hasAnyResourceAccess = computed(() => {
+  return isAdmin.value || isAssignor.value;
+});
+
+// Count available resources for current user
+const availableCount = computed(() => {
+  let count = 0;
+  if (isAdmin.value || isAssignor.value) count++; // Make the Call
+  return count;
+});
 
 const currentRoute = computed(() => route.name);
 

@@ -1,158 +1,221 @@
 <template>
-  <!-- Section Header -->
-  <v-list-subheader class="text-uppercase font-weight-bold text-medium-emphasis px-4 py-3">
-    <v-icon
-      icon="mdi-cog-outline"
-      size="small"
-      class="mr-3"
-      color="primary"
-    ></v-icon>
-    System Maintenance
-  </v-list-subheader>
+  <!-- Resources Section Header -->
+  <v-list-group value="documentation" class="nav-group">
+    <template #activator="{ props, isOpen }">
+      <v-list-item
+        v-bind="props"
+        class="nav-activator"
+        :class="{ 'group-active': isOpen }"
+      >
+        <template #prepend>
+          <v-avatar
+            size="32"
+            class="nav-icon"
+            :color="isOpen ? 'info' : 'surface-variant'"
+            variant="tonal"
+          >
+            <v-icon
+              :icon="isOpen ? 'mdi-cog' : 'mdi-cog-outline'"
+              size="small"
+              :color="isOpen ? 'info' : 'medium-emphasis'"
+            ></v-icon>
+          </v-avatar>
+        </template>
 
-  <v-divider class="mx-4 mb-2" opacity="0.3"></v-divider>
+        <v-list-item-title class="font-weight-medium">
+          System Maintenance
+        </v-list-item-title>
 
-  <!-- Navigation Items -->
-  <div class="maintenance-nav-group">
-    <!-- Associations -->
+        <v-list-item-subtitle class="text-caption text-medium-emphasis">
+          Maintenance of System Resources
+        </v-list-item-subtitle>
+
+        <template #append>
+          <div class="d-flex align-center">
+            <v-chip
+              v-if="availableCount > 0"
+              :color="isOpen ? 'info' : 'surface-variant'"
+              variant="tonal"
+              size="x-small"
+              class="mr-2 count-chip"
+            >
+              {{ availableCount }}
+            </v-chip>
+            <v-icon
+              :icon="isOpen ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+              :color="isOpen ? 'info' : 'medium-emphasis'"
+              size="small"
+              class="expand-icon"
+            ></v-icon>
+          </div>
+        </template>
+      </v-list-item>
+    </template>
+
+    <!-- Association -->
     <v-list-item
       v-if="isAdmin || isLeagueRep"
-      key="association"
-      to="/admin/association"
-      link
+      :class="{ 'v-list-item--active': currentRoute === 'admin/association' }"
+      class="nav-subitem"
+      value="association"
       data-test="nav-item-association"
-      class="nav-item"
-      :class="{ 'v-list-item--active': $route.path === '/admin/association' }"
+      @click="navigateTo('Association')"
     >
-      <template v-slot:prepend>
-        <v-avatar size="32" class="nav-icon" color="primary" variant="tonal">
-          <v-icon icon="mdi-domain" size="small" color="primary"></v-icon>
+      <template #prepend>
+        <div class="subitem-connector"></div>
+        <v-avatar
+          size="28"
+          class="subitem-icon"
+          :color="currentRoute === 'admin/association' ? 'primary' : 'surface'"
+          variant="tonal"
+        >
+          <v-icon
+            icon="mdi-domain"
+            size="x-small"
+            :color="currentRoute === 'admin/association' ? 'primary' : 'medium-emphasis'"
+          ></v-icon>
         </v-avatar>
       </template>
 
-      <v-list-item-title class="font-weight-medium">
+      <v-list-item-title class="font-weight-regular">
         Associations
       </v-list-item-title>
 
       <v-list-item-subtitle class="text-caption text-medium-emphasis">
-        Manage organization groups
+        Manage Organization
       </v-list-item-subtitle>
-
-      <template v-slot:append>
-        <v-icon
-          icon="mdi-chevron-right"
-          size="small"
-          class="nav-chevron"
-        ></v-icon>
-      </template>
     </v-list-item>
 
-    <!-- Seasons -->
+    <!-- Season -->
     <v-list-item
-      v-if="isAdmin || isLeagueRep"
-      key="season"
-      to="/admin/season"
-      link
+      v-if="isAdmin"
+      :class="{ 'v-list-item--active': currentRoute === 'admin/season' }"
+      class="nav-subitem"
+      value="season"
       data-test="nav-item-season"
-      class="nav-item"
-      :class="{ 'v-list-item--active': $route.path === '/admin/season' }"
+      @click="navigateTo('Season')"
     >
-      <template v-slot:prepend>
-        <v-avatar size="32" class="nav-icon" color="success" variant="tonal">
-          <v-icon icon="mdi-calendar-month" size="small" color="success"></v-icon>
+      <template #prepend>
+        <div class="subitem-connector"></div>
+        <v-avatar
+          size="28"
+          class="subitem-icon"
+          :color="currentRoute === 'admin/season' ? 'primary' : 'surface'"
+          variant="tonal"
+        >
+          <v-icon
+            icon="mdi-calendar-month"
+            size="x-small"
+            :color="currentRoute === 'admin/season' ? 'primary' : 'medium-emphasis'"
+          ></v-icon>
         </v-avatar>
       </template>
 
-      <v-list-item-title class="font-weight-medium">
+      <v-list-item-title class="font-weight-regular">
         Seasons
       </v-list-item-title>
 
       <v-list-item-subtitle class="text-caption text-medium-emphasis">
-        Configure season schedules
+        Configure Season information
       </v-list-item-subtitle>
-
-      <template v-slot:append>
-        <v-icon
-          icon="mdi-chevron-right"
-          size="small"
-          class="nav-chevron"
-        ></v-icon>
-      </template>
     </v-list-item>
 
-    <!-- Venues -->
+    <!-- Venue -->
     <v-list-item
       v-if="isAdmin || isAssociationRep"
-      key="venue"
-      to="/admin/venue"
-      link
+      :class="{ 'v-list-item--active': currentRoute === 'admin/venue' }"
+      class="nav-subitem"
+      value="venue"
       data-test="nav-item-venue"
-      class="nav-item"
-      :class="{ 'v-list-item--active': $route.path === '/admin/venue' }"
+      @click="navigateTo('Venue')"
     >
-      <template v-slot:prepend>
-        <v-avatar size="32" class="nav-icon" color="info" variant="tonal">
-          <v-icon icon="mdi-map-marker" size="small" color="info"></v-icon>
+      <template #prepend>
+        <div class="subitem-connector"></div>
+        <v-avatar
+          size="28"
+          class="subitem-icon"
+          :color="currentRoute === 'admin/venue' ? 'primary' : 'surface'"
+          variant="tonal"
+        >
+          <v-icon
+            icon="mdi-map-marker"
+            size="x-small"
+            :color="currentRoute === 'admin/venue' ? 'primary' : 'medium-emphasis'"
+          ></v-icon>
         </v-avatar>
       </template>
 
-      <v-list-item-title class="font-weight-medium">
+      <v-list-item-title class="font-weight-regular">
         Venues
       </v-list-item-title>
 
       <v-list-item-subtitle class="text-caption text-medium-emphasis">
-        Manage facility locations
+        Manage Venues
       </v-list-item-subtitle>
-
-      <template v-slot:append>
-        <v-icon
-          icon="mdi-chevron-right"
-          size="small"
-          class="nav-chevron"
-        ></v-icon>
-      </template>
     </v-list-item>
 
-    <!-- Users -->
+    <!-- User -->
     <v-list-item
       v-if="isAdmin"
-      key="user"
-      to="/admin/user"
-      link
+      :class="{ 'v-list-item--active': currentRoute === 'admin/user' }"
+      class="nav-subitem"
+      value="user"
       data-test="nav-item-user"
-      class="nav-item"
-      :class="{ 'v-list-item--active': $route.path === '/admin/user' }"
+      @click="navigateTo('User')"
     >
-      <template v-slot:prepend>
-        <v-avatar size="32" class="nav-icon" variant="tonal">
-          <v-icon icon="mdi-account-multiple" size="small"></v-icon>
+      <template #prepend>
+        <div class="subitem-connector"></div>
+        <v-avatar
+          size="28"
+          class="subitem-icon"
+          :color="currentRoute === 'admin/user' ? 'primary' : 'surface'"
+          variant="tonal"
+        >
+          <v-icon
+            icon="mdi-account-multiple"
+            size="x-small"
+            :color="currentRoute === 'admin/user' ? 'primary' : 'medium-emphasis'"
+          ></v-icon>
         </v-avatar>
       </template>
 
-      <v-list-item-title class="font-weight-medium">
+      <v-list-item-title class="font-weight-regular">
         Users
       </v-list-item-title>
 
       <v-list-item-subtitle class="text-caption text-medium-emphasis">
-        User account management
+        Manage User Accounts
       </v-list-item-subtitle>
-
-      <template v-slot:append>
-        <v-icon
-          v-if="isAdmin"
-          icon="mdi-chevron-right"
-          size="small"
-          class="nav-chevron"
-        ></v-icon>
-        <v-icon
-          v-else
-          icon="mdi-chevron-right"
-          size="small"
-          class="nav-chevron"
-        ></v-icon>
-      </template>
     </v-list-item>
-  </div>
+
+    <!-- No Maintenance Available Message -->
+    <v-card
+      v-if="!hasAnyResourceAccess"
+      variant="tonal"
+      color="surface-variant"
+      class="mx-4 my-2"
+      density="compact"
+    >
+      <v-card-text class="py-3 px-4">
+        <div class="d-flex align-center text-center">
+          <v-icon
+            icon="mdi-information-outline"
+            size="small"
+            class="mr-3"
+            color="medium-emphasis"
+          ></v-icon>
+          <div class="flex-grow-1">
+            <div class="text-caption font-weight-medium text-medium-emphasis">
+              No maintenance options available for your current role
+            </div>
+            <div class="text-caption text-disabled mt-1">
+              Contact your administrator for access
+            </div>
+          </div>
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-list-group>
 
   <!-- Permission Info Footer -->
   <v-card
@@ -198,12 +261,16 @@ const showPermissionInfo = computed(() => {
   return isAdmin.value || isLeagueRep.value || isAssociationRep.value;
 });
 
-// You could also add a computed for visible items count
-const visibleItemsCount = computed(() => {
+const hasAnyResourceAccess = computed(() => {
+  return isAdmin.value;
+});
+
+const availableCount = computed(() => {
   let count = 0;
-  if (isAdmin.value || isLeagueRep.value) count += 2; // Associations & Seasons
-  if (isAdmin.value || isAssociationRep.value) count += 1; // Venues
-  if (isAdmin.value) count += 1; // Users
+  if (isAdmin.value || isLeagueRep.value) count++;
+  if (isAdmin.value) count++;
+  if (isAdmin.value || isAssociationRep.value) count++;
+  if (isAdmin.value) count++;
   return count;
 });
 </script>

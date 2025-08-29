@@ -1,23 +1,23 @@
 <template>
   <!-- Documentation Section -->
   <v-list-group value="documentation" class="nav-group">
-    <template #activator="{ props, isDocOpen }">
+    <template #activator="{ props, isOpen }">
       <v-list-item
         v-bind="props"
         class="nav-activator"
-        :class="{ 'group-active': isDocOpen }"
+        :class="{ 'group-active': isOpen }"
       >
         <template #prepend>
           <v-avatar
             size="32"
             class="nav-icon"
-            :color="isDocOpen ? 'info' : 'surface-variant'"
+            :color="isOpen ? 'info' : 'surface-variant'"
             variant="tonal"
           >
             <v-icon
-              :icon="isDocOpen ? 'mdi-file-document' : 'mdi-file-document-outline'"
+              :icon="isOpen ? 'mdi-file-document' : 'mdi-file-document-outline'"
               size="small"
-              :color="isDocOpen ? 'info' : 'medium-emphasis'"
+              :color="isOpen ? 'info' : 'medium-emphasis'"
             ></v-icon>
           </v-avatar>
         </template>
@@ -34,7 +34,7 @@
           <div class="d-flex align-center">
             <v-chip
               v-if="visibleDocsCount > 0"
-              :color="isDocOpen ? 'info' : 'surface-variant'"
+              :color="isOpen ? 'info' : 'surface-variant'"
               variant="tonal"
               size="x-small"
               class="mr-2 count-chip"
@@ -42,8 +42,8 @@
               {{ visibleDocsCount }}
             </v-chip>
             <v-icon
-              :icon="isDocOpen ? 'mdi-chevron-up' : 'mdi-chevron-down'"
-              :color="isDocOpen ? 'info' : 'medium-emphasis'"
+              :icon="isOpen ? 'mdi-chevron-up' : 'mdi-chevron-down'"
+              :color="isOpen ? 'info' : 'medium-emphasis'"
               size="small"
               class="expand-icon"
             ></v-icon>
