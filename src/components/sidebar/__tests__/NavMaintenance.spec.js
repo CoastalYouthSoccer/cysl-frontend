@@ -20,6 +20,18 @@ vi.mock('vue-router', () => ({
       params: {},
       query: {},
       meta: {}
+    }, {
+      name: 'Association',
+      path: '/admin/associations',
+      params: {},
+      query: {},
+      meta: {}
+    }, {
+      name: 'Venue',
+      path: '/admin/venues',
+      params: {},
+      query: {},
+      meta: {}
     }
   ),
   useRouter: () => ({
