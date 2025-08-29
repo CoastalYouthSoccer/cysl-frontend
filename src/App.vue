@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <Navigation app/>
     <NavDrawer app/>
     <v-main>
       <v-container fluid>

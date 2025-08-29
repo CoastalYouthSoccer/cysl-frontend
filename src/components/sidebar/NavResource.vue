@@ -57,9 +57,9 @@
     <!-- Make the Call -->
     <v-list-item
       v-if="isReferee || isAdmin || isAssignor"
-      :class="{ 'v-list-item--active': currentRoute === 'assignr-assignors' }"
+      :class="{ 'v-list-item--active': currentRoute === 'call' }"
       class="nav-subitem"
-      value="assignr-assignors"
+      value="call"
       data-test="nav-item-make-call"
       @click="navigateTo('TheCall')"
     >
@@ -68,13 +68,13 @@
         <v-avatar
           size="28"
           class="subitem-icon"
-          :color="currentRoute === 'assignr-assignors' ? 'primary' : 'surface'"
+          :color="currentRoute === 'call' ? 'primary' : 'surface'"
           variant="tonal"
         >
           <v-icon
             icon="mdi-account-supervisor-circle"
             size="x-small"
-            :color="currentRoute === 'assignr-assignors' ? 'primary' : 'medium-emphasis'"
+            :color="currentRoute === 'call' ? 'primary' : 'medium-emphasis'"
           ></v-icon>
         </v-avatar>
       </template>
@@ -150,10 +150,13 @@ const hasAnyResourceAccess = computed(() => {
 const availableCount = computed(() => {
   let count = 0;
   if (isReferee.value || isAdmin.value || isAssignor.value) count++; // Make the Call
-  // Add more resources as they become available
-  if (isAdmin.value || isAssignor.value) count++; // Future: Referee Handbook
   return count;
 });
+
+const navigateTo = (routeName) => {
+  // Add loading state or analytics here if needed
+  router.push({ name: routeName });
+};
 
 // Get user role display for better UX
 const primaryRole = computed(() => {

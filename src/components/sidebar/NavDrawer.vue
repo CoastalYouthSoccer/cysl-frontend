@@ -85,11 +85,6 @@ const items = [
 </script>
 
 <style scoped>
-.nav-header {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  min-height: 64px;
-}
-
 .rail-toggle {
   flex-shrink: 0;
   opacity: 1 !important;

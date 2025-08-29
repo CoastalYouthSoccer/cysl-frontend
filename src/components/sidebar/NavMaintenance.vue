@@ -124,8 +124,8 @@
       :class="{ 'v-list-item--active': $route.path === '/admin/user' }"
     >
       <template v-slot:prepend>
-        <v-avatar size="32" class="nav-icon" color="warning" variant="tonal">
-          <v-icon icon="mdi-account-multiple" size="small" color="warning"></v-icon>
+        <v-avatar size="32" class="nav-icon" variant="tonal">
+          <v-icon icon="mdi-account-multiple" size="small"></v-icon>
         </v-avatar>
       </template>
 
@@ -138,19 +138,12 @@
       </v-list-item-subtitle>
 
       <template v-slot:append>
-        <v-badge
+        <v-icon
           v-if="isAdmin"
-          content="Admin"
-          color="error"
-          offset-x="-8"
-          offset-y="8"
-        >
-          <v-icon
-            icon="mdi-chevron-right"
-            size="small"
-            class="nav-chevron"
-          ></v-icon>
-        </v-badge>
+          icon="mdi-chevron-right"
+          size="small"
+          class="nav-chevron"
+        ></v-icon>
         <v-icon
           v-else
           icon="mdi-chevron-right"
