@@ -23,9 +23,8 @@ describe('NavTool.vue', () => {
         })],
       },
     })
-    expect(wrapper.find('[data-test="nav-item-field-coordinator"]').exists()).toBe(true)
+    expect(wrapper.findComponent('[data-test="nav-item-field-coordinator"]').exists()).toBe(true)
   })
-
   it('renders Field Coordinator for admin', () => {
     const wrapper = mount(NavTool, {
       global: {

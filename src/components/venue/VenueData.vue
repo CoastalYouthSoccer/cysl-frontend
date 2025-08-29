@@ -1,5 +1,4 @@
 <template>
-  <!-- Error Alert -->
   <v-alert
     v-if="errorMessage"
     type="error"
@@ -12,7 +11,6 @@
     {{ errorMessage }}
   </v-alert>
 
-  <!-- Loading State -->
   <div v-if="isLoading" class="d-flex flex-column align-center justify-center my-12" data-test="venue-loading">
     <v-progress-circular
       indeterminate

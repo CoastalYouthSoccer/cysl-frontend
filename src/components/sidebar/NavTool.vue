@@ -55,7 +55,7 @@
       :class="{ 'v-list-item--active': currentRoute === 'field-coordinator' }"
       class="nav-subitem"
       value="field-coordinator"
-      data-test="nav-field-coordinator"
+      data-test="nav-item-field-coordinator"
       @click="navigateTo('FieldCoordinator')"
     >
       <template #prepend>

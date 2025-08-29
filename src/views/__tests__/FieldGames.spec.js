@@ -81,9 +81,9 @@ describe('FieldGames.vue', () => {
     await flushPromises()
     await wrapper.vm.$nextTick()
 
-    const alert = wrapper.findComponent({ name: 'Alert' })
+    const alert = wrapper.findComponent('[data-test="games-alert"]')
     expect(alert.exists()).toBe(true)
-    expect(alert.props('msg')).toBe('Date must be provided')
+    expect(alert.props('text')).toBe('Date must be provided')
   })
 
   it('shows error if venue is missing on submit', async () => {
@@ -93,9 +93,9 @@ describe('FieldGames.vue', () => {
     await flushPromises()
     await wrapper.vm.$nextTick()
 
-    const alert = wrapper.findComponent({ name: 'Alert' })
+    const alert = wrapper.findComponent('[data-test="games-alert"]')
     expect(alert.exists()).toBe(true)
-    expect(alert.props('msg')).toBe('Venue must be provided')
+    expect(alert.props('text')).toBe('Venue must be provided')
   })
 
   it('renders Header', async() => {
