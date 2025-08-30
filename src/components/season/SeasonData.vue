@@ -1,9 +1,15 @@
 <template>
   <!-- Alert Component -->
-  <Alert v-if="errorMessage" :msg="errorMessage" data-test="season-alert" class="mb-4"/>
+  <Alert v-if="errorMessage"
+  :msg="errorMessage"
+  data-test="season-alert"
+  class="mb-4"/>
 
   <!-- Loading State -->
-  <div v-if="isLoading" class="d-flex justify-center align-center" style="min-height: 400px;">
+  <div v-if="isLoading"
+   class="d-flex justify-center align-center"
+   style="min-height: 400px;"
+   data-test="season-loading">
     <v-progress-circular indeterminate color="primary" size="64"></v-progress-circular>
   </div>
 

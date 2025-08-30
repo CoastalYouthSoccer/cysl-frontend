@@ -181,7 +181,7 @@ describe('VenueData.vue', () => {
   it('shows loading spinner when isLoading is true', async () => {
     wrapper.vm.isLoading = true
     await wrapper.vm.$nextTick()
-    expect(wrapper.get('[data-test="loading"]').exists()).toBe(true)
+    expect(wrapper.get('[data-test="venue-loading"]').exists()).toBe(true)
   })
 
   it('shows error alert when errorMessage is set', async () => {
@@ -213,6 +213,6 @@ describe('VenueData.vue', () => {
 
     const alert = wrapper.findComponent('[data-test="venue-alert"]')
     expect(alert.exists()).toBe(true)
-    expect(alert.props('text')).toBe('Error Fetching Venues: error with Venues')
+    expect(alert.props('text')).toBe('Error loading venues: error with Venues')
   })
 })

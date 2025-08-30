@@ -6,6 +6,28 @@ import { vuetify } from '@/vuetify-setup'
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
+vi.mock('vue-router', () => ({
+  useRoute: () => (
+    {
+      name: 'AssignrReferee',
+      path: '/assignr-referee',
+      params: {},
+      query: {},
+      meta: {}
+    }, {
+      name: 'CYSLSpring2025Rules',
+      path: '/spring2025rules',
+      params: {},
+      query: {},
+      meta: {}
+    }
+  ),
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn()
+  })
+}))
+
 describe('NavTool.vue', () => {
   it('renders Field Coordinator for assignor', () => {
     const wrapper = mount(NavTool, {
@@ -23,7 +45,7 @@ describe('NavTool.vue', () => {
         })],
       },
     })
-    expect(wrapper.findComponent('[data-test="nav-item-field-coordinator"]').exists()).toBe(true)
+    expect(wrapper.find('[data-test="nav-item-field-coordinator"]').exists()).toBe(true)
   })
   it('renders Field Coordinator for admin', () => {
     const wrapper = mount(NavTool, {

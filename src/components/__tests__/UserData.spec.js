@@ -131,7 +131,7 @@ describe('UserData.vue', () => {
     wrapper.vm.isLoading = false
     wrapper.vm.users = [{ id: '1', name: 'John', roles: [], associations: [] }]
     await flushPromises()
-    const sheet = wrapper.findComponent({ name: 'v-sheet' })
+    const sheet = wrapper.findComponent('[data-test="userData-table"]')
     expect(sheet.exists()).toBe(true)
   })
 

@@ -174,6 +174,6 @@ describe('AssociationData.vue', () => {
 
     const alert = wrapper.findComponent('[data-test="association-alert"]')
     expect(alert.exists()).toBe(true)
-    expect(alert.props('text')).toBe('Error Fetching Associations: error with Associations')
+    expect(alert.props('text')).toBe('Error loading associations: error with Associations')
   })
 })

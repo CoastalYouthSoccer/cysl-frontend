@@ -2,15 +2,15 @@
   <!-- Error Alert -->
   <v-alert
     v-if="errorMessage"
+    :text="errorMessage"
     type="error"
     variant="tonal"
     closable
     class="mb-6"
     data-test="association-alert"
     @click:close="errorMessage = null"
-  >
-    {{ errorMessage }}
-  </v-alert>
+  ></v-alert>
+
 
   <!-- Loading State -->
   <div v-if="isLoading" class="d-flex flex-column align-center justify-center my-12" data-test="association-loading">
@@ -217,9 +217,8 @@
           variant="tonal"
           density="compact"
           class="mb-0"
-        >
-          This action cannot be undone.
-        </v-alert>
+          :text=This action cannot be undone.
+        ></v-alert>
       </v-card-text>
 
       <v-divider />

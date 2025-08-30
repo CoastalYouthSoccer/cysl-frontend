@@ -150,7 +150,7 @@ describe('SeasonData.vue', () => {
 
     await wrapper.vm.$nextTick()
 
-    expect(wrapper.get('[data-test="loading"]').exists()).toBe(true)
+    expect(wrapper.get('[data-test="season-loading"]').exists()).toBe(true)
   })
 
   it('shows error alert when errorMessage is set', async () => {

@@ -1,15 +1,14 @@
 <template>
   <v-alert
     v-if="errorMessage"
+    :text="errorMessage"
     type="error"
     variant="tonal"
     closable
     class="mb-6"
     data-test="venue-alert"
     @click:close="errorMessage = null"
-  >
-    {{ errorMessage }}
-  </v-alert>
+  ></v-alert>
 
   <div v-if="isLoading" class="d-flex flex-column align-center justify-center my-12" data-test="venue-loading">
     <v-progress-circular
