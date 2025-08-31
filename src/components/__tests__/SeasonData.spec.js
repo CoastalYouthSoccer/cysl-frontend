@@ -39,7 +39,7 @@ describe('SeasonData.vue', () => {
 
     wrapper = mount(SeasonData, {
       global: {
-        stubs: ['v-icon', 'v-date-picker', 'v-number-input'],
+        stubs: ['v-icon', 'v-date-picker', 'v-date-input', 'v-number-input'],
         plugins: [
           vuetify,
           createTestingPinia({
@@ -73,16 +73,19 @@ describe('SeasonData.vue', () => {
 
     api.createSeason.mockResolvedValue({ data: newSeason, error: null })
 
-    // Open Add dialog
     const addBtn = wrapper.findComponent('[data-test="add-season-btn"]')
     await addBtn.trigger('click')
 
     const nameInput = wrapper.findComponent('[data-test="input-name"]')
     expect(nameInput.exists()).toBe(true)
     await nameInput.setValue('Summer')
-    expect(wrapper.vm.record.name).toBe('Summer')
+    const startDateInput = wrapper.findComponent('[data-test="start-date"]')
+    expect(startDateInput.exists()).toBe(true)
+    await startDateInput.setValue('01/01/2000')
+    const lengthInput = wrapper.findComponent('[data-test="season-length"]')
+    expect(lengthInput.exists()).toBe(true)
+    await lengthInput.setValue('8')
 
-    // Save
     const saveBtn = wrapper.findComponent('[data-test="modify-save-btn"]')
     await saveBtn.trigger('click')
 

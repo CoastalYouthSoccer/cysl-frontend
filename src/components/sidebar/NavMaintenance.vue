@@ -88,7 +88,7 @@
 
     <!-- Season -->
     <v-list-item
-      v-if="isAdmin"
+      v-if="isAdmin || isLeagueRep"
       :class="{ 'v-list-item--active': currentRoute === 'admin/season' }"
       class="nav-subitem"
       value="season"
@@ -243,11 +243,13 @@
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/user';
 import { computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const userStore = useUserStore();
 const { isAssociationRep, isAdmin, isLeagueRep } = storeToRefs(userStore);
+
 const route = useRoute();
+const router = useRouter();
 
 // Computed properties for better UX
 const userRoleDisplay = computed(() => {
@@ -273,63 +275,19 @@ const availableCount = computed(() => {
   if (isAdmin.value) count++;
   return count;
 });
+
+const navigateTo = (routeName) => {
+  router.push({ name: routeName });
+};
+
 </script>
 
 <style scoped>
-.maintenance-nav-group {
-  padding: 0 8px;
-}
-
-.nav-item {
-  border-radius: 12px;
-  margin-bottom: 4px;
-  padding: 8px 12px;
-  transition: all 0.2s ease-in-out;
-}
-
-.nav-item:hover {
-  background-color: rgba(var(--v-theme-primary), 0.08);
-  transform: translateX(4px);
-}
-
-.nav-item.v-list-item--active {
-  background-color: rgba(var(--v-theme-primary), 0.12);
-  border-left: 3px solid rgb(var(--v-theme-primary));
-}
-
-.nav-icon {
-  margin-right: 12px;
-  transition: all 0.2s ease-in-out;
-}
-
-.nav-item:hover .nav-icon {
-  transform: scale(1.1);
-}
-
-.nav-chevron {
-  opacity: 0.6;
-  transition: all 0.2s ease-in-out;
-}
-
-.nav-item:hover .nav-chevron {
-  opacity: 1;
-  transform: translateX(2px);
-}
-
 .v-list-subheader {
   background-color: rgba(var(--v-theme-surface-variant), 0.5);
   border-radius: 8px;
   margin: 8px 8px 16px 8px;
   letter-spacing: 0.5px;
-}
-
-/* Dark theme adjustments */
-.v-theme--dark .nav-item:hover {
-  background-color: rgba(var(--v-theme-primary), 0.15);
-}
-
-.v-theme--dark .nav-item.v-list-item--active {
-  background-color: rgba(var(--v-theme-primary), 0.2);
 }
 
 /* Animation for permission info card */

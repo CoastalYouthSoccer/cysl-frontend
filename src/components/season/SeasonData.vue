@@ -466,7 +466,7 @@ const enhancedHeaders = [
 // Form validation rules
 const nameRules = [
   v => !!v || 'Season name is required',
-  v => (v && v.length <= 50) || 'Name must be less than 50 characters'
+  v => (v && v.length > 2 && v.length <= 50) || 'Name must be greater than 2 characters and less than 50 characters'
 ]
 
 const startDateRules = [

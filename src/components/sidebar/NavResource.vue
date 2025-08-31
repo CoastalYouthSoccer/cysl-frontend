@@ -121,7 +121,8 @@
 <script setup>
 import { storeToRefs } from 'pinia';
 import { useUserStore } from '@/stores/user';
-import { useRoute } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
+
 import { computed } from 'vue';
 
 const userStore = useUserStore();
@@ -135,6 +136,7 @@ const {
 } = storeToRefs(userStore);
 
 const route = useRoute();
+const router = useRouter();
 
 // Check if current route is the call page
 const isCallActive = computed(() => {

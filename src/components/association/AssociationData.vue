@@ -160,17 +160,69 @@
 
       <v-card-text class="pa-6">
         <v-form ref="form" v-model="isFormValid" @submit.prevent="save(record)">
-          <v-text-field
-            v-model="record.name"
-            label="Association Name"
-            placeholder="Enter association name"
-            variant="outlined"
-            :rules="nameRules"
-            prepend-inner-icon="mdi-domain"
-            data-test="input-name"
-            autofocus
-            required
-          />
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                v-model="record.name"
+                label="Association Name"
+                placeholder="Enter association name"
+                variant="outlined"
+                :rules="nameRules"
+                prepend-inner-icon="mdi-domain"
+                data-test="input-name"
+                autofocus
+                required
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                v-model="record.registrar"
+                label="Association Registrar"
+                placeholder="Enter association registrar's name"
+                variant="outlined"
+                prepend-inner-icon="mdi-account"
+                data-test="input-registrar"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                v-model="record.president"
+                label="Association President"
+                placeholder="Enter association president's name"
+                variant="outlined"
+                prepend-inner-icon="mdi-account"
+                data-test="input-president"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                v-model="record.assignor"
+                label="Association assignor"
+                placeholder="Enter association assignor's name"
+                variant="outlined"
+                prepend-inner-icon="mdi-account"
+                data-test="input-assignor"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field
+                v-model="record.secretary"
+                label="Association secretary"
+                placeholder="Enter association secretary's name"
+                variant="outlined"
+                prepend-inner-icon="mdi-account"
+                data-test="input-secretary"
+              />
+            </v-col>
+          </v-row>
         </v-form>
       </v-card-text>
 
@@ -189,11 +241,11 @@
           color="primary"
           variant="elevated"
           prepend-icon="mdi-content-save"
-          :disabled="!isFormValid || !record.name?.trim()"
+          :disabled="!isFormValid"
           data-test="modify-save-btn"
           @click="save(record)"
         >
-          {{ isEditing ? 'Update' : 'Create' }}
+          {{ isEditing ? 'Update' : 'Create' }} Association
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -257,6 +309,7 @@ import { fetchAssociations, deleteAssociation, updateAssociation, createAssociat
 import Alert from '../Alert.vue'
 import { formatDateToYYYYMMDD } from '@/utils/date'
 import { formatErrorMessage } from '@/utils/formatMessage.js'
+import { consoleError } from 'vuetify/lib/util/console.mjs'
 
 const adapter = useDate()
 const { getAccessTokenSilently } = useAuth0()
@@ -281,9 +334,8 @@ const allowDelete = computed(() => userStore.user.permissions.includes('delete:a
 
 // Form validation
 const nameRules = [
-  v => !!v || 'Association name is required',
-  v => v?.length >= 2 || 'Name must be at least 2 characters',
-  v => v?.length <= 100 || 'Name must be less than 100 characters'
+  v => !!v || 'Association Name is required',
+  v => (v && v.length > 2 && v.length <= 100) || 'Association name must be greater than 2 characters and less than 100 characters'
 ]
 
 // Table configuration
