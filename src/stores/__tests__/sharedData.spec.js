@@ -18,18 +18,19 @@ describe('useShareStore', () => {
   })
 
   it('sets associations correctly on success', async () => {
-    fetchAssociations.mockResolvedValue({
-      data: [
+    const test_data = [
         { id: '1', name: 'Alpha' },
         { id: '2', name: 'Beta' }
-      ],
+      ]
+    fetchAssociations.mockResolvedValue({
+      data: test_data,
       error: null
     })
 
     const store = useShareStore()
     await store.setAssociations('mock-token')
 
-    expect(store.associations).toEqual(['Alpha', 'Beta'])
+    expect(store.associations).toEqual(test_data)
   })
 
   it('does not update associations on error', async () => {

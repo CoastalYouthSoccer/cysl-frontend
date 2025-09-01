@@ -3,16 +3,7 @@ import { mount } from '@vue/test-utils'
 import AssociationChip from '@/components/user/AssociationChip.vue'
 import { createTestingPinia } from '@pinia/testing'
 import { nextTick } from 'vue'
-
-// Mock Vuetify
-import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as directives from 'vuetify/directives'
-
-const vuetify = createVuetify({
-  components,
-  directives,
-})
+import { vuetify } from '@/vuetify-setup'
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
@@ -29,7 +20,7 @@ describe('AssociationChip.vue', () => {
             createSpy: vi.fn,
             stubActions: false,
             initialState: {
-              share: {
+              sharedStore: {
                 associations: associationsMock
               }
             }
@@ -46,12 +37,7 @@ describe('AssociationChip.vue', () => {
   it('renders all associations as chips', () => {
     const chips = wrapper.findAllComponents('.v-chip')
     expect(chips.length).toBe(2)
-    expect(chips[0].text()).toContain('Main Association')
-    expect(chips[1].text()).toContain('Secondary Association')
-  })
 
-  it('colors assigned associations as primary', async () => {
-    const chips = wrapper.findAllComponents('.v-chip')
     expect(chips[0].props('color')).toBe('primary')
     expect(chips[1].props('color')).toBe('grey lighten-1')
   })

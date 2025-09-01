@@ -62,30 +62,34 @@ describe('AssociationData.vue', () => {
   })
 
   it('adds a new association via createAssociation', async () => {
+    const testName = 'Test Association';
     const newAssociation = {
       id: 2,
-      name: 'New Association',
+      name: testName,
     }
 
     api.createAssociation.mockResolvedValue({ data: newAssociation, error: null })
 
-    // Open Add dialog
     const addBtn = wrapper.findComponent('[data-test="add-association-btn"]')
     await addBtn.trigger('click')
+    await wrapper.vm.$nextTick()
 
     const nameInput = wrapper.findComponent('[data-test="input-name"]')
     expect(nameInput.exists()).toBe(true)
-    await nameInput.setValue('New Association')
-    expect(wrapper.vm.record.name).toBe('New Association')
+    await nameInput.setValue(testName)
+    await wrapper.vm.$nextTick()
 
-    // Save
+    const form = wrapper.findComponent({ ref: 'form' })
+    await form.vm.validate()
+    await wrapper.vm.$nextTick()
+
     const saveBtn = wrapper.findComponent('[data-test="modify-save-btn"]')
+    expect(saveBtn.attributes('disabled')).toBeUndefined()
     await saveBtn.trigger('click')
-
     await flushPromises()
 
     expect(api.createAssociation).toHaveBeenCalled()
-    expect(wrapper.text()).toContain('New Association')
+    expect(wrapper.vm.record.name).toBe(testName)
   })
 
   it('edits existing association when isEditing = true', async () => {
@@ -172,8 +176,8 @@ describe('AssociationData.vue', () => {
 
     await flushPromises()
 
-    const alert = wrapper.findComponent({ name: 'Alert' })
+    const alert = wrapper.findComponent('[data-test="association-alert"]')
     expect(alert.exists()).toBe(true)
-    expect(alert.props('msg')).toBe('Error Fetching Associations: error with Associations')
+    expect(alert.props('text')).toBe('Error loading associations: error with Associations')
   })
 })

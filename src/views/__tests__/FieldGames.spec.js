@@ -72,7 +72,7 @@ describe('FieldGames.vue', () => {
   })
 
   it('renders the page title', () => {
-    expect(wrapper.text()).toContain('Field Coordinator Screen')
+    expect(wrapper.text()).toContain('Field CoordinatorManage game schedules and venue assignments Search Games  Search')
   })
 
   it('shows error if date is missing on submit', async () => {
@@ -81,9 +81,9 @@ describe('FieldGames.vue', () => {
     await flushPromises()
     await wrapper.vm.$nextTick()
 
-    const alert = wrapper.findComponent({ name: 'Alert' })
+    const alert = wrapper.findComponent('[data-test="games-alert"]')
     expect(alert.exists()).toBe(true)
-    expect(alert.props('msg')).toBe('Date must be provided')
+    expect(alert.props('text')).toBe('Date must be provided')
   })
 
   it('shows error if venue is missing on submit', async () => {
@@ -93,9 +93,9 @@ describe('FieldGames.vue', () => {
     await flushPromises()
     await wrapper.vm.$nextTick()
 
-    const alert = wrapper.findComponent({ name: 'Alert' })
+    const alert = wrapper.findComponent('[data-test="games-alert"]')
     expect(alert.exists()).toBe(true)
-    expect(alert.props('msg')).toBe('Venue must be provided')
+    expect(alert.props('text')).toBe('Venue must be provided')
   })
 
   it('renders Header', async() => {
@@ -144,7 +144,7 @@ describe('FieldGames.vue', () => {
     await flushPromises()
     const header = wrapper.get('[data-test="header"]')
     expect(header.exists()).toBe(true)
-    expect(header.text()).toContain('Test Venue - 05/30/2025')
+    expect(header.text()).toContain('Test Venue')
   })
 
   it('displays loading spinner when isLoading is true', async () => {

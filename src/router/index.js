@@ -22,7 +22,7 @@ const routes = [
         component: () => import("@/components/season/SeasonData.vue")
       },
       {
-        path: 'user', name: 'user',
+        path: 'user', name: 'User',
         component: () => import("@/components/user/UserData.vue")
       },
       {
@@ -61,8 +61,8 @@ const routes = [
     beforeEnter: authGuard
   },
   {
-    path: "/spring2024rules",
-    name: "CYSLSpring2024Rules",
+    path: "/spring2025rules",
+    name: "CYSLSpring2025Rules",
     component: () => import("@/views/GameRules2024.vue"),
     beforeEnter: authGuard
     ,

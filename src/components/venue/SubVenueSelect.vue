@@ -1,32 +1,39 @@
 <template>
-  <Alert v-if="errorMessage" :msg=errorMessage color="red" data-test="SubVenues-alert"/>
-  <Loading v-if="isLoading"/>
   <v-select
-    v-if="!isLoading && SubVenues?.length" :item-props="itemProps"
-    :items="SubVenues" label="SubVenues"
-    v-model="SubVenue" data-test="SubVenues-select">
+    :item-props="itemProps"
+    :items="availableSubVenues"
+    :item-value="'id'"
+    :item-title="'name'"
+    v-model="subVenueId"
+    placeholder="Select a sub-venue"
+    data-test="SubVenues-select">
   </v-select>
 </template>
 
 <script setup>
-import { ref, onBeforeMount, watch } from 'vue'
-import { useAuth0 } from '@auth0/auth0-vue';
-import { fetchSubVenues } from '@/services/api.subvenue.js'
-import { formatErrorMessage } from '@/utils/formatMessage.js'
+import { ref, watch, computed } from 'vue'
+import { useVenueSubVenueStore } from '@/stores/venueSubVenue';
+const venueSubVenueStore = useVenueSubVenueStore()
 
 const props = defineProps({
-  venue_id: String,
-  venue_name: String
+  venue_id: {
+    type: [String, null],
+    default: null
+  },
+  selected: {
+    type: [String, null],
+    default: null
+  }
 })
-const { getAccessTokenSilently } = useAuth0();
+const subVenueId = ref(props.selected ?? null)
 const emit = defineEmits(['SubVenueChange']);
-const SubVenues = ref(null);
-const SubVenue = ref(null);
-const errorMessage = ref(null)
-const isLoading = ref(true)
 
-watch(SubVenue, (newValue) => {
+watch(subVenueId, (newValue) => {
   emit('SubVenueChange', newValue)
+})
+
+watch(() => props.selected, (newVal) => {
+  subVenueId.value = newVal
 })
 
 function itemProps(item) {
@@ -35,16 +42,5 @@ function itemProps(item) {
   };
 }
 
-onBeforeMount(async() => {
-  const token = await getAccessTokenSilently();
-  const { data, error } = await fetchSubVenues(token, {"venue_id": props.venue_id});
-
-  if (error?.message) {
-    errorMessage.value = `Error fetching SubVenues: ${formatErrorMessage(error.message)}`
-  } else {
-    SubVenues.value = data
-  }
-  isLoading.value = false
-})
-
+const availableSubVenues = computed(() => venueSubVenueStore.subVenuesForVenue(props.venue_id) ?? [])
 </script>

@@ -1,12 +1,16 @@
 import { defineStore } from 'pinia'
 import { fetchAssociations } from '@/services/api.association.js'
 import { fetchRoles } from '@/services/api.user.js'
+import { fetchSeasons } from '@/services/api.season'
 import { formatErrorMessage } from '@/utils/formatMessage.js'
 
-export const useShareStore = defineStore('share', {
+export const useShareStore = defineStore('sharedStore', {
   state: () => ({
     associations: [],
-    roles: []
+    roles: [],
+    seasons: [],
+    venues: [],
+    subVenues: []
   }),
   actions: {
     async setAssociations(token) {
@@ -16,11 +20,16 @@ export const useShareStore = defineStore('share', {
         console.error(errorMessage)
         return
       }
-      const temp = data.reduce((acc, data) => {
-        acc.push(data.name)
-        return acc
-      }, [])
-      this.associations = temp
+      this.associations = data
+    },
+    async setSeasons(token) {
+      const { data, error } = await fetchSeasons(token);
+      if (error?.message) {
+        const errorMessage = `Error fetching seasons: ${formatErrorMessage(error.message)}`
+        console.error(errorMessage)
+        return
+      }
+      this.seasons = data
     },
     async setRoles(token) {
       const { data, error } = await fetchRoles(token);
@@ -35,6 +44,7 @@ export const useShareStore = defineStore('share', {
   },
   getters: {
     getAssociations: (state) => state.associations,
-    getRoles: (state) => state.roles
+    getRoles: (state) => state.roles,
+    getSeasons: (state) => state.seasons
   }
 });
