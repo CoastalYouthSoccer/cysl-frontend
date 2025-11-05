@@ -15,14 +15,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5.0.0
 
     - name: set .env
       run: |
         echo ${{ vars.VITE_ENV }} >.env
 
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v6.0.0
       with:
         node-version: 20
 
@@ -64,3 +64,38 @@ jobs:
           sudo ln -s ${{ env.TARGET_DIR }} ${{ vars.DEPLOY_TARGET }}/frontend
           sudo chmod 755 -R ${{ env.TARGET_DIR }}
           sudo chown root:root -R ${{ env.TARGET_DIR }}
+
+  docker_build_push:
+#  if: github.ref == 'refs/heads/main'
+    needs: [build_deploy]
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    env:
+      IMAGE_NAME: cysl-frontend
+
+    steps:
+    - uses: actions/checkout@v5.0.0
+
+    - name: Build image
+      run: |
+        docker build . --tag ${{ env.IMAGE_NAME}} --label "runnumber=${GITHUB_RUN_ID}"
+
+    - name: Log in to registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: Push image
+      run: |
+        IMAGE_ID=ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
+        IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+        VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+        [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+        [ "$VERSION" == "main" ] && VERSION=latest
+        echo IMAGE_ID=$IMAGE_ID
+        echo VERSION=$VERSION
+        docker tag ${{ env.IMAGE_NAME }} $IMAGE_ID:$VERSION
+        docker push $IMAGE_ID:$VERSION
