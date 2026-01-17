@@ -122,7 +122,6 @@ jobs:
     - name: Load Docker image
       run: |
         docker load --input /tmp/${{ env.IMAGE_NAME }}.tar
-        docker image ls -a
 
     - name: Log in to registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
