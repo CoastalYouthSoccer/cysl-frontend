@@ -13,7 +13,7 @@
   "dependencies": {
     "@auth0/auth0-vue": "^2.4.0",
     "@mdi/font": "^7.0.96",
-    "axios": "^1.10.0",
+    "axios": "^1.13.2",
     "pinia": "^3.0.3",
     "roboto-fontface": "^0.10.0",
     "unplugin-vue-components": "^0.27.5",
@@ -28,9 +28,10 @@
     "@vitest/coverage-v8": "^2.1.9",
     "@vitest/ui": "^2.1.9",
     "@vue/test-utils": "^2.4.6",
-    "jsdom": "^24.1.3",
+    "happy-dom": "^20.3.1",
+    "jsdom": "^27.4.0",
     "resize-observer-polyfill": "^1.5.1",
-    "vite": "^5.4.19",
+    "vite": "^5.4.21",
     "vite-plugin-vuetify": "^2.1.1",
     "vitest": "^2.1.9",
     "vitest-sonar-reporter": "^2.0.1"
