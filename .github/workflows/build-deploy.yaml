@@ -69,7 +69,12 @@ jobs:
         outputs: type=docker,dest=/tmp/${{ env.IMAGE_NAME }}.tar
         cache-from: type=gha
         cache-to: type=gha,mode=max
-
+        build-args: |
+          VITE_AUTH0_DOMAIN=${{ secrets.VITE_AUTH0_DOMAIN }}
+          VITE_AUTH0_CLIENT_ID=${{ secrets.VITE_AUTH0_CLIENT_ID }}
+          VITE_AUTH0_SCOPE=${{ secrets.VITE_AUTH0_SCOPE }}
+          VITE_AUTH0_AUDIENCE=${{ secrets.VITE_AUTH0_AUDIENCE }}
+          VITE_AUTH0_CALLBACK_URL=${{ secrets.VITE_AUTH0_CALLBACK_URL }}
     - name: Run Trivy vulnerability scanner in fs mode
       uses: aquasecurity/trivy-action@0.33.1
       with:
@@ -86,7 +91,7 @@ jobs:
 
   docker_push:
     needs: [test_and_build]
-    if: github.ref == 'refs/heads/main'
+#    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       packages: write
