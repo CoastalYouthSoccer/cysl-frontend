@@ -1,27 +1,20 @@
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
+import { describe, it, expect, vi } from 'vitest'
+import { mount, flushPromises } from '@vue/test-utils'
 import { createTestingPinia } from '@pinia/testing'
 import NavTool from '@/components/sidebar/NavTool.vue'
 import { vuetify } from '@/vuetify-setup'
+import { VList } from 'vuetify/components'
 
 global.ResizeObserver = require('resize-observer-polyfill')
 
 vi.mock('vue-router', () => ({
-  useRoute: () => (
-    {
-      name: 'AssignrReferee',
-      path: '/assignr-referee',
-      params: {},
-      query: {},
-      meta: {}
-    }, {
-      name: 'CYSLSpring2025Rules',
-      path: '/spring2025rules',
-      params: {},
-      query: {},
-      meta: {}
-    }
-  ),
+  useRoute: () => ({
+    name: 'FieldCoordinator',
+    path: '/field-coordinator',
+    params: {},
+    query: {},
+    meta: {}
+  }),
   useRouter: () => ({
     push: vi.fn(),
     replace: vi.fn()
@@ -29,59 +22,49 @@ vi.mock('vue-router', () => ({
 }))
 
 describe('NavTool.vue', () => {
-  it('renders Field Coordinator for assignor', () => {
-    const wrapper = mount(NavTool, {
+  const createWrapper = async (userRoles = []) => {
+    const wrapper = mount({
+      components: { NavTool, VList },
+      template: '<v-list :opened="[\'tools\']"><NavTool /></v-list>',
+    }, {
       global: {
         plugins: [
           vuetify,
           createTestingPinia({
-          initialState: {
-            user: {
+            stubActions: false,
+            initialState: {
               user: {
-                userRoles: ['Assignor'],
+                user: {
+                  userRoles,
+                },
               },
             },
-          },
-        })],
+          })
+        ],
       },
     })
-    expect(wrapper.find('[data-test="nav-item-field-coordinator"]').exists()).toBe(true)
-  })
-  it('renders Field Coordinator for admin', () => {
-    const wrapper = mount(NavTool, {
-      global: {
-        plugins: [
-          vuetify,
-          createTestingPinia({
-          initialState: {
-            user: {
-              user: {
-                userRoles: ['Administrator'],
-              },
-            },
-          },
-        })],
-      },
-    })
+
+    await flushPromises()
+    await wrapper.vm.$nextTick()
+
+    return wrapper
+  }
+
+  it('renders Field Coordinator for assignor', async () => {
+    const wrapper = await createWrapper(['Assignor'])
+
     expect(wrapper.find('[data-test="nav-item-field-coordinator"]').exists()).toBe(true)
   })
 
-  it('does not render Field Coordinator if not assignor or admin', () => {
-    const wrapper = mount(NavTool, {
-      global: {
-        plugins: [
-          vuetify,
-          createTestingPinia({
-          initialState: {
-            user: {
-              user: {
-                userRoles: ['Referee'],
-              },
-            },
-          },
-        })],
-      },
-    })
+  it('renders Field Coordinator for admin', async () => {
+    const wrapper = await createWrapper(['Administrator'])
+
+    expect(wrapper.find('[data-test="nav-item-field-coordinator"]').exists()).toBe(true)
+  })
+
+  it('does not render Field Coordinator if not assignor or admin', async () => {
+    const wrapper = await createWrapper(['Referee'])
+
     expect(wrapper.find('[data-test="nav-item-field-coordinator"]').exists()).toBe(false)
   })
 })
