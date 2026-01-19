@@ -21,10 +21,6 @@ jobs:
     steps:
     - uses: actions/checkout@v6.0.1
 
-    - name: set .env
-      run: |
-        echo ${{ vars.VITE_ENV }} >.env
-
     - name: Use Node.js
       uses: actions/setup-node@v6.2.0
       with:
@@ -69,7 +65,12 @@ jobs:
         outputs: type=docker,dest=/tmp/${{ env.IMAGE_NAME }}.tar
         cache-from: type=gha
         cache-to: type=gha,mode=max
-
+        build-args: |
+          VITE_AUTH0_DOMAIN=${{ secrets.VITE_AUTH0_DOMAIN }}
+          VITE_AUTH0_CLIENT_ID=${{ secrets.VITE_AUTH0_CLIENT_ID }}
+          VITE_AUTH0_SCOPE=${{ secrets.VITE_AUTH0_SCOPE }}
+          VITE_AUTH0_AUDIENCE=${{ secrets.VITE_AUTH0_AUDIENCE }}
+          VITE_AUTH0_CALLBACK_URL=${{ secrets.VITE_AUTH0_CALLBACK_URL }}
     - name: Run Trivy vulnerability scanner in fs mode
       uses: aquasecurity/trivy-action@0.33.1
       with:
